@@ -4,7 +4,7 @@ import { defineConfig, type DefaultTheme } from 'vitepress'
 export default defineConfig({
    title: 'React Hooks',
    description: 'React Hooks',
-   base: '/classic-react-hooks/',
+  //  base: '/classic-react-hooks/',
    themeConfig: {
       // https://vitepress.dev/reference/default-theme-config
       nav: [
