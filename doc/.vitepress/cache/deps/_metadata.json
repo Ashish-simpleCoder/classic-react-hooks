@@ -1,0 +1,47 @@
+{
+  "hash": "a200213b",
+  "browserHash": "860d3e70",
+  "optimized": {
+    "vue": {
+      "src": "../../../../node_modules/.pnpm/vue@3.3.4/node_modules/vue/dist/vue.runtime.esm-bundler.js",
+      "file": "vue.js",
+      "fileHash": "8a19ba8d",
+      "needsInterop": false
+    },
+    "vitepress > @vue/devtools-api": {
+      "src": "../../../../node_modules/.pnpm/@vue+devtools-api@6.5.0/node_modules/@vue/devtools-api/lib/esm/index.js",
+      "file": "vitepress___@vue_devtools-api.js",
+      "fileHash": "0ed6c9f8",
+      "needsInterop": false
+    },
+    "vue3-tabs-component": {
+      "src": "../../../../node_modules/.pnpm/vue3-tabs-component@1.3.6/node_modules/vue3-tabs-component/dist/vue3-tabs-component.mjs",
+      "file": "vue3-tabs-component.js",
+      "fileHash": "6f05223a",
+      "needsInterop": false
+    },
+    "react": {
+      "src": "../../../../node_modules/.pnpm/react@18.2.0/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "19aa0484",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../../node_modules/.pnpm/react-dom@18.2.0_react@18.2.0/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "d46b88b8",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-AUFS4W3T": {
+      "file": "chunk-AUFS4W3T.js"
+    },
+    "chunk-67UUJLDS": {
+      "file": "chunk-67UUJLDS.js"
+    },
+    "chunk-76J2PTFD": {
+      "file": "chunk-76J2PTFD.js"
+    }
+  }
+}
