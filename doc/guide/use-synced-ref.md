@@ -13,7 +13,7 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-synced-ref'
+import Example from '../../src/hooks/use-synced-ref/example.tsx'
 import useSyncedRef from '../../src/hooks/use-synced-ref/use-synced-ref'
 
 const el = ref()
@@ -25,7 +25,7 @@ onMounted(() => {
 
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-synced-ref/index.tsx{2,6}
+<<< @/../src/hooks/use-synced-ref/example.tsx{2,6}
 :::
 
 ::: details useSyncedRef.tsx
@@ -33,7 +33,7 @@ onMounted(() => {
 :::
 
 
-::: code-group
+<!-- ::: code-group
 
 ```sh [ts]
 $ npm add -D vitepress
@@ -43,4 +43,4 @@ $ npm add -D vitepress
 $ pnpm add -D vitepress
 ```
 
-:::
+::: -->

@@ -14,7 +14,7 @@ export default defineConfig({
       sidebar: {
          '/guide/use-synced-ref': { base: '/guide/', items: sidebarGuide() },
       },
-      socialLinks: [{ icon: 'github', link: 'https://github.com/ashish-simpleCoder' }],
+      socialLinks: [{ icon: 'github', link: 'https://github.com/Ashish-simpleCoder/classic-react-hooks' }],
    },
 })
 
