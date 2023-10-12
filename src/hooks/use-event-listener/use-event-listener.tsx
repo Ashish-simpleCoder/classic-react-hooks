@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import useSyncedRef from './use-synced-ref'
+import useSyncedRef from '../use-synced-ref/use-synced-ref'
 
 type Target = null | EventTarget | (() => EventTarget | null)
 type Options = boolean | AddEventListenerOptions

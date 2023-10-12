@@ -1,7 +1,11 @@
+import type { DependencyList } from 'react'
 import { useEffect, useRef } from 'react'
 
-export default function useSyncedEffect(cb: () => void, dep: [] = []) {
+const DEP: DependencyList = []
+
+export default function useSyncedEffect(cb: () => void, dep: DependencyList | undefined) {
    const isInitialLoad = useRef(true)
+   
    useEffect(() => {
       let cleanup
       if (isInitialLoad) {
@@ -10,5 +14,5 @@ export default function useSyncedEffect(cb: () => void, dep: [] = []) {
          cleanup = cb()
       }
       return cleanup
-   }, dep)
+   }, dep ?? DEP)
 }

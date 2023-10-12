@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import useSyncedRef from '../use-synced-ref/use-synced-ref'
 
 export default function useTimeoutEffect(cb: () => void, delay = 0) {
-   let paramsRef = useRef({ cb, delay })
-   paramsRef.current.cb = cb
-   paramsRef.current.delay = delay
+   let paramsRef = useSyncedRef({ cb, delay })
 
    useEffect(() => {
       let timerId = setTimeout(paramsRef.current.cb, paramsRef.current.delay)

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useEventListener } from './use-event-listener'
-import useSyncedRef from './use-synced-ref'
+import { useEventListener } from '../use-event-listener/use-event-listener'
+import useSyncedRef from '../use-synced-ref/use-synced-ref'
 
 type Target = null | EventTarget | (() => EventTarget | null)
 
@@ -20,5 +20,5 @@ export default function useOutsideClick(
       paramsRef.current.handler(event)
    }, [])
 
-   useEventListener(document, 'click', eventCb, undefined, shouldAddEvent)
+   return useEventListener(document, 'click', eventCb, undefined, shouldAddEvent)
 }
