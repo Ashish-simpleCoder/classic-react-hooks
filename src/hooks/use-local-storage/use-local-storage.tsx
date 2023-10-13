@@ -17,11 +17,13 @@ export default function useLocalStorage<State>(key: string, defaultValue?: State
       if (typeof value == 'function') {
          setState((state) => {
             new_value = (value as (state: State) => State)(state)
+            localStorage.setItem(key, JSON.stringify(new_value))
             return new_value
          })
+      } else {
+         setState(new_value)
+         localStorage.setItem(key, JSON.stringify(new_value))
       }
-      setState(new_value)
-      localStorage.setItem(key, JSON.stringify(new_value))
    }, [])
 
 

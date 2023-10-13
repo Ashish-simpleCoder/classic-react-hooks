@@ -3,7 +3,7 @@ outline: deep
 ---
 # useIsOnline
 
-A simple hook for getting the network connection state.
+- A simple hook for getting the network connection state.
 
 ## Example
 
