@@ -3,7 +3,7 @@ outline: deep
 ---
 # useSyncedRef
 
-Like `useRef` hook, but it automatically syncs-up with the given state.
+- Like `useRef` hook, but it automatically syncs-up with the given state.
 
 
 ## Example
