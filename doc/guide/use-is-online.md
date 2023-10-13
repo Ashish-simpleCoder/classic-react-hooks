@@ -1,10 +1,9 @@
 ---
 outline: deep
 ---
-# useSyncedRef
+# useIsOnline
 
-Like `useRef` hook, but it automatically syncs-up with the given state.
-
+A simple hook for getting the network connection state.
 
 ## Example
 
@@ -15,8 +14,8 @@ Like `useRef` hook, but it automatically syncs-up with the given state.
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-synced-ref/example'
-import useSyncedRef from '../../src/hooks/use-synced-ref/use-synced-ref'
+import Example from '../../src/hooks/use-is-online/example'
+import useIsOnline from '../../src/hooks/use-is-online/use-is-online'
 
 const el = ref()
 onMounted(() => {
@@ -28,11 +27,11 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-synced-ref/example.tsx{2,6}
+<<< @/../src/hooks/use-is-online/example.tsx{5,11}
 :::
 
-::: details useSyncedRef.tsx
-<<< @/../src/hooks/use-synced-ref/use-synced-ref.tsx
+::: details useIsOnline.tsx
+<<< @/../src/hooks/use-is-online/use-is-online.tsx
 :::
 
 

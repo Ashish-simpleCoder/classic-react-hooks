@@ -22,7 +22,7 @@ export default function Example() {
                className='px-3 py-2 max-sm:w-full sm:ml-auto rounded-md bg-gray-200 dark:bg-gray-800'
                onClick={() => alert("counter-ref value -> "+counterRef.current)}
             >
-               Print counter-ref
+               print counter-ref
             </button>
          </div>
       </>
