@@ -17,3 +17,4 @@ A great collection of awesome react-hooks.
 - [use-debounced-fn](https://classic-react-hooks.vercel.app/guide/use-debounced-fn.html)
 - [use-interval-effect](https://classic-react-hooks.vercel.app/guide/use-interval-effect.html)
 - [use-timeout-effect](https://classic-react-hooks.vercel.app/guide/use-timeout-effect.html)
+- [use-synced-effect](https://classic-react-hooks.vercel.app/guide/use-synced-effect.html)
