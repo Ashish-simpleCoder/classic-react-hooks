@@ -1,18 +1,19 @@
-import type { DependencyList } from 'react'
+import type { DependencyList, EffectCallback } from 'react'
 import { useEffect, useRef } from 'react'
 
 const DEP: DependencyList = []
 
-export default function useSyncedEffect(cb: () => void, dep: DependencyList | undefined) {
+
+export default function useSyncedEffect(cb: EffectCallback, dep: DependencyList | undefined) {
    const isInitialLoad = useRef(true)
-   
+   const cleanup = useRef<(void | (() => void))>()
+
    useEffect(() => {
-      let cleanup
-      if (isInitialLoad) {
+      if (isInitialLoad.current) {
          isInitialLoad.current = false
       } else {
-         cleanup = cb()
+         cleanup.current = cb()
       }
-      return cleanup
+      return cleanup.current
    }, dep ?? DEP)
 }

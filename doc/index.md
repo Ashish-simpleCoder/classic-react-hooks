@@ -16,9 +16,9 @@ hero:
       # target: _blank
 
 features:
-  - title: Awesome Hooks
+  - title: Awesome Collection of Hooks
     details: Awesome react-hooks for make your feature building easy.
-  - title: Small Bundle Size
-    details: A small library.
+  # - title: Small Bundle Size
+  #   details: A small library.
 ---
 
