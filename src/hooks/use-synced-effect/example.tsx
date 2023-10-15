@@ -28,7 +28,7 @@ export default function Example() {
                </button>
             </div>
 
-            <div className="bg-gray-800 px-2" ref={logRef}></div>
+            <div className="bg-gray-200 dark:bg-gray-800 px-2" ref={logRef}></div>
          </div>
       </>
    )
