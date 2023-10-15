@@ -23,7 +23,7 @@ import {
 } from "./chunk-67UUJLDS.js";
 import "./chunk-76J2PTFD.js";
 
-// node_modules/.pnpm/vue3-tabs-component@1.3.6/node_modules/vue3-tabs-component/dist/vue3-tabs-component.mjs
+// node_modules/.pnpm/vue3-tabs-component@1.3.6_vue@3.3.4/node_modules/vue3-tabs-component/dist/vue3-tabs-component.mjs
 var x = Symbol("addTab");
 var k = Symbol("updateTab");
 var y = Symbol("deleteTab");
