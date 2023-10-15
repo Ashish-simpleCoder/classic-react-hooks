@@ -3,10 +3,12 @@ import { defineConfig, type DefaultTheme } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
    title: 'React Hooks',
-   description: 'React Hooks',
+   description: 'A collection of awesome react hooks.',
   //  base: '/classic-react-hooks/',
+  lang: 'en-US',
    themeConfig: {
       // https://vitepress.dev/reference/default-theme-config
+      logo: "/logo.ico",
       nav: [
          { text: 'Home', link: '/' },
          { text: 'Guide Book', link: '/guide/use-synced-ref' },
