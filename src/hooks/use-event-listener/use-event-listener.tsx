@@ -57,6 +57,7 @@ export function useEventListener(
    return () => {
       const node = typeof target === 'function' ? target() : target ?? document
       if (!cleanupCallbackRef.current || !node) return
+
       node.removeEventListener(event, cleanupCallbackRef.current, listener.current.options)
    }
 }
