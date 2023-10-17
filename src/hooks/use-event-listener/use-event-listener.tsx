@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import useSyncedRef from '../use-synced-ref/use-synced-ref'
 
 type Target = null | EventTarget | (() => EventTarget | null)
@@ -33,27 +33,30 @@ export function useEventListener(
    shouldAddEvent: boolean = true
 ) {
    const listener = useSyncedRef({ handler, options })
+   const cleanupCallbackRef = useRef<(e: Event) => void>()
 
    useEffect(() => {
       const node = typeof target === 'function' ? target() : target ?? document
 
       if (!listener.current.handler || !node) return
 
+      const callback = (e: Event) => listener.current.handler?.(e)
+      cleanupCallbackRef.current = callback
+
       if (shouldAddEvent) {
-         node.addEventListener(event, listener.current.handler, listener.current.options)
+         node.addEventListener(event, callback, listener.current.options)
       } else {
-         node.removeEventListener(event, listener.current.handler, listener.current.options)
+         node.removeEventListener(event, callback, listener.current.options)
       }
 
       return () => {
-         if (!listener.current.handler) return
-         node.removeEventListener(event, listener.current.handler, listener.current.options)
+         node.removeEventListener(event, callback, listener.current.options)
       }
    }, [event, target, shouldAddEvent])
 
    return () => {
       const node = typeof target === 'function' ? target() : target ?? document
-      if (!listener.current.handler) return
-      node?.removeEventListener(event, listener.current.handler, listener.current.options)
+      if (!cleanupCallbackRef.current || !node) return
+      node.removeEventListener(event, cleanupCallbackRef.current, listener.current.options)
    }
 }
