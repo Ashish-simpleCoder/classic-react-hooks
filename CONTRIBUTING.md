@@ -47,7 +47,7 @@ To install the project, navigate to the directory and run:
 
 To run the project, run the following commands:
 
-- `pnpm run dev`
+- `pnpm run docs:dev`
 
 <br>
 
