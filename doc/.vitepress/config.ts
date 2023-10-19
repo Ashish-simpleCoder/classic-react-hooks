@@ -41,6 +41,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         { text: 'useOutsideClick', link: 'use-outside-click' },
         { text: 'useStateHistory', link: 'use-state-history' },
         { text: 'useKeysEventListener', link: 'use-keys-event-listener' },
+        { text: 'useCounter', link: 'use-counter' },
       ]
     },
   ]
