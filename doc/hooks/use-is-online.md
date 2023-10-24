@@ -14,8 +14,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-is-online/example'
-import useIsOnline from '../../src/hooks/use-is-online/use-is-online'
+import Example from '../../src/lib/use-is-online/example'
+import useIsOnline from '../../src/lib/use-is-online/use-is-online'
 
 const el = ref()
 onMounted(() => {
@@ -27,11 +27,11 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-is-online/example.tsx{5,11}
+<<< @/../src/lib/use-is-online/example.tsx{5,11}
 :::
 
 ::: details useIsOnline.tsx
-<<< @/../src/hooks/use-is-online/use-is-online.tsx
+<<< @/../src/lib/use-is-online/use-is-online.tsx
 :::
 
 

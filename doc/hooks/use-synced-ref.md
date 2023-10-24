@@ -15,8 +15,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-synced-ref/example'
-import useSyncedRef from '../../src/hooks/use-synced-ref/use-synced-ref'
+import Example from '../../src/lib/use-synced-ref/example'
+import useSyncedRef from '../../src/lib/use-synced-ref/use-synced-ref'
 
 const el = ref()
 onMounted(() => {
@@ -28,11 +28,11 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-synced-ref/example.tsx{2,6}
+<<< @/../src/lib/use-synced-ref/example.tsx{2,6}
 :::
 
 ::: details useSyncedRef.tsx
-<<< @/../src/hooks/use-synced-ref/use-synced-ref.tsx
+<<< @/../src/lib/use-synced-ref/use-synced-ref.tsx
 :::
 
 

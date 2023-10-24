@@ -15,8 +15,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-local-storage/example'
-import useLocalStorage from '../../src/hooks/use-local-storage/use-local-storage'
+import Example from '../../src/lib/use-local-storage/example'
+import useLocalStorage from '../../src/lib/use-local-storage/use-local-storage'
 
 const el = ref()
 onMounted(() => {
@@ -28,9 +28,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-local-storage/example.tsx{5,11-13,17-19,27}
+<<< @/../src/lib/use-local-storage/example.tsx{5,11-13,17-19,27}
 :::
 
 ::: details useLocalStorage.tsx
-<<< @/../src/hooks/use-local-storage/use-local-storage.tsx
+<<< @/../src/lib/use-local-storage/use-local-storage.tsx
 :::

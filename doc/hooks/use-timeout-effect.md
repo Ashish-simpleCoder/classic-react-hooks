@@ -15,8 +15,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-timeout-effect/example'
-import useTimeoutEffect from '../../src/hooks/use-timeout-effect/use-timeout-effect'
+import Example from '../../src/lib/use-timeout-effect/example'
+import useTimeoutEffect from '../../src/lib/use-timeout-effect/use-timeout-effect'
 
 const el = ref()
 onMounted(() => {
@@ -28,9 +28,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-timeout-effect/example.tsx{2,6}
+<<< @/../src/lib/use-timeout-effect/example.tsx{2,6}
 :::
 
 ::: details useTimeoutEffect.tsx
-<<< @/../src/hooks/use-timeout-effect/use-timeout-effect.tsx
+<<< @/../src/lib/use-timeout-effect/use-timeout-effect.tsx
 :::

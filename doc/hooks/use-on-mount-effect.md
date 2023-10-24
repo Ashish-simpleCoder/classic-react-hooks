@@ -16,8 +16,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-on-mount-effect/example'
-import useOnMountEffect from '../../src/hooks/use-on-mount-effect/use-on-mount-effect'
+import Example from '../../src/lib/use-on-mount-effect/example'
+import useOnMountEffect from '../../src/lib/use-on-mount-effect/use-on-mount-effect'
 
 const el = ref()
 onMounted(() => {
@@ -29,9 +29,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-on-mount-effect/example.tsx{2,8-16}
+<<< @/../src/lib/use-on-mount-effect/example.tsx{2,8-16}
 :::
 
 ::: details useOnMountEffect.tsx
-<<< @/../src/hooks/use-on-mount-effect/use-on-mount-effect.tsx
+<<< @/../src/lib/use-on-mount-effect/use-on-mount-effect.tsx
 :::

@@ -16,8 +16,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-synced-effect/example'
-import useSyncedEffect from '../../src/hooks/use-synced-effect/use-synced-effect'
+import Example from '../../src/lib/use-synced-effect/example'
+import useSyncedEffect from '../../src/lib/use-synced-effect/use-synced-effect'
 
 const el = ref()
 onMounted(() => {
@@ -29,9 +29,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-synced-effect/example.tsx{2,8-16}
+<<< @/../src/lib/use-synced-effect/example.tsx{2,8-16}
 :::
 
 ::: details useSyncedEffect.tsx
-<<< @/../src/hooks/use-synced-effect/use-synced-effect.tsx
+<<< @/../src/lib/use-synced-effect/use-synced-effect.tsx
 :::
