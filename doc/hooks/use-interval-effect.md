@@ -15,8 +15,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-interval-effect/example'
-import useIntervalEffect from '../../src/hooks/use-interval-effect/use-interval-effect'
+import Example from '../../src/lib/use-interval-effect/example'
+import useIntervalEffect from '../../src/lib/use-interval-effect/use-interval-effect'
 
 const el = ref()
 onMounted(() => {
@@ -28,9 +28,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-interval-effect/example.tsx{2,6,17,18,13}
+<<< @/../src/lib/use-interval-effect/example.tsx{2,6,17,18,13}
 :::
 
 ::: details useIntervalEffect.tsx
-<<< @/../src/hooks/use-interval-effect/use-interval-effect.tsx
+<<< @/../src/lib/use-interval-effect/use-interval-effect.tsx
 :::

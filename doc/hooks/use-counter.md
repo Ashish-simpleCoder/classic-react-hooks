@@ -14,8 +14,8 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/hooks/use-counter/example'
-import useCounter from '../../src/hooks/use-counter/use-counter'
+import Example from '../../src/lib/use-counter/example'
+import useCounter from '../../src/lib/use-counter/use-counter'
 
 const el = ref()
 onMounted(() => {
@@ -27,9 +27,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details Example.tsx
-<<< @/../src/hooks/use-counter/example.tsx{5,13,17,20}
+<<< @/../src/lib/use-counter/example.tsx{5,13,17,20}
 :::
 
 ::: details useCounter.tsx
-<<< @/../src/hooks/use-counter/use-counter.tsx
+<<< @/../src/lib/use-counter/use-counter.tsx
 :::
