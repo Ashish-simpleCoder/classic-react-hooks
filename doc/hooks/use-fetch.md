@@ -23,7 +23,7 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-fetch/example.tsx
 :::
 

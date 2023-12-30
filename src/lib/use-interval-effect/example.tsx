@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import useIntervalEffect from './use-interval-effect'
+import ExampleContainer from '../../components/example-container'
 
 export default function Example() {
    const [counter, setCounter] = useState(0)
@@ -7,26 +8,28 @@ export default function Example() {
 
    return (
       <>
-         <div className='flex flex-col gap-4 border-gray-200 dark:border-gray-800 border px-4 py-2 rounded-md'>
+         <ExampleContainer>
             <p className='text-sm !m-0'>
-               Counter will be incrementing by <strong className='text-green-500'>1</strong> after every{' '}
-               <strong className='text-green-500'>1 seconds</strong>.
+               Counter will be incrementing by <strong className='text-green-600 font-medium'>1</strong> after every{' '}
+               <strong className='text-green-600 font-medium'>1 seconds</strong>.
             </p>
             <div className='flex flex-row  gap-4 items-center'>
                <h4>
-                  counter :- <strong className='text-blue-500'>{counter}</strong>
+                  counter :- <strong>{counter}</strong>
                </h4>
             </div>
 
             <div className='flex flex-row gap-4'>
-               <button className='px-3 py-2 rounded-md bg-gray-200 dark:bg-gray-800' onClick={clearTimer}>
-                  clear timer
+               <button className='px-3 py-2 rounded-md bg-red-100 dark:bg-red-950 font-medium' onClick={clearTimer}>
+                  clear interval
                </button>
-               <button className='px-3 py-2 rounded-md bg-gray-200 dark:bg-gray-800' onClick={restartTimer}>
-                  restart timer
+               <button
+                  className='px-3 py-2 rounded-md bg-green-100 dark:bg-green-950 font-medium'
+                  onClick={restartTimer}>
+                  restart interval
                </button>
             </div>
-         </div>
+         </ExampleContainer>
       </>
    )
 }

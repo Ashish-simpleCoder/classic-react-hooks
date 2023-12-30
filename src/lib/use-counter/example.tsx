@@ -6,7 +6,7 @@ export default function Example() {
 
    return (
       <>
-         <div className='flex flex-col sm:flex-row gap-4 border-gray-200 dark:border-gray-800 border px-4 py-2 rounded-md'>
+         <div className='flex flex-col sm:flex-row gap-4 bg-gray-100 dark:bg-custom-gray-dark  px-4 py-6 rounded-md'>
             <div className='flex flex-row gap-4 items-center w-full'>
                <button className='px-3 py-2 rounded-md bg-gray-200 dark:bg-gray-800' onClick={incrementCounter}>
                   increment

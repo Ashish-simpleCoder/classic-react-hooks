@@ -3,11 +3,11 @@ outline: deep
 ---
 # use-synced-ref
 
-- Like `useRef` hook, but it automatically syncs-up with the given state.
+- A replacement for `useRef` hook, which automatically syncs-up with the given state.
+- No need to manually update the ref.
 
 
 ## Example
-
 
 <div ref="el" />
 
@@ -27,11 +27,11 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-synced-ref/example.tsx{2,6}
 :::
 
-::: details useSyncedRef.tsx
+::: details use-synced-ref.tsx
 <<< @/../src/lib/use-synced-ref/use-synced-ref.tsx
 :::
 

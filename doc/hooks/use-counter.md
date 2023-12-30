@@ -26,7 +26,7 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-counter/example.tsx{5,13,17,20}
 :::
 

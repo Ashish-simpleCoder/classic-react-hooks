@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+
 import useSyncedRef from './use-synced-ref'
+import ExampleContainer from '../../components/example-container'
 
 export default function Example() {
    const [counter, setCounter] = useState(0)
@@ -7,7 +9,7 @@ export default function Example() {
 
    return (
       <>
-         <div className='flex flex-col sm:flex-row gap-4 border-gray-200 dark:border-gray-800 border px-4 py-2 rounded-md'>
+         <ExampleContainer className='flex-col sm:flex-row'>
             <div className='flex flex-row  gap-4 items-center'>
                <h4>counter :- {counter}</h4>
                <button
@@ -22,7 +24,7 @@ export default function Example() {
                onClick={() => alert('counter-ref value -> ' + counterRef.current)}>
                print counter-ref
             </button>
-         </div>
+         </ExampleContainer>
       </>
    )
 }

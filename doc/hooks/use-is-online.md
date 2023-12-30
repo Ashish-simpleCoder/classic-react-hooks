@@ -26,7 +26,7 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-is-online/example.tsx{5,11}
 :::
 

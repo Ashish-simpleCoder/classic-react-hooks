@@ -10,7 +10,13 @@ export default {
     './docs/.vitepress/**/*.ts',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor:{
+        "custom-gray":{
+          dark:"#65758529"
+        }
+      }
+    },
   },
   plugins: [],
 }

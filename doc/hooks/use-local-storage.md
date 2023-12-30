@@ -27,7 +27,7 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-local-storage/example.tsx{5,11-13,17-19,27}
 :::
 

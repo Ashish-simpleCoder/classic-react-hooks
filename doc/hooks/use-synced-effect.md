@@ -28,7 +28,7 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-synced-effect/example.tsx{2,8-16}
 :::
 
