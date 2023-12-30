@@ -1,4 +1,4 @@
-# useFetch
+# use-fetch
 
 - A hook is used to fetch data from server without writing custom fetch logic.
 - If the component is unmounted and the request is still in pending then this will cancel automatically.

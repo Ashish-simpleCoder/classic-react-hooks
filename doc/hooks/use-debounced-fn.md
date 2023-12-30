@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useDeboucedFn
+# use-debouced-fn
 
 - A hook for managing operations with debouncing.
 

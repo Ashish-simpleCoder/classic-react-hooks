@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useIsOnline
+# use-is-online
 
 - A simple hook for getting the network connection state.
 

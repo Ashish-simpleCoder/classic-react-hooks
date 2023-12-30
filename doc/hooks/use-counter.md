@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useCounter
+# use-counter
 
 - A simple hook for managing counter.
 

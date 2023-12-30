@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useTimeoutEffect
+# use-timeout-effect
 
 - A hooks that runs the provided callback only once after the timer is completed.
 

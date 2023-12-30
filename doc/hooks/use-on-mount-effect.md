@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useOnMountEffect
+# use-on-mount-effect
 
 - A hooks that fires the given callback once after the mount.
 > *Note* :- The provided callback fires only once after the mount. It doesn't take any dependencies.

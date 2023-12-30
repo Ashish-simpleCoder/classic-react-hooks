@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useIntervalEffect
+# use-interval-effect
 
 - A hooks that runs the provided callback only once after the timer is completed.
 

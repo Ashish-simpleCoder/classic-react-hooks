@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useSyncedRef
+# use-synced-ref
 
 - Like `useRef` hook, but it automatically syncs-up with the given state.
 

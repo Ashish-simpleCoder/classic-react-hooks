@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useLocalStorage
+# use-local-storage
 
 - A hook for managing the states with local-storage.
 - It automatically updates the state in local-storage.
