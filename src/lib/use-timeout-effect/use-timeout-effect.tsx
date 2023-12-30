@@ -19,5 +19,5 @@ export default function useTimeoutEffect(cb: () => void, delay = 0) {
       return clearTimer
    }, [])
 
-   return {clearTimer, restartTimer}
+   return { clearTimer, restartTimer }
 }

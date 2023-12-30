@@ -22,8 +22,7 @@ export default function Example() {
                {counter}
                <button
                   className='px-3 py-2 ml-auto rounded-md bg-gray-200 dark:bg-gray-800'
-                  onClick={() => setCounter((c) => c + 1)}
-               >
+                  onClick={() => setCounter((c) => c + 1)}>
                   increment
                </button>
             </div>
