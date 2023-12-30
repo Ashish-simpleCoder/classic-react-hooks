@@ -1,9 +1,9 @@
 ---
 outline: deep
 ---
-# useIntervalEffect
+# use-interval-effect
 
-- A hooks that runs the provided callback only once after the timer is completed.
+- A hooks which fires the provided callback every time when the given delay is passed, just like the setInterval.
 
 
 ## Example
@@ -27,10 +27,10 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-interval-effect/example.tsx{2,6,17,18,13}
 :::
 
-::: details useIntervalEffect.tsx
+::: details use-interval-effect.tsx
 <<< @/../src/lib/use-interval-effect/use-interval-effect.tsx
 :::

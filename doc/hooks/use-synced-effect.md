@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useSyncedEffect
+# use-synced-effect
 
 - A hooks that fires the given callback for given dependencies.
 > *Note* :- The provided callback doesn't fire on initial mount. Only runs when the provided dependecies changes.
@@ -28,7 +28,7 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-synced-effect/example.tsx{2,8-16}
 :::
 

@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useOnMountEffect
+# use-on-mount-effect
 
 - A hooks that fires the given callback once after the mount.
 > *Note* :- The provided callback fires only once after the mount. It doesn't take any dependencies.
@@ -28,7 +28,7 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-on-mount-effect/example.tsx{2,8-16}
 :::
 

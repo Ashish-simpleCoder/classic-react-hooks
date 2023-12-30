@@ -1,9 +1,9 @@
 ---
 outline: deep
 ---
-# useDeboucedFn
+# use-debouced-fn
 
-- A hook for managing operations with debouncing.
+- A hook which returns a debounced function.
 
 ## Example
 
@@ -26,11 +26,11 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
-<<< @/../src/lib/use-debounced-fn/example.tsx{7-9,17,22}
+::: details example.tsx
+<<< @/../src/lib/use-debounced-fn/example.tsx{7-9,18,23,33,38}
 :::
 
-::: details useDeboucedFn.tsx
+::: details use-debouced-fn.tsx
 <<< @/../src/lib/use-debounced-fn/use-debounced-fn.tsx
 :::
 

@@ -1,9 +1,10 @@
 ---
 outline: deep
 ---
-# useTimeoutEffect
+# use-timeout-effect
 
-- A hooks that runs the provided callback only once after the timer is completed.
+- A hooks which fires the provided callback only once when the given delay is passed, just like the setTimeout.
+
 
 
 ## Example
@@ -27,10 +28,10 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-timeout-effect/example.tsx{2,6}
 :::
 
-::: details useTimeoutEffect.tsx
+::: details use-timeout-effect.tsx
 <<< @/../src/lib/use-timeout-effect/use-timeout-effect.tsx
 :::
