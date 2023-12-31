@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useIntervalEffect from './use-interval-effect'
 import ExampleContainer from '../../components/example-container'
+import AppButton from '../../components/app-button'
 
 export default function Example() {
    const [counter, setCounter] = useState(0)
@@ -20,14 +21,10 @@ export default function Example() {
             </div>
 
             <div className='flex flex-row gap-4'>
-               <button className='px-3 py-2 rounded-md bg-red-100 dark:bg-red-950 font-medium' onClick={clearTimer}>
+               <AppButton color='error' onClick={clearTimer}>
                   clear interval
-               </button>
-               <button
-                  className='px-3 py-2 rounded-md bg-green-100 dark:bg-green-950 font-medium'
-                  onClick={restartTimer}>
-                  restart interval
-               </button>
+               </AppButton>
+               <AppButton onClick={restartTimer}>restart interval</AppButton>
             </div>
          </ExampleContainer>
       </>
