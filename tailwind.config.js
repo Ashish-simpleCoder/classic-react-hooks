@@ -15,7 +15,7 @@ export default {
         "custom-gray":{
           dark:"#65758529"
         }
-      }
+      },
     },
   },
   plugins: [],
