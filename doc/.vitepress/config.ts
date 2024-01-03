@@ -59,6 +59,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             { text: 'use-synced-ref', link: 'use-synced-ref' },
             { text: 'use-debounded-fn', link: 'use-debounced-fn' },
             { text: 'use-event-listener', link: 'use-event-listener' },
+            { text: 'use-copy-to-clipboard', link: 'use-copy-to-clipboard' },
             // { text: 'use-fetch$', link: 'use-fetch' },
             { text: 'use-interval-effect', link: 'use-interval-effect' },
             { text: 'use-timeout-effect', link: 'use-timeout-effect' },
