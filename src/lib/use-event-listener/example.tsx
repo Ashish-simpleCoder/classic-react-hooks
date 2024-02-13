@@ -9,7 +9,6 @@ export default function Example() {
    const logRef = useRef<ElementRef<'div'>>(null)
 
    useEventListener(target ? document.querySelector(target) : null, event_type, (e) => {
-      // console.log(e.target)
       const p = document.createElement('p')
       p.innerText = `element=${e.target.nodeName} | event=${event_type} | content=${e.target.textContent}`
       logRef.current!.prepend(p)

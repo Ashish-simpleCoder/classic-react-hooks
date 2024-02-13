@@ -28,7 +28,7 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details example.tsx
-<<< @/../src/lib/use-event-listener/example.tsx{4,10-16,26}
+<<< @/../src/lib/use-event-listener/example.tsx{2,11-16,26}
 :::
 
 ::: details use-event-listener.tsx
