@@ -9,6 +9,13 @@ export default defineConfig({
    lastUpdated: true,
    cleanUrls: true,
 
+   sitemap: {
+      hostname: 'https://classic-react-hooks.vercel.app',
+      transformItems(items) {
+        return items.filter((item) => !item.url.includes('migration'))
+      }
+    },
+
    themeConfig: {
       // https://vitepress.dev/reference/default-theme-config
       logo: '/logo.jpg',

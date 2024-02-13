@@ -3,7 +3,8 @@ outline: deep
 ---
 # use-event-listener
 
-- A hook which returns a debounced function.
+- A hook for adding dom events in declarative manner.
+
 
 ## Example
 
@@ -27,10 +28,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details example.tsx
-<<< @/../src/lib/use-event-listener/example.tsx
+<<< @/../src/lib/use-event-listener/example.tsx{2,11-16,26}
 :::
 
 ::: details use-event-listener.tsx
 <<< @/../src/lib/use-event-listener/use-event-listener.tsx
 :::
-
