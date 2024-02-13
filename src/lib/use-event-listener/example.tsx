@@ -1,46 +1,60 @@
 import React, { ElementRef, useRef, useState } from 'react'
-import ResetWrapper from '../../components/reset-wrapper'
-import { ResetSvg } from '../../components/svg-icons'
 import { useEventListener } from './use-event-listener'
+import ExampleContainer from '../../components/example-container'
+import AppButton from '../../components/app-button'
 
-function Example() {
-   const [counter, setCounter] = useState(0)
-   const blueBtnRef = useRef<ElementRef<'button'>>(null)
+export default function Example() {
+   const [target, setTarget] = useState<string | null>(null)
+   const [event_type, setEventType] = useState<keyof DocumentEventMap>('click')
+   const logRef = useRef<ElementRef<'div'>>(null)
 
-   useEventListener(
-      () => blueBtnRef.current,
-      'click',
-      () => {
-         setCounter((c) => c + 1)
-      }
-   )
+   useEventListener(target ? document.querySelector(target) : null, event_type, (e) => {
+      // console.log(e.target)
+      const p = document.createElement('p')
+      p.innerText = `element=${e.target.nodeName} | event=${event_type} | content=${e.target.textContent}`
+      logRef.current!.prepend(p)
+   })
 
    return (
       <>
-         <div className='flex flex-col gap-4 border-gray-200 dark:border-gray-800 border px-4 py-2 rounded-md'>
-            <button className='reset-btn absolute right-2' title='reset example'>
-               <ResetSvg />
-            </button>
-
-            <div className='flex flex-row items-center gap-4'>
-               <button className='px-3 py-2 rounded-md bg-blue-200 dark:bg-blue-800' ref={blueBtnRef}>
-                  increment
-               </button>
-               <p className="text-sm !m-0">{counter}</p>
+         <ExampleContainer>
+            <div className='flex gap-6 max-sm:flex-col'>
+               <div className='form-group flex items-center gap-2 justify-between flex-1'>
+                  <label htmlFor='target'>Target</label>
+                  <select
+                     name='target'
+                     id='target'
+                     className='px-4 py-2 rounded-md w-full'
+                     onChange={(e) => setTarget(e.target.value)}>
+                     <option selected disabled>
+                        select
+                     </option>
+                     <option value='.btn-1'>btn-1</option>
+                     <option value='.head-1'>h-1</option>
+                  </select>
+               </div>
+               <div className='form-group flex items-center gap-2 justify-between flex-1'>
+                  <label htmlFor='target' className='whitespace-nowrap'>
+                     Event
+                  </label>
+                  <select
+                     name='event-type'
+                     id='event-type'
+                     className='px-4 py-2 rounded-md w-full'
+                     onChange={(e) => setEventType(e.target.value as keyof DocumentEventMap)}>
+                     <option value='click'>click</option>
+                     <option value='mouseenter'>hover</option>
+                  </select>
+               </div>
             </div>
-         </div>
+
+            <div className='flex gap-4 max-sm:flex-col'>
+               <AppButton className='btn-1'>click me (btn-1)</AppButton>
+               <AppButton className='head-1'>This is (h1-1)</AppButton>
+            </div>
+
+            <div className='bg-gray-200 dark:bg-gray-800 px-2 max-h-48 overflow-y-auto' ref={logRef}></div>
+         </ExampleContainer>
       </>
    )
 }
-
-export default function ExampleContainer() {
-   return (
-      <>
-         <ResetWrapper>
-            <Example />
-         </ResetWrapper>
-      </>
-   )
-}
-
-

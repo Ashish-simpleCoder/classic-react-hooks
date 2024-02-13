@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-# useEventListener
+# use-event-listener
 
 - A hook for adding dom events in declarative manner.
 
@@ -27,10 +27,10 @@ onMounted(() => {
 
 ## Code Snippets
 
-::: details Example.tsx
+::: details example.tsx
 <<< @/../src/lib/use-event-listener/example.tsx{4,10-16,26}
 :::
 
-::: details useEventListener.tsx
+::: details use-event-listener.tsx
 <<< @/../src/lib/use-event-listener/use-event-listener.tsx
 :::

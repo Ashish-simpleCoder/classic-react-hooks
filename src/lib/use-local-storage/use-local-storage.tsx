@@ -12,20 +12,22 @@ export default function useLocalStorage<State>(key: string, defaultValue?: State
       }
    })
 
-   const updateState: Dispatch<React.SetStateAction<State>> = useCallback((value: State | ((state: State) => State)) => {
-      let new_value = value
-      if (typeof value == 'function') {
-         setState((state) => {
-            new_value = (value as (state: State) => State)(state)
+   const updateState: Dispatch<React.SetStateAction<State>> = useCallback(
+      (value: State | ((state: State) => State)) => {
+         let new_value = value
+         if (typeof value == 'function') {
+            setState((state) => {
+               new_value = (value as (state: State) => State)(state)
+               localStorage.setItem(key, JSON.stringify(new_value))
+               return new_value
+            })
+         } else {
+            setState(new_value)
             localStorage.setItem(key, JSON.stringify(new_value))
-            return new_value
-         })
-      } else {
-         setState(new_value)
-         localStorage.setItem(key, JSON.stringify(new_value))
-      }
-   }, [])
-
+         }
+      },
+      []
+   )
 
    useEffect(() => {
       // only set default when not present in localStorage

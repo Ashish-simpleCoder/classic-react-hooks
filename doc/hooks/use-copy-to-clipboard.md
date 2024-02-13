@@ -1,9 +1,10 @@
 ---
 outline: deep
 ---
-# use-debouced-fn
+# use-copy-to-clipboard
 
-- A hook which returns a debounced function.
+- A hook for copying the data in the clipboard with success and error callbacks.
+
 
 ## Example
 
@@ -14,8 +15,7 @@ outline: deep
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ref, onMounted } from 'vue'
-import Example from '../../src/lib/use-debounced-fn/example'
-import useDeboucedFn from '../../src/lib/use-debounced-fn/use-debounced-fn'
+import Example from '../../src/lib/use-copy-to-clipboard/example'
 
 const el = ref()
 onMounted(() => {
@@ -27,10 +27,9 @@ onMounted(() => {
 ## Code Snippets
 
 ::: details example.tsx
-<<< @/../src/lib/use-debounced-fn/example.tsx{7-9,18,23,33,38}
+<<< @/../src/lib/use-copy-to-clipboard/example.tsx{6,22-26}
 :::
 
-::: details use-debouced-fn.tsx
-<<< @/../src/lib/use-debounced-fn/use-debounced-fn.tsx
+::: details use-copy-to-clipboard.tsx
+<<< @/../src/lib/use-copy-to-clipboard/use-copy-to-clipboard.tsx
 :::
-

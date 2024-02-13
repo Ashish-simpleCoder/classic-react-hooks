@@ -3,10 +3,9 @@ import { useEffect, useRef } from 'react'
 
 const DEP: DependencyList = []
 
-
 export default function useSyncedEffect(cb: EffectCallback, dep: DependencyList | undefined) {
    const isInitialLoad = useRef(true)
-   const cleanup = useRef<(void | (() => void))>()
+   const cleanup = useRef<void | (() => void)>()
 
    useEffect(() => {
       if (isInitialLoad.current) {
