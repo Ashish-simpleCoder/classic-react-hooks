@@ -1,4 +1,5 @@
 import { defineConfig, type DefaultTheme } from 'vitepress'
+import { version } from '../../../package.json'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -29,6 +30,10 @@ export default defineConfig({
             text: 'API',
             link: '/hooks/use-synced-ref',
          },
+         {
+            text: `v${version}`,
+            link: `https://github.com/Ashish-simpleCoder/classic-react-hooks/releases/tag/v${version}`,
+         },
       ],
 
       search: {
@@ -47,6 +52,7 @@ export default defineConfig({
             icon: 'github',
             link: 'https://github.com/Ashish-simpleCoder/classic-react-hooks',
          },
+         { icon: 'x', link: 'https://twitter.com/ashish_devloper' },
       ],
       editLink: {
          pattern: 'https://github.com/Ashish-simpleCoder/classic-react-hooks/edit/main/doc/:path',
@@ -54,7 +60,8 @@ export default defineConfig({
       },
 
       footer: {
-         message: "Crafted by <a href='https://github.com/ashish-simpleCoder' target='_blank'>Ashish Prajapati</a>",
+         message:
+            "Released under the MIT License.\n Crafted by <a href='https://github.com/ashish-simpleCoder' target='_blank'>Ashish Prajapati</a>",
          copyright: 'Powered by VitePress',
       },
    },
