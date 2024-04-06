@@ -11,9 +11,10 @@ export default defineConfig({
       coverage: {
          provider: 'istanbul', // or 'c8'
          clean: true,
-         all: false,
+         all: true,
+         include: ['src/lib/**/*'],
       },
-      include: ['./src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+      include: ['src/lib/**/*.{test,spec}.{js,jsx,ts,tsx}'],
       exclude: [
          '**/node_modules/**',
          '**/dist/**',
@@ -21,6 +22,7 @@ export default defineConfig({
          '**/.{idea,git,cache,output,temp}/**',
          './src/config/**',
          './scripts/*',
+         './apps/*',
       ],
    },
    clearScreen: true,
