@@ -19,7 +19,7 @@ describe('use-synced-ref', () => {
       // update
       rerender({ name: 'React' })
       expect(current).toEqual({ current: { name: 'React' } })
-      
+
       // update
       rerender({ name: 'React', rank: 1 })
       expect(current).toEqual({ current: { name: 'React', rank: 1 } })
