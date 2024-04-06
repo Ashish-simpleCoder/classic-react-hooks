@@ -30,7 +30,7 @@ const DEP: DependencyList = []
       )
    }
 */
-export default function useSyncedEffect(cb: EffectCallback, deps: DependencyList | undefined) {
+export default function useSyncedEffect(cb: EffectCallback, deps?: DependencyList) {
    const isInitialLoad = useRef(true)
    const cleanup = useRef<void | (() => void)>()
 
