@@ -1,7 +1,5 @@
 import * as React from 'react'
 
-const p = 'sfsdf'
-
 export { useEventListener as useEventListener } from './lib/use-event-listener'
 export { default as useCopyToClipboard } from './lib/use-copy-to-clipboard'
 export { default as useLocalStorage } from './lib/use-local-storage'

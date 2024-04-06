@@ -37,9 +37,9 @@ export default function useTimeoutEffect(cb: () => void, timeout = 0) {
       clearTimeout(timeoutId.current)
    }, [])
 
-   const restartTimer = useCallback(() => {
+   const restartTimer = useCallback((new_timeout?: number) => {
       clearTimer()
-      timeoutId.current = setTimeout(paramsRef.current.cb, paramsRef.current.timeout)
+      timeoutId.current = setTimeout(paramsRef.current.cb, new_timeout ?? paramsRef.current.timeout)
    }, [])
 
    useEffect(() => {

@@ -26,7 +26,7 @@ import useSyncedRef from '../use-synced-ref'
       )
    }
 */
-export default function useIntervalEffect(cb: () => void, interval = 0) {
+export default function useIntervalEffect(cb: () => void, interval = 100) {
    let paramsRef = useSyncedRef({
       cb,
       interval,
@@ -37,9 +37,9 @@ export default function useIntervalEffect(cb: () => void, interval = 0) {
       clearInterval(intervalId.current)
    }, [])
 
-   const restartTimer = useCallback(() => {
+   const restartTimer = useCallback((new_interval?: number) => {
       clearTimer()
-      intervalId.current = setInterval(paramsRef.current.cb, paramsRef.current.interval)
+      intervalId.current = setInterval(paramsRef.current.cb, new_interval ?? paramsRef.current.interval)
    }, [])
 
    useEffect(() => {

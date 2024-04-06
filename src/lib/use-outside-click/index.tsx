@@ -39,7 +39,7 @@ export default function useOutsideClick(
    })
 
    const eventCb = useCallback((event: DocumentEventMap['click']) => {
-      const node = typeof target === 'function' ? target() : target ?? document
+      const node = (typeof target == 'function' ? target() : target) ?? document
       if (event.target == node) return
 
       if (node && (node as Node).contains(event.target as Node)) {
