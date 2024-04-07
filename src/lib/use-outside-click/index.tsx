@@ -48,5 +48,5 @@ export default function useOutsideClick(
       paramsRef.current.handler(event)
    }, [])
 
-   return useEventListener(document, 'click', eventCb, undefined, shouldInjectEvent)
+   useEventListener(document, 'click', eventCb, undefined, shouldInjectEvent)
 }

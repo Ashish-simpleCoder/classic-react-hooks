@@ -33,21 +33,21 @@ export function useEventListener<K extends keyof DocumentEventMap>(
    handler?: (event: DocumentEventMap[K]) => void,
    options?: Options,
    shouldInjectEvent?: boolean
-): VoidFunction
+): void
 export function useEventListener<K extends keyof WindowEventMap>(
    target: Target,
    event: K,
    handler?: (event: WindowEventMap[K]) => void,
    options?: Options,
    shouldInjectEvent?: boolean
-): VoidFunction
+): void
 export function useEventListener<K extends keyof GlobalEventHandlersEventMap>(
    target: Target,
    event: K,
    handler?: (event: GlobalEventHandlersEventMap[K]) => void,
    options?: Options,
    shouldInjectEvent?: boolean
-): VoidFunction
+): void
 export function useEventListener(
    target: Target,
    event: string,
@@ -72,20 +72,10 @@ export function useEventListener(
 
       if (shouldInjectEvent) {
          node.addEventListener(event, callback, options)
-      } else {
-         node.removeEventListener(event, callback, options)
       }
 
       return () => {
          node.removeEventListener(event, callback, options)
       }
    }, [event, target, shouldInjectEvent])
-
-   // cleanup function
-   return () => {
-      const node = typeof target === 'function' ? target() : target
-      if (!cleanupCallbackRef.current || !node) return
-
-      node.removeEventListener(event, cleanupCallbackRef.current, listener.current.options)
-   }
 }
