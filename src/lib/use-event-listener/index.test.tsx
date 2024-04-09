@@ -7,7 +7,7 @@ describe('use-outside-click', () => {
       renderHook(() => useEventListener(null, 'click', () => {}))
    })
 
-   it('should add listener on-mount and remove it on on-mount', () => {
+   it('should add listener on-mount and remove it on un-mount', () => {
       const div = document.createElement('div')
       const addSpy = vi.spyOn(div, 'addEventListener')
       const removeSpy = vi.spyOn(div, 'removeEventListener')
