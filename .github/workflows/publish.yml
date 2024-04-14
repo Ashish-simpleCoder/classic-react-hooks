@@ -1,0 +1,37 @@
+name: Publish
+on:
+   push:
+      branches:
+         - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+   publish:
+      runs-on: 'ubuntu-latest'
+      # provenance check
+      # permission for github-action
+      # permissions:
+      # id-token: write
+      # actions: write
+      permissions: write-all
+      steps:
+         - uses: actions/checkout@v3
+         - uses: pnpm/action-setup@v2
+           with:
+              version: 8
+         - uses: actions/setup-node@v3
+           with:
+              node-version: ${{ matrix.node }}
+              cache: 'pnpm'
+
+         - run: pnpm install --no-frozen-lockfile
+
+         - name: Create Release Pull Request or Publish
+           id: changesets
+           uses: changesets/action@v1
+           env:
+              GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+              NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+           with:
+              publish: pnpm release
