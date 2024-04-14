@@ -69,12 +69,5 @@ export default function useLocalStorage<State>(key: string, defaultValue?: State
       []
    )
 
-   // useEffect(() => {
-   //    // only set default when not present in localStorage
-   //    if (defaultValue && localStorage.getItem(key) == null) {
-   //       updateState(defaultValue)
-   //    }
-   // }, [])
-
    return [state, updateState] as const
 }
