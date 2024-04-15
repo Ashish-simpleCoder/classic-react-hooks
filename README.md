@@ -1,10 +1,8 @@
 # 🚀 classic-react-hooks
 
-#### A Simple and Minimal React Library of `custom hooks`.
+#### A simple and minimal library of `custom react hooks`.
 
 <br />
-
-> **Note** This library is still in progress.
 
 <br />
 <p align="left">
@@ -16,9 +14,13 @@
     <img src="https://img.shields.io/github/actions/workflow/status/Ashish-simpleCoder/classic-react-hooks/test.yml?label=Test&logo=GitHub" alt="Test" />
   </a>
   <a href="https://github.com/Ashish-simplecoder/classic-react-hooks/actions/workflows/main.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/Ashish-simpleCoder/classic-react-hooks/main.yml?label=CI&logo=GitHub" alt="Jest is released under the MIT license." />
+    <img src="https://img.shields.io/github/actions/workflow/status/Ashish-simpleCoder/classic-react-hooks/main.yml?label=CI&logo=GitHub" alt="classic-react-hooks is released under the MIT license." />
   </a>
 </p>
+
+## Read the Documentation
+
+https://classic-react-hooks.vercel.app/
 
 ## Features
 
