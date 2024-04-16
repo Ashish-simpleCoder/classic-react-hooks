@@ -2,7 +2,7 @@
 
 ## What is **classic-react-hooks**?
 
--  **`classic-react-hooks`** is collection of `feature rich` custom react hooks that can be easily integrated into your react projects.
+-  **`classic-react-hooks`** is collection of feature rich custom react hooks that can be easily integrated into your react projects.
 
 ## Installation
 

@@ -51,15 +51,15 @@ $ yarn add classic-react-hooks
 
 ## Hooks
 
--  [use-event-listener](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-event-listener)
--  [use-copy-to-clipboard](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-copy-to-clipboard)
--  [use-local-storage](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-local-storage)
--  [use-outside-click](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-outside-click)
--  [use-debounced-fn](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-debounced-fn)
--  [use-is-online](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-is-online)
--  [use-timeout-effect](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-timeout-effect)
--  [use-interval-effect](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-interval-effect)
--  [use-synced-ref](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-synced-ref)
--  [use-synced-effect](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-synced-effect)
--  [use-on-mount-effect](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-on-mount-effect)
--  [use-counter](https://github.com/Ashish-simpleCoder/classic-react-hooks#use-counter)
+-  use-event-listener
+-  use-copy-to-clipboard
+-  use-local-storage
+-  use-outside-click
+-  use-debounced-fn
+-  use-is-online
+-  use-timeout-effect
+-  use-interval-effect
+-  use-synced-ref
+-  use-synced-effect
+-  use-on-mount-effect
+-  use-counter
