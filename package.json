@@ -16,7 +16,7 @@
       "access": "public",
       "provenance": true
    },
-   "homepage": "https://github.com/Ashish-simpleCoder/classic-react-hooks",
+   "homepage": "https://classic-react-hooks.vercel.app",
    "author": "Ashish-simpleCoder",
    "license": "MIT",
    "private": false,

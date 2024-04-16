@@ -28,7 +28,7 @@ export default defineConfig({
          },
          {
             text: 'API',
-            link: '/hooks/use-synced-ref',
+            link: '/getting-started/overview',
          },
          {
             text: `v${version}`,
