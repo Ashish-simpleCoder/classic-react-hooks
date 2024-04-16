@@ -1,0 +1,22 @@
+{
+   "name": "docs",
+   "version": "0.0.0",
+   "description": "Documentation for classic-react-hooks package",
+   "main": "index.js",
+   "scripts": {
+      "docs:dev": "vitepress dev",
+      "docs:build": "vitepress build",
+      "docs:preview": "vitepress preview"
+   },
+   "keywords": [
+      "classic-react-hooks",
+      "hooks",
+      "react hooks"
+   ],
+   "author": "Ashish-simpleCoder",
+   "license": "MIT",
+   "dependencies": {},
+   "devDependencies": {
+      "vitepress": "^1.0.1"
+   }
+}

@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "classic-react-hooks": "0.1.0"
+  },
+  "changesets": [
+    "silver-cows-explode"
+  ]
+}

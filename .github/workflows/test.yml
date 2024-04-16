@@ -1,0 +1,15 @@
+name: Test
+on: [pull_request]
+jobs:
+   size:
+      runs-on: ubuntu-latest
+      env:
+         CI_JOB_NUMBER: 1
+      steps:
+         - uses: actions/checkout@v3
+         - uses: pnpm/action-setup@v2
+           with:
+              version: 8
+         - run: pnpm i -g pnpm
+         - run: pnpm install --no-frozen-lockfile
+         - run: pnpm build && pnpm test

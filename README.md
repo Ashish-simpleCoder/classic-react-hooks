@@ -1,24 +1,65 @@
-# react-hooks
+# 🚀 classic-react-hooks
 
-A great collection of awesome react-hooks.
+#### A simple and minimal library of `custom react hooks`.
 
-## Docs
-- Visit https://classic-react-hooks.vercel.app for examples and usage.
+<br />
+
+<br />
+<p align="left">
+  <a href="https://badge.fury.io/Ashish-simpleCoder/classic-react-hooks">
+    <img src="https://badge.fury.io/js/classic-react-hooks.svg" alt="npm version">
+  </a>
+    <img src="https://img.shields.io/badge/Licence-MIT-success" alt="MIT license." />
+  <a href="https://github.com/Ashish-simpleCoder/classic-react-hooks/actions/workflows/test.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/Ashish-simpleCoder/classic-react-hooks/test.yml?label=Test&logo=GitHub" alt="Test" />
+  </a>
+  <a href="https://github.com/Ashish-simplecoder/classic-react-hooks/actions/workflows/main.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/Ashish-simpleCoder/classic-react-hooks/main.yml?label=CI&logo=GitHub" alt="classic-react-hooks is released under the MIT license." />
+  </a>
+</p>
+
+## Read the Documentation
+
+https://classic-react-hooks.vercel.app/
 
 ## Features
-- Comprehensive hooks collection
-- Built in Typescript
-- Copy & Paste Code Snippet Directly
 
+-  Comes with treeshaking
+-  Typescript support
+-  Small bundle size
+-  Minimal and Easy to use
+
+## Installation
+
+For npm users
+
+```bash
+$ npm install classic-react-hooks
+```
+
+For pnpm users
+
+```bash
+$ pnpm install classic-react-hooks
+```
+
+For yarn users
+
+```bash
+$ yarn add classic-react-hooks
+```
 
 ## Hooks
-- [use-synced-ref](https://classic-react-hooks.vercel.app/guide/use-synced-ref.html)
-- [use-debounced-fn](https://classic-react-hooks.vercel.app/guide/use-debounced-fn.html)
-- [use-interval-effect](https://classic-react-hooks.vercel.app/guide/use-interval-effect.html)
-- [use-timeout-effect](https://classic-react-hooks.vercel.app/guide/use-timeout-effect.html)
-- [use-is-online](https://classic-react-hooks.vercel.app/guide/use-is-online.html)
-- [use-on-mount-effect](https://classic-react-hooks.vercel.app/guide/use-on-mount-effect.html)
-- [use-synced-effect](https://classic-react-hooks.vercel.app/guide/use-synced-effect.html)
-- [use-local-storage](https://classic-react-hooks.vercel.app/guide/use-local-storage.html)
-- [use-counter](https://classic-react-hooks.vercel.app/guide/use-.html)
-- [use-debounced-fn](https://classic-react-hooks.vercel.app/guide/use-debounced-fn.html)
+
+-  use-event-listener
+-  use-copy-to-clipboard
+-  use-local-storage
+-  use-outside-click
+-  use-debounced-fn
+-  use-is-online
+-  use-timeout-effect
+-  use-interval-effect
+-  use-synced-ref
+-  use-synced-effect
+-  use-on-mount-effect
+-  use-counter
