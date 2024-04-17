@@ -35,17 +35,14 @@ type Handler = (event: Event) => void
 ### Usage
 
 ```ts
+import { useRef } from 'react'
 import { useEventListener } from 'classic-react-hooks'
 
 export default function YourComponent() {
    const ref = useRef()
-   useEventListener(
-      () => ref.current,
-      'click',
-      (e) => {
-         console.log(e)
-      }
-   )
+   useEventListener(ref, 'click', (e) => {
+      console.log(e)
+   })
 
    return (
       <div>

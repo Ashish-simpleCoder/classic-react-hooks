@@ -18,7 +18,7 @@ type Handler = (event: Event) => void
    
    export default function YourComponent() {
       const ref = useRef()
-      useEventListener(() => ref.current, 'click', (e) =>{
+      useEventListener(ref, 'click', (e) =>{
          console.log(e)
       })
 
