@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react'
 import { vi } from 'vitest'
 import { useEventListener } from '.'
 
-describe('use-outside-click', () => {
+describe('use-event-listener', () => {
    it('should render', () => {
       renderHook(() => useEventListener(null, 'click', () => {}))
    })
@@ -31,6 +31,29 @@ describe('use-outside-click', () => {
       unmount()
       expect(addSpy).toHaveBeenCalledTimes(2)
       expect(removeSpy).toHaveBeenCalledTimes(2)
+   })
+
+   it('should work with refs', () => {
+      const div = document.createElement('div')
+      const addSpy = vi.spyOn(div, 'addEventListener')
+      const removeSpy = vi.spyOn(div, 'removeEventListener')
+
+      const ref = { current: div }
+
+      const { rerender, unmount } = renderHook(() => {
+         useEventListener(ref, 'resize', () => {}, { passive: true })
+      })
+
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(removeSpy).toHaveBeenCalledTimes(0)
+
+      rerender()
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(removeSpy).toHaveBeenCalledTimes(0)
+
+      unmount()
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(removeSpy).toHaveBeenCalledTimes(1)
    })
 
    it('should fire listener on event trigger with proper context', () => {
