@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { RefObject, useEffect } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
-type Target = null | EventTarget | (() => EventTarget | null)
+type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget | null)
 type Options = boolean | AddEventListenerOptions
 type Handler = (event: Event) => void
 
@@ -71,11 +71,19 @@ export function useEventListener(
       const options = listener.current.options
 
       if (shouldInjectEvent) {
-         node.addEventListener(event, callback, options)
+         if ('current' in node) {
+            node.current?.addEventListener(event, callback, options)
+         } else {
+            node.addEventListener(event, callback, options)
+         }
       }
 
       return () => {
-         node.removeEventListener(event, callback, options)
+         if ('current' in node) {
+            node.current?.removeEventListener(event, callback, options)
+         } else {
+            node.removeEventListener(event, callback, options)
+         }
       }
    }, [event, target, shouldInjectEvent])
 }
