@@ -68,6 +68,9 @@ describe('use-event-listener', () => {
 
       expect(listener).toHaveBeenCalledTimes(1)
       expect(listener).toHaveBeenCalledWith(event)
+
+      div.dispatchEvent(event)
+      expect(listener).toHaveBeenCalledTimes(2)
    })
 
    it('should remove listener when shouldInjectEvent becomes false', () => {
@@ -88,5 +91,9 @@ describe('use-event-listener', () => {
       rerender(false)
       expect(listener).toHaveBeenCalledTimes(1)
       expect(removeSpy).toHaveBeenCalledTimes(1)
+
+      // check whether event is cleanup or not
+      div.dispatchEvent(event)
+      expect(listener).toHaveBeenCalledTimes(1)
    })
 })

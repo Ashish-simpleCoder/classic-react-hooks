@@ -1,3 +1,4 @@
+'use client'
 import React, { useSyncExternalStore } from 'react'
 
 /**

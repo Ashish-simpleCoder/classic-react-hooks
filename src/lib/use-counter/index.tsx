@@ -1,3 +1,4 @@
+'use client'
 import React, { useCallback, useState } from 'react'
 import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter'
 

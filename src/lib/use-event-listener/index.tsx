@@ -1,3 +1,4 @@
+'use client'
 import React, { RefObject, useEffect } from 'react'
 import useSyncedRef from '../use-synced-ref'
 

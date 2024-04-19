@@ -8,7 +8,7 @@ export default defineConfig({
    description: 'An awesome collection of custom React hooks',
 
    lastUpdated: true,
-   cleanUrls: true,
+   cleanUrls: false,
 
    sitemap: {
       hostname: 'https://classic-react-hooks.vercel.app',
