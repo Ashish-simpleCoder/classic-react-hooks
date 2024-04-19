@@ -1,3 +1,4 @@
+'use client'
 import React, { useCallback } from 'react'
 import { useEventListener } from '../use-event-listener'
 import useSyncedRef from '../use-synced-ref'
