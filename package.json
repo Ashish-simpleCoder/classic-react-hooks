@@ -80,5 +80,15 @@
       "tabWidth": 3,
       "jsxSingleQuote": true,
       "trailingComma": "es5"
-   }
+   },
+   "size-limit": [
+      {
+         "path": "dist/index.mjs",
+         "limit": "10 KB"
+      },
+      {
+         "path": "dist/index.js",
+         "limit": "10 KB"
+      }
+   ]
 }
