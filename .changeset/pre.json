@@ -5,6 +5,7 @@
     "classic-react-hooks": "0.1.0"
   },
   "changesets": [
+    "eighty-seahorses-laugh",
     "silver-cows-explode",
     "tiny-tables-switch"
   ]
