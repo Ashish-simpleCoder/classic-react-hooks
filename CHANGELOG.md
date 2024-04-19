@@ -1,5 +1,13 @@
 # classic-react-hooks
 
+## 0.2.0-beta.2
+
+### Minor Changes
+
+-  8931f18: - Add use-client directive support
+   -  Turn off cleanUrl config in vitepress doc
+   -  Update test cases for `use-event-listener` hook
+
 ## 0.2.0-beta.1
 
 ### Minor Changes
