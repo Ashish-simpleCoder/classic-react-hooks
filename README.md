@@ -1,6 +1,6 @@
 # 🚀 classic-react-hooks
 
-#### A simple and minimal library of `custom react hooks`.
+#### A simple and awesome collection of `custom react hooks`.
 
 <br />
 

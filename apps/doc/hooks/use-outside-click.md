@@ -33,13 +33,9 @@ import { useOutsideClick } from 'classic-react-hooks'
 
 export default function YourComponent() {
    const modalRef = useRef(null)
-   useOutsideClick(
-      () => modalRef.current,
-      (e) => {
-         console.log('clicked outside on modal. Target = ', e.target)
-      },
-      true
-   )
+   useOutsideClick(modalRef, (e) => {
+      console.log('clicked outside on modal. Target = ', e.target)
+   })
 
    return (
       <div>

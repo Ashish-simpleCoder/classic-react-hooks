@@ -4,7 +4,7 @@ outline: deep
 
 # use-interval-effect
 
--  A hooks which fires the provided callback every time when the given delay is passed, just like the setInterval.
+-  A hooks which fires the provided callback every time when the given delay is passed, just like the `setInterval`.
 
 ### Parameters
 

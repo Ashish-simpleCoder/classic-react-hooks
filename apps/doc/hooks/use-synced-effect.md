@@ -11,7 +11,7 @@ outline: deep
 
 | Parameter |   Type   | Required | Default Value | Description                                     |
 | --------- | :------: | :------: | :-----------: | ----------------------------------------------- |
-| cb        | Function |    ✅    |       -       | Function to fire when dependencies get changed. |
+| cb        | Function |    ✅    |       -       | Callback to fire when dependencies get changed. |
 | deps      |  Array   |    ❌    |      []       | Dependencies.                                   |
 
 ### Usage

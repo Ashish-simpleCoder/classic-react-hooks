@@ -11,7 +11,7 @@ outline: deep
 
 | Parameter |   Type   | Required | Default Value | Description                           |
 | --------- | :------: | :------: | :-----------: | ------------------------------------- |
-| cb        | Function |    ✅    |       -       | Function to fire after initial mount. |
+| cb        | Function |    ✅    |       -       | Callback to fire after initial mount. |
 
 ### Usage
 
