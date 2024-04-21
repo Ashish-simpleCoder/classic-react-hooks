@@ -36,11 +36,20 @@ export default function useSyncedEffect(cb: EffectCallback, deps?: DependencyLis
    const cleanup = useRef<void | (() => void)>()
 
    useEffect(() => {
+      let timeoutId: NodeJS.Timeout
       if (isInitialLoad.current) {
-         isInitialLoad.current = false
+         // handling React.StrictMode double time firing
+         timeoutId = setTimeout(() => {
+            isInitialLoad.current = false
+         })
       } else {
          cleanup.current = cb()
       }
-      return cleanup.current
+      return () => {
+         if (timeoutId) {
+            clearTimeout(timeoutId)
+         }
+         cleanup.current?.()
+      }
    }, deps ?? DEP)
 }

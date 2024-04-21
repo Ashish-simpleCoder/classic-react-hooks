@@ -3,6 +3,10 @@ import { vi } from 'vitest'
 import useSyncedEffect from '.'
 
 describe('use-on-mount-effect', () => {
+   beforeEach(() => {
+      vi.useFakeTimers()
+   })
+
    it('should not run callback on initial the mount', () => {
       const fn = vi.fn()
       renderHook(() => useSyncedEffect(fn, []))
@@ -18,15 +22,17 @@ describe('use-on-mount-effect', () => {
       const fn = vi.fn()
       let skill = 'js'
 
-      const { rerender } = renderHook((props: Array<any>) => useSyncedEffect(fn, props ?? [skill]))
+      const { rerender } = renderHook(() => useSyncedEffect(fn, [skill]))
       expect(fn).toHaveBeenCalledTimes(0)
 
+      vi.runAllTimers()
+
       skill = 'react'
-      rerender([skill])
+      rerender()
       expect(fn).toHaveBeenCalledTimes(1)
 
       skill = 'typescript'
-      rerender([skill])
+      rerender()
       expect(fn).toHaveBeenCalledTimes(2)
    })
 
@@ -35,10 +41,11 @@ describe('use-on-mount-effect', () => {
       const fn = vi.fn(() => cleanupFn)
       let skill = 'js'
 
-      const { rerender, unmount } = renderHook((props: Array<any>) => useSyncedEffect(fn, props ?? [skill]))
+      const { rerender, unmount } = renderHook(() => useSyncedEffect(fn, [skill]))
+      vi.runAllTimers()
 
       skill = 'react'
-      rerender([skill])
+      rerender()
       expect(fn).toHaveBeenCalledTimes(1)
 
       unmount()
