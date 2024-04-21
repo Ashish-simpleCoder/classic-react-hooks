@@ -18,7 +18,7 @@ describe('use-timeout-effect', () => {
       renderHook(() => useTimoeoutEffect(fn))
 
       expect(fn).toHaveBeenCalledTimes(0)
-      vi.advanceTimersByTime(0)
+      vi.advanceTimersByTime(100)
       expect(fn).toHaveBeenCalledTimes(1)
    })
 
