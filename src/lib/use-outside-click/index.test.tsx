@@ -30,6 +30,28 @@ describe('use-outside-click', () => {
       expect(addSpy).toHaveBeenCalledTimes(1)
       expect(removeSpy).toHaveBeenCalledTimes(1)
    })
+   it('should work with refs', () => {
+      const div = document.createElement('div')
+      const addSpy = vi.spyOn(document, 'addEventListener')
+      const removeSpy = vi.spyOn(document, 'removeEventListener')
+
+      const ref = { current: div }
+
+      const { rerender, unmount } = renderHook(() => {
+         useOutsideClick(ref, () => {})
+      })
+
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(removeSpy).toHaveBeenCalledTimes(0)
+
+      rerender()
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(removeSpy).toHaveBeenCalledTimes(0)
+
+      unmount()
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(removeSpy).toHaveBeenCalledTimes(1)
+   })
 
    it('should fire listener when clicked outside of target element', () => {
       const div = document.createElement('div')
