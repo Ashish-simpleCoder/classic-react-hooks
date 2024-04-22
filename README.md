@@ -63,3 +63,7 @@ $ yarn add classic-react-hooks
 -  use-synced-effect
 -  use-on-mount-effect
 -  use-counter
+
+## Contribution
+
+See [Contributing Guide](https://github.com/Ashish-simpleCoder/classic-react-hooks/blob/main/CONTRIBUTING.md).
