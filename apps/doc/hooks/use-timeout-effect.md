@@ -4,7 +4,7 @@ outline: deep
 
 # use-timeout-effect
 
--  A hooks which fires the provided callback only once when the given delay is passed, just like the setTimeout.
+-  A hooks which fires the provided callback only once when the given delay is passed, just like the `setTimeout`.
 
 ### Parameters
 

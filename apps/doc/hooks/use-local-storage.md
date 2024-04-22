@@ -6,14 +6,14 @@ outline: deep
 
 -  A hook for managing the states with `local-storage`
 -  It automatically updates the state in `local-storage`
--  `useState` with local storage power.
+-  It is `useState` with local storage power.
 
 ### Parameters
 
-| Parameter    |  Type  | Required | Default Value | Description                                            |
-| ------------ | :----: | :------: | :-----------: | ------------------------------------------------------ |
-| key          | string |    ✅    |       -       | key for getting from local-storage                     |
-| defaultValue |  any   |    ❌    |       -       | A initial value when item is not present local-storage |
+| Parameter    |  Type  | Required | Default Value | Description                                          |
+| ------------ | :----: | :------: | :-----------: | ---------------------------------------------------- |
+| key          | string |    ✅    |       -       | key for getting an item from local-storage           |
+| defaultValue |  any   |    ❌    |       -       | A initial value when item is not found local-storage |
 
 ### Returns
 

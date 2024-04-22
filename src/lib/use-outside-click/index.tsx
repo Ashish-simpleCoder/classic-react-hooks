@@ -1,9 +1,9 @@
 'use client'
-import React, { useCallback } from 'react'
+import React, { RefObject, useCallback } from 'react'
 import { useEventListener } from '../use-event-listener'
 import useSyncedRef from '../use-synced-ref'
 
-type Target = null | EventTarget | (() => EventTarget | null)
+type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget | null)
 
 /**
  * @description
@@ -41,9 +41,13 @@ export default function useOutsideClick(
 
    const eventCb = useCallback((event: DocumentEventMap['click']) => {
       const node = (typeof target == 'function' ? target() : target) ?? document
-      if (event.target == node) return
+      if (event.target == node || ('current' in node && event.target == node.current)) return
 
-      if (node && (node as Node).contains(event.target as Node)) {
+      if (
+         node &&
+         ((node as Node).contains(event.target as Node) ||
+            ('current' in node && (node.current as Node).contains(event.target as Node)))
+      ) {
          return
       }
       paramsRef.current.handler(event)

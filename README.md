@@ -1,6 +1,6 @@
 # 🚀 classic-react-hooks
 
-#### A simple and minimal library of `custom react hooks`.
+#### A simple and awesome collection of `custom react hooks`.
 
 <br />
 
@@ -63,3 +63,7 @@ $ yarn add classic-react-hooks
 -  use-synced-effect
 -  use-on-mount-effect
 -  use-counter
+
+## Contribution
+
+See [Contributing Guide](https://github.com/Ashish-simpleCoder/classic-react-hooks/blob/main/CONTRIBUTING.md).

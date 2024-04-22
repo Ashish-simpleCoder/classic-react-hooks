@@ -15,7 +15,7 @@ outline: deep
 
 ### Returns
 
--  It returns a function which debouced version of passed cb.
+-  It returns a function which is debouced version of passed callback.
 
 ### Usage
 

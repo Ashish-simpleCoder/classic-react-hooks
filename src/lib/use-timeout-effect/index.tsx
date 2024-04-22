@@ -27,7 +27,7 @@ import useSyncedRef from '../use-synced-ref'
       )
    }
 */
-export default function useTimeoutEffect(cb: () => void, timeout = 0) {
+export default function useTimeoutEffect(cb: () => void, timeout = 100) {
    let paramsRef = useSyncedRef({
       cb,
       timeout,
