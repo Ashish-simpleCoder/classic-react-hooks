@@ -1,3 +1,4 @@
+'use client'
 import React, { useRef } from 'react'
 import { useEventListener } from '../use-event-listener'
 
@@ -41,9 +42,9 @@ export default function useCombinedKeyEventListener<K extends keyof GlobalEventH
       pressedKeysMap.current.pop()
    }
 
-   useEventListener(document, type, listener, eventOptions, shouldInjectEvent)
+   useEventListener(document, type, listener, options)
 
-   useEventListener(document, 'keyup', clearPressedKey, eventOptions, shouldInjectEvent)
+   useEventListener(document, 'keyup', clearPressedKey, options)
    useEventListener(window, 'blur', () => (pressedKeysMap.current = []), shouldInjectEvent)
    useEventListener(window, 'contextmenu', () => (pressedKeysMap.current = []), shouldInjectEvent)
 }
