@@ -12,7 +12,6 @@ outline: deep
 | ----------------- | :-----------------------: | :------: | :-----------: | --------------------------------------------------- |
 | target            | [Target](#parametertype)  |    ✅    |       -       | Reference of the html element                       |
 | handler           | [Handler](#parametertype) |    ❌    |   undefined   | Callback for the event                              |
-| shouldInjectEvent |          boolean          |    ❌    |     true      | Based on it's value, event can be removed and added |
 
 ### Types
 
