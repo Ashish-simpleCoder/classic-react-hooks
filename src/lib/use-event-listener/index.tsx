@@ -3,7 +3,7 @@ import React, { RefObject, useEffect } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
 type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget | null)
-type Options = boolean | AddEventListenerOptions
+type Options = boolean | Prettify<AddEventListenerOptions & { shouldInjectEvent?: boolean | any }>
 type Handler = (event: Event) => void
 
 /* Have taken reference from ChakraUI's use-event-listener for typing out the props in type-safe manner. */
@@ -34,34 +34,29 @@ export function useEventListener<K extends keyof DocumentEventMap>(
    target: Target,
    event: K,
    handler?: (event: DocumentEventMap[K]) => void,
-   options?: Options,
-   shouldInjectEvent?: boolean
+   options?: Options
 ): void
 export function useEventListener<K extends keyof WindowEventMap>(
    target: Target,
    event: K,
    handler?: (event: WindowEventMap[K]) => void,
-   options?: Options,
-   shouldInjectEvent?: boolean
+   options?: Options
 ): void
 export function useEventListener<K extends keyof GlobalEventHandlersEventMap>(
    target: Target,
    event: K,
    handler?: (event: GlobalEventHandlersEventMap[K]) => void,
-   options?: Options,
-   shouldInjectEvent?: boolean
+   options?: Options
 ): void
-export function useEventListener(
-   target: Target,
-   event: string,
-   handler?: Handler,
-   options?: Options,
-   shouldInjectEvent: boolean = true
-) {
+export function useEventListener(target: Target, event: string, handler?: Handler, options?: Options) {
    const listener = useSyncedRef({
       handler,
       options,
    })
+   let shouldInjectEvent = true
+   if (typeof options == 'object' && 'shouldInjectEvent' in options) {
+      shouldInjectEvent = !!options.shouldInjectEvent
+   }
 
    useEffect(() => {
       const node = typeof target === 'function' ? target() : target
