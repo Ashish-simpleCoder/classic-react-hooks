@@ -13,6 +13,7 @@ export default defineConfig({
          clean: true,
          all: true,
          include: ['src/lib/**/*'],
+         exclude: ['src/lib/use-combined-key-event-listener'],
       },
       include: ['src/lib/**/*.{test,spec}.{js,jsx,ts,tsx}'],
       exclude: [
