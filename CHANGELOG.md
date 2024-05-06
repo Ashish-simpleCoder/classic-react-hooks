@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 1.0.0-beta.4
+
+### Major Changes
+
+-  72681e1: Major release
+
 ## 0.2.0-beta.3
 
 ### Minor Changes
