@@ -79,7 +79,7 @@ describe('use-event-listener', () => {
 
       const listener = vi.fn()
       const { rerender } = renderHook((shouldInjectEvent: boolean = true) => {
-         useEventListener(div, 'click', listener, { passive: true }, shouldInjectEvent)
+         useEventListener(div, 'click', listener, { passive: true, shouldInjectEvent })
       })
 
       const event = new Event('click')

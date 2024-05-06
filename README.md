@@ -49,6 +49,12 @@ For yarn users
 $ yarn add classic-react-hooks
 ```
 
+For bun users
+
+```bash
+$ bun add classic-react-hooks
+```
+
 ## Hooks
 
 -  use-event-listener
