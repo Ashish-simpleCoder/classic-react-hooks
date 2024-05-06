@@ -4,7 +4,7 @@ Hi! We are really excited that you are interested in contributing to classic-rea
 
 ## Repo Setup
 
-The package manager used to install and link dependencies must be [pnpm](https://pnpm.io/). NodeJS version should be v18.14.2 or higher
+The package manager used to install and link dependencies should be [pnpm](https://pnpm.io/) v8.12.0 or higher. NodeJS version should be v18.14.2 or higher
 
 1. Run `pnpm install` in root folder
 
@@ -25,7 +25,7 @@ The package manager used to install and link dependencies must be [pnpm](https:/
 
 -  If fixing bug:
 
-   -  If you are resolving a special issue, add `(fix #xxxx[,#xxxx])` (#xxxx is the issue id) in your PR title for a better release log, e.g. `fix: update entities encoding/decoding (fix #3899)`.
+   -  If you are resolving a special issue, add `(fix #xxxx[,#xxxx])` (#xxxx is the issue id) in your PR title for a better release log, e.g. `fix: update fetch logic (fix #3899)`.
    -  Provide a detailed description of the bug in the PR. Live demo preferred.
    -  Add appropriate test coverage if applicable.
 
@@ -37,7 +37,7 @@ The package manager used to install and link dependencies must be [pnpm](https:/
 
 ## Documenation Guidelines
 
--  To make contribute in the documentation, go to apps/doc directory
+-  To contribute in the documentation, go to apps/doc directory
 
 1. Run `pnpm install` to install all of the dependencies
 
