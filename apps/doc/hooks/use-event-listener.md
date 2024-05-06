@@ -14,7 +14,6 @@ outline: deep
 | event             |          string           |    ✅    |       -       | Event name                                          |
 | handler           | [Handler](#parametertype) |    ❌    |   undefined   | Callback for the event                              |
 | options           | [Options](#parametertype) |    ❌    |   undefined   | For managing Event Propagation                      |
-| shouldInjectEvent |          boolean          |    ❌    |     true      | Based on it's value, event can be removed and added |
 
 ### Returns
 
@@ -28,7 +27,7 @@ outline: deep
 
 ```ts
 type Target = null | EventTarget | (() => EventTarget | null)
-type Options = boolean | AddEventListenerOptions
+type Options = boolean | (AddEventListenerOptions & { shouldInjectEvent?: boolean | any })
 type Handler = (event: Event) => void
 ```
 
