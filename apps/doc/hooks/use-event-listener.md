@@ -8,12 +8,12 @@ outline: deep
 
 ### Parameters
 
-| Parameter         |           Type            | Required | Default Value | Description                                         |
-| ----------------- | :-----------------------: | :------: | :-----------: | --------------------------------------------------- |
-| target            | [Target](#parametertype)  |    ✅    |       -       | Reference of the html element                       |
-| event             |          string           |    ✅    |       -       | Event name                                          |
-| handler           | [Handler](#parametertype) |    ❌    |   undefined   | Callback for the event                              |
-| options           | [Options](#parametertype) |    ❌    |   undefined   | For managing Event Propagation                      |
+| Parameter |           Type            | Required | Default Value | Description                    |
+| --------- | :-----------------------: | :------: | :-----------: | ------------------------------ |
+| target    | [Target](#parametertype)  |    ✅    |       -       | Reference of the html element  |
+| event     |          string           |    ✅    |       -       | Event name                     |
+| handler   | [Handler](#parametertype) |    ❌    |   undefined   | Callback for the event         |
+| options   | [Options](#parametertype) |    ❌    |   undefined   | For managing Event Propagation |
 
 ### Returns
 
