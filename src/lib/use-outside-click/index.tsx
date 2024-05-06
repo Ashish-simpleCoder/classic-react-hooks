@@ -29,11 +29,7 @@ type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget |
       )
    }
 */
-export default function useOutsideClick(
-   target: Target,
-   handler: (event: DocumentEventMap['click']) => void,
-   shouldInjectEvent = true
-) {
+export default function useOutsideClick(target: Target, handler: (event: DocumentEventMap['click']) => void) {
    const paramsRef = useSyncedRef({
       target,
       handler,
@@ -53,5 +49,5 @@ export default function useOutsideClick(
       paramsRef.current.handler(event)
    }, [])
 
-   useEventListener(document, 'click', eventCb, undefined, shouldInjectEvent)
+   useEventListener(document, 'click', eventCb)
 }
