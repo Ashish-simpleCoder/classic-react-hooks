@@ -1,4 +1,5 @@
 'use client'
+import type { Prettify } from '../../types'
 import React, { RefObject, useEffect } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
