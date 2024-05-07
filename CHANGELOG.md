@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 1.0.0-beta.5
+
+### Patch Changes
+
+-  b21e739: Fix missing utility type Prettify in build
+
 ## 1.0.0-beta.4
 
 ### Major Changes
