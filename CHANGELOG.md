@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 1.0.0-beta.6
+
+### Minor Changes
+
+-  034f910: Fix working with ref for use-outside-click hook
+
 ## 1.0.0-beta.5
 
 ### Patch Changes
