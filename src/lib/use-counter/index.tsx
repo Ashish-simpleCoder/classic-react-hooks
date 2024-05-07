@@ -1,4 +1,5 @@
 'use client'
+import type { Prettify } from '../../types'
 import React, { useCallback, useState } from 'react'
 import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter'
 
