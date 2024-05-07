@@ -41,8 +41,8 @@ export default function useOutsideClick(target: Target, handler: (event: Documen
 
       if (
          node &&
-         ((node as Node).contains(event.target as Node) ||
-            ('current' in node && (node.current as Node).contains(event.target as Node)))
+         (('contains' in node && (node as Node).contains(event.target as Node)) ||
+            ('current' in node && 'contains' && (node.current as Node).contains(event.target as Node)))
       ) {
          return
       }
