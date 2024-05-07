@@ -53,6 +53,22 @@ describe('use-outside-click', () => {
       expect(removeSpy).toHaveBeenCalledTimes(1)
    })
 
+   it('should fire listener when clicked outside of target element when ref is provided', () => {
+      const div = document.createElement('div')
+      const ref = { current: div }
+      const listener = vi.fn()
+
+      renderHook(() => {
+         useOutsideClick(ref, listener)
+      })
+
+      const event = new Event('click')
+      document.dispatchEvent(event)
+
+      expect(listener).toHaveBeenCalledTimes(1)
+      expect(listener).toHaveBeenCalledWith(event)
+   })
+
    it('should fire listener when clicked outside of target element', () => {
       const div = document.createElement('div')
 
