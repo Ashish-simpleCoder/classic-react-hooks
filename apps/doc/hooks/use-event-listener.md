@@ -15,10 +15,6 @@ outline: deep
 | handler   | [Handler](#parametertype) |    ❌    |   undefined   | Callback for the event         |
 | options   | [Options](#parametertype) |    ❌    |   undefined   | For managing Event Propagation |
 
-### Returns
-
-`cleanup function` : Cleanup function for removing events manually.
-
 ### Types
 
 ---

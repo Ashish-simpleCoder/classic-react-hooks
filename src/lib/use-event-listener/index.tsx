@@ -3,9 +3,9 @@ import type { Prettify } from '../../types'
 import React, { RefObject, useEffect } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
-type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget | null)
-type Options = boolean | Prettify<AddEventListenerOptions & { shouldInjectEvent?: boolean | any }>
-type Handler = (event: Event) => void
+export type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget | null)
+export type Options = boolean | Prettify<AddEventListenerOptions & { shouldInjectEvent?: boolean | any }>
+export type Handler = (event: Event) => void
 
 /* Have taken reference from ChakraUI's use-event-listener for typing out the props in type-safe manner. */
 
