@@ -1,5 +1,15 @@
 # classic-react-hooks
 
+## 1.0.0-beta.7
+
+### Minor Changes
+
+-  4709360: - doc: update description for delay in use-debounced-fn
+   -  doc: update use-outside-click hook doc for new option param
+   -  feat: add Options param in use-outside-click hook
+   -  doc: remove return type from use-event-listener doc
+   -  type: export use-event-listener params types
+
 ## 1.0.0-beta.6
 
 ### Minor Changes
