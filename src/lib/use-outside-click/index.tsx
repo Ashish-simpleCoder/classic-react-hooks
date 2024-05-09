@@ -1,9 +1,8 @@
 'use client'
-import React, { RefObject, useCallback } from 'react'
+import type { Target } from '../use-event-listener'
+import React, { useCallback } from 'react'
 import { useEventListener } from '../use-event-listener'
 import useSyncedRef from '../use-synced-ref'
-
-type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget | null)
 
 /**
  * @description
@@ -17,7 +16,7 @@ type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget |
    
    export default function YourComponent() {
       const modalRef = useRef(null)
-      useOutsideClick(() => modalRef.current, (e) => {
+      useOutsideClick(modalRef, (e) => {
          console.log("clicked outside on modal. Target = ", e.target)
       }, true)
 
@@ -29,11 +28,19 @@ type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget |
       )
    }
 */
-export default function useOutsideClick(target: Target, handler: (event: DocumentEventMap['click']) => void) {
+export default function useOutsideClick(
+   target: Target,
+   handler: (event: DocumentEventMap['click']) => void,
+   options?: { shouldInjectEvent?: boolean | any }
+) {
    const paramsRef = useSyncedRef({
       target,
       handler,
    })
+   let shouldInjectEvent = true
+   if (typeof options == 'object' && 'shouldInjectEvent' in options) {
+      shouldInjectEvent = !!options.shouldInjectEvent
+   }
 
    const eventCb = useCallback((event: DocumentEventMap['click']) => {
       const node = (typeof target == 'function' ? target() : target) ?? document
@@ -49,5 +56,5 @@ export default function useOutsideClick(target: Target, handler: (event: Documen
       paramsRef.current.handler(event)
    }, [])
 
-   useEventListener(document, 'click', eventCb)
+   useEventListener(document, 'click', eventCb, { shouldInjectEvent: shouldInjectEvent })
 }
