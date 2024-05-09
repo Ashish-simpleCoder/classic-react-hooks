@@ -8,10 +8,10 @@ outline: deep
 
 ### Parameters
 
-| Parameter |   Type   | Required | Default Value | Description                                 |
-| --------- | :------: | :------: | :-----------: | ------------------------------------------- |
-| cb        | Function |    ✅    |       -       | A callback which is to be debounced.        |
-| delay     |  number  |    ❌    |     true      | A delay after that the callback gets fired. |
+| Parameter |   Type   | Required | Default Value | Description                                                 |
+| --------- | :------: | :------: | :-----------: | ----------------------------------------------------------- |
+| cb        | Function |    ✅    |       -       | A callback which is to be debounced.                        |
+| delay     |  number  |    ❌    |      300      | A delay in milliseconds after that the callback gets fired. |
 
 ### Returns
 
