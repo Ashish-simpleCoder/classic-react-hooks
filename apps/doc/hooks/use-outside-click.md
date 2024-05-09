@@ -12,6 +12,7 @@ outline: deep
 | --------- | :-----------------------: | :------: | :-----------: | ----------------------------- |
 | target    | [Target](#parametertype)  |    ✅    |       -       | Reference of the html element |
 | handler   | [Handler](#parametertype) |    ❌    |   undefined   | Callback for the event        |
+| options   | [Options](#parametertype) |    ❌    |   undefined   | Extra params                  |
 
 ### Types
 
@@ -21,6 +22,7 @@ outline: deep
 
 ```ts
 type Target = null | EventTarget | (() => EventTarget | null)
+type Options = { shouldInjectEvent?: boolean | any }
 type Handler = (event: Event) => void
 ```
 
@@ -32,9 +34,13 @@ import { useOutsideClick } from 'classic-react-hooks'
 
 export default function YourComponent() {
    const modalRef = useRef(null)
-   useOutsideClick(modalRef, (e) => {
-      console.log('clicked outside on modal. Target = ', e.target)
-   })
+   useOutsideClick(
+      modalRef,
+      (e) => {
+         console.log('clicked outside on modal. Target = ', e.target)
+      },
+      { shouldInjectEvent: true }
+   )
 
    return (
       <div>
