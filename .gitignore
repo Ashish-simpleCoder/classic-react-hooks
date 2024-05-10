@@ -10,3 +10,6 @@ example
 apps/*
 !apps/doc
 apps/doc/.vitepress/cache
+
+
+src/**/*.dev.tsx
