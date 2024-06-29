@@ -7,27 +7,9 @@ import useSyncedRef from '../use-synced-ref'
 /**
  * @description
  * A hook that fires the given callback when clicked outside anywhere of the given html element.
- * 
- * @see Docs https://github.com/Ashish-simpleCoder/classic-react-hooks#use-outside-click
  *
- * @example
-   import { useRef } from 'react'
-   import { useOutsideClick } from 'classic-react-hooks'
-   
-   export default function YourComponent() {
-      const modalRef = useRef(null)
-      useOutsideClick(modalRef, (e) => {
-         console.log("clicked outside on modal. Target = ", e.target)
-      }, true)
-
-
-      return (
-         <div>
-            <div style={{width:'300px', height:'300px'}} ref={modalRef}>This is modal</div>
-         </div>
-      )
-   }
-*/
+ * @see Docs https://classic-react-hooks.vercel.app/hooks/use-outside-click.html
+ */
 export default function useOutsideClick(
    target: Target,
    handler: (event: DocumentEventMap['click']) => void,

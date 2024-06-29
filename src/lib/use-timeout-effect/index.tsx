@@ -5,28 +5,9 @@ import useSyncedRef from '../use-synced-ref'
 /**
  * @description
  * A hook which fires the provided callback only once when the given timeout is passed, just like the setTimeout.
- *  
- * @see Docs https://github.com/Ashish-simpleCoder/classic-react-hooks#use-timeout-effect
  *
- * @example
-   import { useState } from 'react'
-   import { useTimeoutEffect } from 'classic-react-hooks'
-   
-   export default function YourComponent() {
-      const [show, setShow] = useState(false)
-
-      useTimeoutEffect(() => {
-         console.log("use-timeout-callback")
-         setShow(true)
-      }, 2000)
-
-      return (
-         <div>
-            {show && <div>show</div>}
-         </div>
-      )
-   }
-*/
+ * @see Docs https://classic-react-hooks.vercel.app/hooks/use-timeout-effect.html
+ */
 export default function useTimeoutEffect(cb: () => void, timeout = 100) {
    let paramsRef = useSyncedRef({
       cb,

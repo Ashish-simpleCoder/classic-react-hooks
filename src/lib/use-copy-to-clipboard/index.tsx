@@ -9,40 +9,10 @@ type CopyToClipboardFn = (data: string, onSuccess?: OnSuccess, onError?: OnError
 /**
  * @description
  *  A hook for copying the data in the clipboard with success and error callbacks.
- *  
- * @see Docs https://github.com/Ashish-simpleCoder/classic-react-hooks#use-copy-to-clipboard
  *
- * @example
-   import { useState } from 'react'
-   import { useCopyToClipboard } from 'classic-react-hooks'
-   
-   export default function YourComponent() {
-      const [data, setData] = useState('')
-      const copyToClipboard = useCopyToClipboard()
-
-
-      return (
-         <div>
-            <input
-               placeholder='enter data to copy'
-               value={data}
-               onChange={(e) => setData(e.target.value)}
-            />
-            <button
-               onClick={() =>
-                  copyToClipboard(
-                     data,
-                     () => console.log('success'),
-                     (err) => console.log(err)
-                  )
-               }
-            >
-               copy
-            </button>
-         </div>
-      )
-   }
-*/
+ * @see Docs https://classic-react-hooks.vercel.app/hooks/use-copy-to-clipboard.html
+ *
+ */
 export default function useCopyToClipboard(props?: { onSuccess?: OnSuccess; onError?: OnError }): CopyToClipboardFn {
    const propsRef = useSyncedRef(props)
 

@@ -13,8 +13,7 @@ export type Handler = (event: Event) => void
  * @description
  *  A hook which handles dom events in efficient and declarative manner.
  *
- * @see Docs https://github.com/Ashish-simpleCoder/classic-react-hooks#use-event-listener
- *
+ * @see Docs https://classic-react-hooks.vercel.app/hooks/use-event-listener.html
  */
 export function useEventListener<K extends keyof DocumentEventMap>(
    target: Target,
