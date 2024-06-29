@@ -11,26 +11,11 @@ export type Handler = (event: Event) => void
 
 /**
  * @description
- *  A hook for adding dom events in declarative manner.
- *  
+ *  A hook which handles dom events in efficient and declarative manner.
+ *
  * @see Docs https://github.com/Ashish-simpleCoder/classic-react-hooks#use-event-listener
  *
- * @example
-   import { useEventListener } from 'classic-react-hooks'
-   
-   export default function YourComponent() {
-      const ref = useRef()
-      useEventListener(ref, 'click', (e) =>{
-         console.log(e)
-      })
-
-      return (
-         <div>
-            <button ref={ref}>button</button>
-         </div>
-      )
-   }
-*/
+ */
 export function useEventListener<K extends keyof DocumentEventMap>(
    target: Target,
    event: K,
