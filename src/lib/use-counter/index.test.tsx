@@ -7,10 +7,10 @@ describe('use-counter', () => {
    })
 
    it('should return counter value of zero, incrementCounter and decrementCounter handlers with default key', () => {
-      const { result } = renderHook(() => useCounter())
+      const { result } = renderHook(() => useCounter('', 1))
 
       expect('counter' in result.current).not.toBeUndefined()
-      expect(result.current.counter).toBe(0)
+      expect(result.current.counter).toBe(1)
       expect('incrementCounter' in result.current).not.toBeUndefined()
       expect('decrementCounter' in result.current).not.toBeUndefined()
    })

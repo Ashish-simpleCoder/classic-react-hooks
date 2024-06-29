@@ -13,8 +13,8 @@ const LOWERCASED_COUNTER_TEXT = COUNTER_TEXT.toLowerCase() as Lowercase<typeof C
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-counter.html
  *
  */
-export default function useCounter<K extends string = ''>(key = '' as K) {
-   const [counter, setCounter] = useState(0)
+export default function useCounter<K extends string = ''>(key = '' as K, initialValue: number = 0) {
+   const [counter, setCounter] = useState(initialValue)
 
    const capitalizedKey = capitalizeFirstLetter(key)
 
