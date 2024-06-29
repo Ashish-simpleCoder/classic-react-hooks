@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
 /**
@@ -15,22 +15,21 @@ export default function useTimeoutEffect(cb: () => void, timeout = 100) {
    })
    const timeoutId = useRef<NodeJS.Timeout>()
 
-   const clearTimer = useCallback(() => {
-      clearTimeout(timeoutId.current)
-   }, [])
-
-   const restartTimer = useCallback((new_timeout?: number) => {
-      clearTimer()
-      timeoutId.current = setTimeout(paramsRef.current.cb, new_timeout ?? paramsRef.current.timeout)
-   }, [])
+   const handlers = useRef({
+      clearTimer: () => clearTimeout(timeoutId.current),
+      restartTimer: (new_interval?: number) => {
+         handlers.current.clearTimer()
+         timeoutId.current = setTimeout(paramsRef.current.cb, new_interval ?? paramsRef.current.timeout)
+      },
+   })
 
    useEffect(() => {
       timeoutId.current = setTimeout(paramsRef.current.cb, paramsRef.current.timeout)
-      return clearTimer
+      return handlers.current.clearTimer
    }, [])
 
    return {
-      clearTimer,
-      restartTimer,
+      clearTimer: handlers.current.clearTimer,
+      restartTimer: handlers.current.restartTimer,
    }
 }

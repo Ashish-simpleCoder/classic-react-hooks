@@ -1,6 +1,6 @@
 'use client'
 import type { Target } from '../use-event-listener'
-import React, { useCallback } from 'react'
+import React, { useRef } from 'react'
 import { useEventListener } from '../use-event-listener'
 import useSyncedRef from '../use-synced-ref'
 
@@ -24,7 +24,7 @@ export default function useOutsideClick(
       shouldInjectEvent = !!options.shouldInjectEvent
    }
 
-   const eventCb = useCallback((event: DocumentEventMap['click']) => {
+   const eventCb = useRef((event: DocumentEventMap['click']) => {
       const node = (typeof target == 'function' ? target() : target) ?? document
       if (event.target == node || ('current' in node && event.target == node.current)) return
 
@@ -36,7 +36,7 @@ export default function useOutsideClick(
          return
       }
       paramsRef.current.handler(event)
-   }, [])
+   })
 
-   useEventListener(document, 'click', eventCb, { shouldInjectEvent: shouldInjectEvent })
+   useEventListener(document, 'click', eventCb.current, { shouldInjectEvent: shouldInjectEvent })
 }

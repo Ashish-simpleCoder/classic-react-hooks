@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
 /**
@@ -15,22 +15,21 @@ export default function useIntervalEffect(cb: () => void, interval = 100) {
    })
    const intervalId = useRef<NodeJS.Timeout>()
 
-   const clearTimer = useCallback(() => {
-      clearInterval(intervalId.current)
-   }, [])
-
-   const restartTimer = useCallback((new_interval?: number) => {
-      clearTimer()
-      intervalId.current = setInterval(paramsRef.current.cb, new_interval ?? paramsRef.current.interval)
-   }, [])
+   const handlers = useRef({
+      clearTimer: () => clearInterval(intervalId.current),
+      restartTimer: (new_interval?: number) => {
+         handlers.current.clearTimer()
+         intervalId.current = setInterval(paramsRef.current.cb, new_interval ?? paramsRef.current.interval)
+      },
+   })
 
    useEffect(() => {
       intervalId.current = setInterval(paramsRef.current.cb, paramsRef.current.interval)
-      return clearTimer
+      return handlers.current.clearTimer
    }, [])
 
    return {
-      clearTimer,
-      restartTimer,
+      clearTimer: handlers.current.clearTimer,
+      restartTimer: handlers.current.restartTimer,
    }
 }

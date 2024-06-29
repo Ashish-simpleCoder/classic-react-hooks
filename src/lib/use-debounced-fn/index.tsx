@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback } from 'react'
+import React, { useRef } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
 const DEFAULT_DELAY = 300
@@ -17,8 +17,8 @@ export default function useDebouncedFn<T extends (...args: any[]) => any>(cb: T,
       delay,
    })
 
-   const debouncedCb = useCallback(debouncedFnWrapper(paramsRef.current.cb, paramsRef.current.delay), [])
-   return debouncedCb
+   const debouncedCb = useRef(debouncedFnWrapper(paramsRef.current.cb, paramsRef.current.delay))
+   return debouncedCb.current
 }
 
 /**

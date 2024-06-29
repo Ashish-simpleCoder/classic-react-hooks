@@ -1,6 +1,6 @@
 'use client'
-import type { Dispatch } from 'react'
-import React, { useCallback, useState } from 'react'
+import type { Dispatch, MutableRefObject } from 'react'
+import React, { useRef, useState } from 'react'
 
 /**
  * @description
@@ -30,7 +30,7 @@ export default function useLocalStorage<State>(key: string, defaultValue?: State
       }
    })
 
-   const updateState: Dispatch<React.SetStateAction<State>> = useCallback(
+   const updateState: MutableRefObject<Dispatch<React.SetStateAction<State>>> = useRef(
       (value: State | ((state: State) => State)) => {
          let new_value = value
          if (typeof value == 'function') {
@@ -43,9 +43,8 @@ export default function useLocalStorage<State>(key: string, defaultValue?: State
             setState(new_value)
             localStorage.setItem(key, JSON.stringify(new_value))
          }
-      },
-      []
+      }
    )
 
-   return [state, updateState] as const
+   return [state, updateState.current] as const
 }

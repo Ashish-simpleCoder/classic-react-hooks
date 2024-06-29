@@ -1,6 +1,6 @@
 'use client'
 import type { Prettify } from '../../types'
-import React, { useCallback, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter'
 
 const COUNTER_TEXT = 'Counter'
@@ -28,17 +28,19 @@ export default function useCounter<K extends string = ''>(key = '' as K) {
    const Increment = `increment${capitalizedKey}${COUNTER_TEXT}` as const
    const Decrement = `decrement${capitalizedKey}${COUNTER_TEXT}` as const
 
-   const incrementHandler = useCallback(() => {
-      setCounter((c) => c + 1)
-   }, [])
-   const decrementHandler = useCallback(() => {
-      setCounter((c) => c - 1)
-   }, [])
+   const handlers = useRef({
+      incrementHandler: () => {
+         setCounter((c) => c + 1)
+      },
+      decrementHandler: () => {
+         setCounter((c) => c - 1)
+      },
+   })
 
    return {
       [CounterName]: counter,
-      [Increment]: incrementHandler,
-      [Decrement]: decrementHandler,
+      [Increment]: handlers.current.incrementHandler,
+      [Decrement]: handlers.current.decrementHandler,
    } as Prettify<
       {
          [KeyName in K as TypedCounterKey]: number
