@@ -1,6 +1,6 @@
 'use client'
 import type { Prettify } from '../../types'
-import React, { useCallback, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter'
 
 const COUNTER_TEXT = 'Counter'
@@ -9,29 +9,10 @@ const LOWERCASED_COUNTER_TEXT = COUNTER_TEXT.toLowerCase() as Lowercase<typeof C
 /**
  * @description
  *  A simple hook for managing counter.
- *  
- * @see Docs https://github.com/Ashish-simpleCoder/classic-react-hooks#use-counter
  *
- * @example
-   import { useCounter } from 'classic-react-hooks'
-   
-   export default function YourComponent() {
-      const { counter, decrementCounter, incrementCounter } = useCounter()
-
-
-      return (
-         <div>
-            <div>
-               <button onClick={decrementCounter}>
-                  decrement
-               </button>
-               <p>{counter}</p>
-               <button onClick={incrementCounter}>increment</button>
-            </div>
-         </div>
-      )
-   }
-*/
+ * @see Docs https://classic-react-hooks.vercel.app/hooks/use-counter.html
+ *
+ */
 export default function useCounter<K extends string = ''>(key = '' as K) {
    const [counter, setCounter] = useState(0)
 
@@ -47,17 +28,19 @@ export default function useCounter<K extends string = ''>(key = '' as K) {
    const Increment = `increment${capitalizedKey}${COUNTER_TEXT}` as const
    const Decrement = `decrement${capitalizedKey}${COUNTER_TEXT}` as const
 
-   const incrementHandler = useCallback(() => {
-      setCounter((c) => c + 1)
-   }, [])
-   const decrementHandler = useCallback(() => {
-      setCounter((c) => c - 1)
-   }, [])
+   const handlers = useRef({
+      incrementHandler: () => {
+         setCounter((c) => c + 1)
+      },
+      decrementHandler: () => {
+         setCounter((c) => c - 1)
+      },
+   })
 
    return {
       [CounterName]: counter,
-      [Increment]: incrementHandler,
-      [Decrement]: decrementHandler,
+      [Increment]: handlers.current.incrementHandler,
+      [Decrement]: handlers.current.decrementHandler,
    } as Prettify<
       {
          [KeyName in K as TypedCounterKey]: number

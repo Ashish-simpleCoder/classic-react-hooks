@@ -4,7 +4,7 @@ outline: deep
 
 # use-event-listener
 
--  A hook for handling dom events in efficient and declarative manner.
+-  A hook which handles dom events in efficient and declarative manner.
 
 ### Parameters
 

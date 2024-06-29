@@ -7,6 +7,13 @@ describe('use-outside-click', () => {
       renderHook(() => useOutsideClick(null, () => {}))
    })
 
+   it('should work when Target is null', () => {
+      renderHook(() => useOutsideClick(null, () => {}, { shouldInjectEvent: true }))
+
+      const event = new Event('click')
+      document.dispatchEvent(event)
+   })
+
    it('should add listener on-mount and remove it on un-mount', () => {
       const div = document.createElement('div')
       const addSpy = vi.spyOn(document, 'addEventListener')

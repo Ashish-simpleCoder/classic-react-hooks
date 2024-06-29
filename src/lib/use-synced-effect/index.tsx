@@ -7,30 +7,11 @@ const DEP: DependencyList = []
 /**
  * @description
  * A hooks that fires the given callback for given dependencies.
- * 
- * It works exacatly like `useEffect`. But callback doesn't get fired on initial mount.
- * 
- * @see Docs https://github.com/Ashish-simpleCoder/classic-react-hooks#use-synced-effect
  *
- * @example
-   import { useState } from 'react'
-   import { useSyncedEffect } from 'classic-react-hooks'
-   
-   export default function YourComponent() {
-      const [counter, setCounter] = useState(0)
-
-      useSyncedEffect(() => {
-         console.log("counter changed to ", counter)
-      }, [counter])
-
-
-      return (
-         <div>
-            <button onClick={() => setCounter(c => c+1)}>increment</button>
-         </div>
-      )
-   }
-*/
+ * It works exacatly like `useEffect`. But callback doesn't get fired on initial mount.
+ *
+ * @see Docs https://classic-react-hooks.vercel.app/hooks/use-synced-effect.html
+ */
 export default function useSyncedEffect(cb: EffectCallback, deps?: DependencyList) {
    const isInitialLoad = useRef(true)
    const cleanup = useRef<void | (() => void)>()

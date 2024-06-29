@@ -27,7 +27,7 @@ export default defineConfig({
             link: '/',
          },
          {
-            text: 'API',
+            text: 'Hooks',
             link: '/getting-started/overview',
          },
          {
@@ -79,7 +79,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
          ],
       },
       {
-         text: 'API',
+         text: 'Hooks',
          collapsed: false,
          base: "/hooks/",
          items: [
