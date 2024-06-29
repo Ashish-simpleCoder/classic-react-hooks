@@ -8,9 +8,10 @@ outline: deep
 
 ### Parameters
 
-| Parameter |  Type  | Required | Default Value | Description                                                                 |
-| --------- | :----: | :------: | :-----------: | --------------------------------------------------------------------------- |
-| key       | string |    ❌    |      ""       | Based on the key, it generates `type-safe` object with `prefixed` proprety. |
+| Parameter    |  Type  | Required | Default Value | Description                                                                 |
+| ------------ | :----: | :------: | :-----------: | --------------------------------------------------------------------------- |
+| key          | string |    ❌    |      ""       | Based on the key, it generates `type-safe` object with `prefixed` proprety. |
+| initialValue | number |    ❌    |       0       | Initial value of the counter.                                               |
 
 ### Returns
 
