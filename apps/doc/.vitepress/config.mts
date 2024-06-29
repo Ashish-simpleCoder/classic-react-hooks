@@ -56,7 +56,7 @@ export default defineConfig({
          { icon: 'linkedin', link: 'https://linkedin.com/in/ashish-prajapati-002154193' },
       ],
       editLink: {
-         pattern: 'https://github.com/Ashish-simpleCoder/classic-react-hooks/edit/main/doc/:path',
+         pattern: 'https://github.com/Ashish-simpleCoder/classic-react-hooks/edit/main/apps/doc/:path',
          text: 'Edit this page on GitHub',
       },
 
