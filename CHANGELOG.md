@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 1.0.0-beta.9
+
+### Minor Changes
+
+-  a14cd39: Add initialValue param for use-counter hook
+
 ## 1.0.0-beta.8
 
 ### Minor Changes
