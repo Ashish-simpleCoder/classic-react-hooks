@@ -1,5 +1,17 @@
 # classic-react-hooks
 
+## 1.0.0-beta.8
+
+### Minor Changes
+
+-  a370a03: Update documentation and test cases
+
+   -  [f7c5939] docs: update overview
+   -  [3e06140] docs: update use-event-listener doc
+   -  [0a8ef61] docs: update js-doc for all of the hooks
+   -  [bb05733] remove: useCallback from hooks
+   -  [a8f50f6] test: add extra test case for use-outside-click for covering the branch
+
 ## 1.0.0-beta.7
 
 ### Minor Changes
