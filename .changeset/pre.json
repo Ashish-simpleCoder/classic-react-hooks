@@ -5,6 +5,7 @@
     "classic-react-hooks": "0.1.0"
   },
   "changesets": [
+    "beige-ladybugs-camp",
     "eighty-seahorses-laugh",
     "few-waves-hammer",
     "gold-wolves-exist",
