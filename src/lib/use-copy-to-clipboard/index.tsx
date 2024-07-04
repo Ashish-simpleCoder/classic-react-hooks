@@ -17,22 +17,26 @@ export default function useCopyToClipboard(props?: { onSuccess?: OnSuccess; onEr
    const propsRef = useSyncedRef(props)
 
    const copyToClipboard = useRef(async (data: string, onSuccess?: OnSuccess, onError?: OnError) => {
-      try {
-         if (navigator.clipboard) {
-            navigator.clipboard
-               .writeText(data)
-               .then(() => (onSuccess || propsRef.current?.onSuccess)?.())
-               .catch((error) => (onError || propsRef.current?.onError)?.(error))
-         } else {
-            const error: Partial<Error> = {
-               message: 'Cliboard not available',
-            }
-            ;(onError || propsRef.current?.onError)?.(error as Error)
-         }
-      } catch (error) {
-         ;(onError || propsRef.current?.onError)?.(error as Error)
-      }
+      copyToClipboardFn(data, onSuccess || propsRef.current?.onSuccess, onError || propsRef.current?.onError)
    })
 
    return copyToClipboard.current
+}
+
+export async function copyToClipboardFn(data: string, onSuccess?: OnSuccess, onError?: OnError) {
+   try {
+      if (navigator.clipboard) {
+         navigator.clipboard
+            .writeText(data)
+            .then(() => onSuccess?.())
+            .catch((error) => onError?.(error))
+      } else {
+         const error: Partial<Error> = {
+            message: 'Cliboard not available',
+         }
+         onError?.(error as Error)
+      }
+   } catch (error) {
+      onError?.(error as Error)
+   }
 }

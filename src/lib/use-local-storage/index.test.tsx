@@ -13,6 +13,18 @@ describe('use-local-storage', () => {
       expect(typeof result.current[1]).toBe('function')
    })
 
+   it('should be able handle error when item is undefined in local-storage', () => {
+      localStorage.setItem('key', '') // when getting localStorage.getItem(key) => '', it results into undefined
+      const { result } = renderHook(() => useLocalStorage('key'))
+      expect(result.current[0]).toBeUndefined()
+   })
+
+   it('should be able handle error when with default value param', () => {
+      localStorage.setItem('key', '')
+      const { result } = renderHook(() => useLocalStorage('key', {}))
+      expect(result.current[0]).toStrictEqual({})
+   })
+
    it('should set the default value', () => {
       const { result } = renderHook(() => useLocalStorage('user', { name: 'Saitama' }))
 
