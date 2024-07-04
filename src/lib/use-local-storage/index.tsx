@@ -20,7 +20,7 @@ export default function useLocalStorage<State>(key: string, defaultValue?: State
          if (defaultValue && item == null) {
             return defaultValue
          }
-         const parsed_value = item == null ? '' : JSON.parse(item ?? '')
+         const parsed_value = item == null ? '' : JSON.parse(item)
          return parsed_value
       } catch (err) {
          if (defaultValue) {
