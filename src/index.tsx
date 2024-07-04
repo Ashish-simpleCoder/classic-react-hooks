@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 export { useEventListener as useEventListener } from './lib/use-event-listener'
-export { default as useCopyToClipboard } from './lib/use-copy-to-clipboard'
+export { default as useCopyToClipboard, copyToClipboardFn } from './lib/use-copy-to-clipboard'
 export { default as useLocalStorage } from './lib/use-local-storage'
 export { default as useOutsideClick } from './lib/use-outside-click'
 export { default as useDebouncedFn, debouncedFnWrapper } from './lib/use-debounced-fn'
