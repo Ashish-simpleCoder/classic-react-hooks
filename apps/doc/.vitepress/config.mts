@@ -87,7 +87,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             { text: 'use-copy-to-clipboard', link: 'use-copy-to-clipboard' },
             { text: 'use-local-storage', link: 'use-local-storage' },
             { text: 'use-outside-click', link: 'use-outside-click' },
-            { text: 'use-debounded-fn', link: 'use-debounced-fn' },
+            { text: 'use-debounced-fn', link: 'use-debounced-fn' },
             { text: 'use-throttled-fn', link: 'use-throttled-fn' },
             { text: 'use-is-online', link: 'use-is-online' },
             { text: 'use-timeout-effect', link: 'use-timeout-effect' },
