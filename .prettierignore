@@ -3,4 +3,5 @@ coverage
 node_modules
 public
 apps/doc/.vitepress/cache
+apps/example
 .changeset
