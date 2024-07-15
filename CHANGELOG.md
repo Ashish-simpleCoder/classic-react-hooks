@@ -1,5 +1,14 @@
 # classic-react-hooks
 
+## 1.2.0
+
+### Minor Changes
+
+-  39f9f42: Add timer cleanup on unmount in use-debounced-fn
+
+   -  fix #57: Callback is triggered after unmount for use-debounced-fn hook
+   -  Add tests for timer cleanup and params syncing in use-debounced-fn hook
+
 ## 1.1.0
 
 ### Minor Changes
