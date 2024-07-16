@@ -1,5 +1,14 @@
 # classic-react-hooks
 
+## 1.2.1
+
+### Patch Changes
+
+-  81739cb: Upgrade development dependencies
+
+   -  [50bd2d9] build: update dependencies version
+   -  [e2495cb] dep: update vite dependency and rename vite config to latest version
+
 ## 1.2.0
 
 ### Minor Changes
