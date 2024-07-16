@@ -53,8 +53,8 @@
       "@types/react": "^18.0.38",
       "@types/react-dom": "^18.0.11",
       "@types/testing-library__jest-dom": "^5.14.5",
-      "@vitejs/plugin-react": "^4.0.0",
-      "@vitest/coverage-istanbul": "^0.30.1",
+      "@vitejs/plugin-react": "^4.3.1",
+      "@vitest/coverage-istanbul": "^2.0.3",
       "jsdom": "^21.1.1",
       "prettier": "^2.8.7",
       "react-dom": "^18.2.0",
@@ -63,8 +63,8 @@
       "ts-node": "^10.9.1",
       "tsup": "^6.7.0",
       "typescript": "^5.0.4",
-      "vite": "4.3.1",
-      "vitest": "^0.30.1"
+      "vite": "5.3.3",
+      "vitest": "^2.0.3"
    },
    "engines": {
       "node": ">=16.14.0",
@@ -90,5 +90,17 @@
          "path": "dist/index.js",
          "limit": "10 KB"
       }
-   ]
+   ],
+   "pnpm": {
+      "overrides": {
+         "@adobe/css-tools@<4.3.1": ">=4.3.1",
+         "@adobe/css-tools@<4.3.2": ">=4.3.2",
+         "semver@>=7.0.0 <7.5.2": ">=7.5.2",
+         "semver@<5.7.2": ">=5.7.2",
+         "ws@>=8.0.0 <8.17.1": ">=8.17.1",
+         "word-wrap@<1.2.4": ">=1.2.4",
+         "tough-cookie@<4.1.3": ">=4.1.3",
+         "braces@<3.0.3": ">=3.0.3"
+      }
+   }
 }
