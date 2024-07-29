@@ -84,6 +84,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
          base: "/hooks/",
          items: [
             { text: 'use-event-listener', link: 'use-event-listener' },
+            { text: 'use-intersection-observer', link: 'use-intersection-observer' },
             { text: 'use-copy-to-clipboard', link: 'use-copy-to-clipboard' },
             { text: 'use-local-storage', link: 'use-local-storage' },
             { text: 'use-outside-click', link: 'use-outside-click' },
