@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 1.3.0
+
+### Minor Changes
+
+-  b8fe2f5: Release use-intersection-observer hook
+
 ## 1.2.1
 
 ### Patch Changes
