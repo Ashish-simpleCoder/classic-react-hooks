@@ -34,7 +34,7 @@
       "type-check": "tsc",
       "size": "size-limit",
       "cs": "pnpm changeset",
-      "format": "prettier --write . --cache",
+      "format": "prettier --write ./src ./apps/doc --cache",
       "test": "vitest --coverage",
       "clean": "rm -rf dist"
    },
