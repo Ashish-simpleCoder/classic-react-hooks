@@ -13,5 +13,6 @@ export { default as useSyncedRef } from './lib/use-synced-ref'
 export { default as useSyncedEffect } from './lib/use-synced-effect'
 export { default as useOnMountEffect } from './lib/use-on-mount-effect'
 export { default as useCounter } from './lib/use-counter'
+export { default as useWindowResize } from './lib/use-window-resize'
 
 export { default as useInterSectionObserver } from './lib/use-intersection-observer'

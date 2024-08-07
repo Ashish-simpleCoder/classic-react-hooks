@@ -54,6 +54,7 @@ export default defineConfig({
          },
          { icon: 'x', link: 'https://twitter.com/ashish_devloper' },
          { icon: 'linkedin', link: 'https://linkedin.com/in/ashish-prajapati-002154193' },
+         { icon: 'npm', link: 'https://www.npmjs.com/package/classic-react-hooks' },
       ],
       editLink: {
          pattern: 'https://github.com/Ashish-simpleCoder/classic-react-hooks/edit/main/apps/doc/:path',
@@ -85,6 +86,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
          items: [
             { text: 'use-event-listener', link: 'use-event-listener' },
             { text: 'use-intersection-observer', link: 'use-intersection-observer' },
+            { text: 'use-window-resize', link: 'use-window-resize' },
             { text: 'use-copy-to-clipboard', link: 'use-copy-to-clipboard' },
             { text: 'use-local-storage', link: 'use-local-storage' },
             { text: 'use-outside-click', link: 'use-outside-click' },
