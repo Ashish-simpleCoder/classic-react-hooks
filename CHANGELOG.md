@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 1.4.0
+
+### Minor Changes
+
+-  b11719a: Add use-window-resize hook
+
 ## 1.3.0
 
 ### Minor Changes
