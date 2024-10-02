@@ -62,6 +62,7 @@ $ bun add classic-react-hooks
 -  use-local-storage
 -  use-outside-click
 -  use-debounced-fn
+-  use-throttled-hook
 -  use-is-online
 -  use-timeout-effect
 -  use-interval-effect
