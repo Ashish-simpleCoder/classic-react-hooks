@@ -2,7 +2,21 @@
 
 Hi! We are really excited that you are interested in contributing to classic-react-hooks. Before submitting your contribution, please make sure to take a moment and read through the following guide:
 
-## Repo Setup
+
+
+## 🔧 System Requirements
+- Node.js v16 or higher
+- Pnpm v8 or higher
+
+
+## 🏗️ Repo Setup
+
+- Clone the repository:
+```bash
+git clone https://github.com/Ashish-simpleCoder/classic-react-hooks.git
+
+cd classic-react-hooks
+```
 
 The package manager used to install and link dependencies should be [pnpm](https://pnpm.io/) v8.12.0 or higher. NodeJS version should be v18.14.2 or higher
 
@@ -14,7 +28,7 @@ The package manager used to install and link dependencies should be [pnpm](https
 
 4. Run `pnpm run format` to format all of the coding with prettier
 
-## Pull Request Guidelines
+## 🔃 Pull Request Guidelines
 
 -  Checkout a topic branch from a base branch, e.g. `main`, and merge back against that branch.
 
@@ -35,7 +49,7 @@ The package manager used to install and link dependencies should be [pnpm](https
 
 -  Use `pnpm format` to format files according to the project guidelines.
 
-## Documenation Guidelines
+## 📄 Documenation Guidelines
 
 -  To contribute in the documentation, go to apps/doc directory
 
