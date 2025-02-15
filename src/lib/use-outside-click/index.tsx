@@ -1,5 +1,6 @@
 'use client'
-import type { Target } from '../use-event-listener'
+import type { EventTypes } from '../../types'
+
 import React, { useRef } from 'react'
 import { useEventListener } from '../use-event-listener'
 import useSyncedRef from '../use-synced-ref'
@@ -11,7 +12,7 @@ import useSyncedRef from '../use-synced-ref'
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-outside-click.html
  */
 export default function useOutsideClick(
-   target: Target,
+   target: EventTypes['Target'],
    handler: (event: DocumentEventMap['click']) => void,
    options?: { shouldInjectEvent?: boolean | any }
 ) {

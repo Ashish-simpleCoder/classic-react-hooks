@@ -1,11 +1,9 @@
 'use client'
-import type { Prettify } from '../../types'
-import React, { RefObject, useEffect } from 'react'
+import type { EventTypes } from '../../types'
+
+import React, { useEffect } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
-export type Target = null | EventTarget | RefObject<EventTarget> | (() => EventTarget | null)
-export type Options = boolean | Prettify<AddEventListenerOptions & { shouldInjectEvent?: boolean | any }>
-export type Handler = (event: Event) => void
 
 /* Have taken reference from ChakraUI's use-event-listener for typing out the props in type-safe manner. */
 
@@ -16,24 +14,24 @@ export type Handler = (event: Event) => void
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-event-listener.html
  */
 export function useEventListener<K extends keyof DocumentEventMap>(
-   target: Target,
+   target: EventTypes['Target'],
    event: K,
    handler?: (event: DocumentEventMap[K]) => void,
-   options?: Options
+   options?: EventTypes['Options']
 ): void
 export function useEventListener<K extends keyof WindowEventMap>(
-   target: Target,
+   target: EventTypes['Target'],
    event: K,
    handler?: (event: WindowEventMap[K]) => void,
-   options?: Options
+   options?: EventTypes['Options']
 ): void
 export function useEventListener<K extends keyof GlobalEventHandlersEventMap>(
-   target: Target,
+   target: EventTypes['Target'],
    event: K,
    handler?: (event: GlobalEventHandlersEventMap[K]) => void,
-   options?: Options
+   options?: EventTypes['Options']
 ): void
-export function useEventListener(target: Target, event: string, handler?: Handler, options?: Options) {
+export function useEventListener(target: EventTypes['Target'], event: string, handler?: EventTypes['Handler'], options?: EventTypes['Options']) {
    const listener = useSyncedRef({
       handler,
       options,
