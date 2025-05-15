@@ -9,7 +9,7 @@ describe('use-window-resize', () => {
    })
 
    it('should return defaultValue, if defaultValue is passed', () => {
-      const { result } = renderHook(() => useWindowResize(() => window.innerWidth < 400, { defaultValue: true }))
+      const { result } = renderHook(() => useWindowResize(vi.fn(), { defaultValue: true }))
       expect(result.current).toBe(true)
    })
 
