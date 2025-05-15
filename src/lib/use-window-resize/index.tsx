@@ -11,7 +11,12 @@ import { useEventListener } from '../use-event-listener'
 export default function useWindowResize<T>(cb: () => T, options?: { defaultValue?: T; shouldInjectEvent?: boolean }) {
    const [result, setResult] = useState(options?.defaultValue ?? cb)
 
-   useEventListener(window, 'resize', () => setResult(cb), { shouldInjectEvent: options?.shouldInjectEvent ?? true })
+   useEventListener(
+      () => window,
+      'resize',
+      () => setResult(cb),
+      { shouldInjectEvent: options?.shouldInjectEvent ?? true }
+   )
 
    return result
 }

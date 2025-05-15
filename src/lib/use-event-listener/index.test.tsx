@@ -1,99 +1,225 @@
-import { renderHook } from '@testing-library/react'
-import { vi } from 'vitest'
+import { fireEvent, render, renderHook, screen } from '@testing-library/react'
+import { expect, vi } from 'vitest'
 import { useEventListener } from '.'
+import { ElementRef, useRef, useState } from 'react'
+import { EvTarget } from '../../types'
 
-describe('use-event-listener', () => {
+describe('mounting and unmounting', () => {
    it('should render', () => {
-      renderHook(() => useEventListener(null, 'click', () => {}))
+      renderHook(() => useEventListener(() => null, 'click', undefined, {}))
+
+      // @ts-expect-error  handling the edge case if target is not type of function
+      renderHook(() => useEventListener(null, 'click', undefined, {}))
    })
 
-   it('should add listener on-mount and remove it on un-mount', () => {
+   it('should not add event if handler is not provided', () => {
+      const div = document.createElement('div')
+      const addSpy = vi.spyOn(div, 'addEventListener')
+      const removeSpy = vi.spyOn(div, 'removeEventListener')
+      const fn = vi.fn()
+
+      renderHook(() => {
+         useEventListener(() => div, 'click')
+      })
+
+      expect(addSpy).toHaveBeenCalledTimes(0)
+      expect(removeSpy).not.toHaveBeenCalled()
+
+      renderHook(() => {
+         useEventListener(() => div, 'click', fn, { shouldInjectEvent: false })
+      })
+      expect(addSpy).toHaveBeenCalledTimes(0)
+      expect(removeSpy).not.toHaveBeenCalled()
+
+      renderHook(() => {
+         useEventListener(() => null, 'click', fn)
+      })
+      expect(addSpy).toHaveBeenCalledTimes(0)
+      expect(removeSpy).not.toHaveBeenCalled()
+   })
+
+   it('should remove event on-un-mount', () => {
+      const div = document.createElement('div')
+      const addSpy = vi.spyOn(div, 'addEventListener')
+      const removeSpy = vi.spyOn(div, 'removeEventListener')
+      const fn = vi.fn()
+
+      const { unmount } = renderHook(() => {
+         useEventListener(() => div, 'click', fn)
+      })
+
+      unmount()
+      expect(addSpy).toHaveBeenCalledTimes(1) // should be 1 on unmount
+      expect(removeSpy).toHaveBeenCalledTimes(1)
+   })
+
+   it('should not re-run the addEventListner if the <target>,<event> and <handler> props are not changed', () => {
       const div = document.createElement('div')
       const addSpy = vi.spyOn(div, 'addEventListener')
       const removeSpy = vi.spyOn(div, 'removeEventListener')
 
-      const { rerender, unmount } = renderHook(() => {
-         useEventListener(
-            () => div,
-            'resize',
-            () => {},
-            { passive: true }
-         )
+      const handler = vi.fn()
+      const target = () => div
+
+      const { rerender } = renderHook(() => {
+         useEventListener(target, 'click', handler)
       })
 
       expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(0)
-
       rerender()
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(removeSpy).not.toHaveBeenCalled()
+   })
+
+   it('should re-run the effect if the <target>,<event> and <options.key> props are changed', () => {
+      const div = document.createElement('div')
+      div.textContent = 'div'
+
+      const addSpy = vi.spyOn(div, 'addEventListener')
+      const removeSpy = vi.spyOn(div, 'removeEventListener')
+
+      const handler = vi.fn()
+      const t = () => div
+
+      const { rerender, unmount } = renderHook(
+         (props: { capture: boolean; shouldInjectEvent: boolean; event: keyof DocumentEventMap; target: EvTarget }) => {
+            useEventListener(props.target, props.event, handler, {
+               capture: props.capture,
+               shouldInjectEvent: props.shouldInjectEvent,
+            })
+         },
+         { initialProps: { capture: true, target: t, event: 'click', shouldInjectEvent: true } }
+      )
+
+      expect(addSpy).toHaveBeenCalledTimes(1)
+
+      // re-render with updated options.capture prop
+      rerender({ capture: false, target: t, event: 'click', shouldInjectEvent: true })
       expect(addSpy).toHaveBeenCalledTimes(2)
       expect(removeSpy).toHaveBeenCalledTimes(1)
 
-      unmount()
+      // re-render with updated options.shouldInjectEvent prop
+      rerender({ shouldInjectEvent: false, target: t, event: 'click', capture: false })
       expect(addSpy).toHaveBeenCalledTimes(2)
       expect(removeSpy).toHaveBeenCalledTimes(2)
-   })
 
-   it('should work with refs', () => {
-      const div = document.createElement('div')
-      const addSpy = vi.spyOn(div, 'addEventListener')
-      const removeSpy = vi.spyOn(div, 'removeEventListener')
+      // re-render with updated event prop
+      rerender({ event: 'mousedown', shouldInjectEvent: true, capture: false, target: t })
+      expect(addSpy).toHaveBeenCalledTimes(3)
+      expect(removeSpy).toHaveBeenCalledTimes(2)
 
-      const ref = { current: div }
+      const div2 = document.createElement('div')
+      div2.textContent = 'div2'
+      const addSpy2 = vi.spyOn(div2, 'addEventListener')
+      const removeSpy2 = vi.spyOn(div2, 'removeEventListener')
 
-      const { rerender, unmount } = renderHook(() => {
-         useEventListener(ref, 'resize', () => {}, { passive: true })
-      })
+      // re-render with updated target
+      rerender({ target: () => div2, capture: false, event: 'mousedown', shouldInjectEvent: true })
+      expect(addSpy2).toHaveBeenCalledTimes(1)
+      expect(removeSpy).toHaveBeenCalledTimes(3) // remove old target event
 
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(0)
+      // extra re-render test same target
+      rerender({ target: () => div2, capture: false, event: 'mousedown', shouldInjectEvent: true })
+      expect(addSpy2).toHaveBeenCalledTimes(1)
 
-      rerender()
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(0)
-
+      // unmount
+      expect(removeSpy2).not.toHaveBeenCalled()
       unmount()
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(1)
+      expect(addSpy2).toHaveBeenCalledTimes(1)
+      expect(removeSpy2).toHaveBeenCalledTimes(1)
+   })
+})
+
+describe('event trigger', () => {
+   it('should trigger event with proper event context', () => {
+      const div = document.createElement('div')
+      const handler = vi.fn()
+
+      renderHook(() => useEventListener(() => div, 'click', handler))
+
+      const ev = new Event('click')
+
+      // first trigger
+      div.dispatchEvent(ev)
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(ev)
+
+      // second trigger
+      div.dispatchEvent(ev)
+      expect(handler).toHaveBeenCalledTimes(2)
+      expect(handler).toHaveBeenCalledWith(ev)
    })
 
-   it('should fire listener on event trigger with proper context', () => {
+   it('should not trigger event after unmount', () => {
       const div = document.createElement('div')
-      const listener = vi.fn()
-      renderHook(() => {
-         useEventListener(div, 'click', listener, { passive: true })
-      })
+      const handler = vi.fn()
 
-      const event = new Event('click')
-      div.dispatchEvent(event)
+      const { unmount } = renderHook(() => useEventListener(() => div, 'click', handler))
 
-      expect(listener).toHaveBeenCalledTimes(1)
-      expect(listener).toHaveBeenCalledWith(event)
+      // unmount
+      unmount()
 
-      div.dispatchEvent(event)
-      expect(listener).toHaveBeenCalledTimes(2)
+      // test whether it is being triggered or not
+      const ev = new Event('click')
+      div.dispatchEvent(ev)
+      expect(handler).not.toHaveBeenCalled()
    })
 
-   it('should remove listener when shouldInjectEvent becomes false', () => {
+   it('should trigger event with proper event context', () => {
       const div = document.createElement('div')
-      const removeSpy = vi.spyOn(div, 'removeEventListener')
+      const handler = vi.fn()
 
-      const listener = vi.fn()
-      const { rerender } = renderHook((shouldInjectEvent: boolean = true) => {
-         useEventListener(div, 'click', listener, { passive: true, shouldInjectEvent })
-      })
+      renderHook(() => useEventListener(() => div, 'click', handler))
 
-      const event = new Event('click')
-      div.dispatchEvent(event)
+      const ev = new Event('click')
 
-      expect(listener).toHaveBeenCalledTimes(1)
-      expect(listener).toHaveBeenCalledWith(event)
+      // first trigger
+      div.dispatchEvent(ev)
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(ev)
 
-      rerender(false)
-      expect(listener).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(1)
+      // second trigger
+      div.dispatchEvent(ev)
+      expect(handler).toHaveBeenCalledTimes(2)
+      expect(handler).toHaveBeenCalledWith(ev)
+   })
+})
 
-      // check whether event is cleanup or not
-      div.dispatchEvent(event)
-      expect(listener).toHaveBeenCalledTimes(1)
+describe('integration with react component', () => {
+   it('should log the latest value of counter in handler', () => {
+      const fn = vi.fn()
+
+      const Wrapper = () => {
+         const [counter, setCounter] = useState(0)
+         const ref = useRef<ElementRef<'div'>>(null)
+         useEventListener(
+            () => ref.current,
+            'click',
+            () => {
+               fn(counter)
+            }
+         )
+
+         return (
+            <div>
+               <button data-testid='btn' onClick={() => setCounter((c) => c + 1)}>
+                  update counter {counter}
+               </button>
+               <div ref={ref} data-testid='log'>
+                  log value
+               </div>
+            </div>
+         )
+      }
+
+      render(<Wrapper />)
+
+      fireEvent.click(screen.getByTestId('btn'))
+      fireEvent.click(screen.getByTestId('log'))
+      expect(fn).toHaveBeenNthCalledWith(1, 1) // should log "0"
+
+      fireEvent.click(screen.getByTestId('btn'))
+      fireEvent.click(screen.getByTestId('log'))
+      expect(fn).toHaveBeenNthCalledWith(2, 2) // should log "1"
    })
 })

@@ -1,8 +1,8 @@
 'use client'
-import type { Target } from '../use-event-listener'
-import React, { useRef } from 'react'
+import type { EvOptions, EvTarget } from '../../types'
+
+import React from 'react'
 import { useEventListener } from '../use-event-listener'
-import useSyncedRef from '../use-synced-ref'
 
 /**
  * @description
@@ -11,32 +11,22 @@ import useSyncedRef from '../use-synced-ref'
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-outside-click.html
  */
 export default function useOutsideClick(
-   target: Target,
-   handler: (event: DocumentEventMap['click']) => void,
-   options?: { shouldInjectEvent?: boolean | any }
+   target: EvTarget,
+   handler?: (event: DocumentEventMap['click']) => void,
+   options?: EvOptions
 ) {
-   const paramsRef = useSyncedRef({
-      target,
-      handler,
-   })
-   let shouldInjectEvent = true
-   if (typeof options == 'object' && 'shouldInjectEvent' in options) {
-      shouldInjectEvent = !!options.shouldInjectEvent
-   }
+   const eventCb = (event: DocumentEventMap['click']) => {
+      const node = typeof target == 'function' ? target() : null // node which need to be tracked if click has occured within it or not
 
-   const eventCb = useRef((event: DocumentEventMap['click']) => {
-      const node = (typeof target == 'function' ? target() : target) ?? document
-      if (event.target == node || ('current' in node && event.target == node.current)) return
+      if (!node) return
 
-      if (
-         node &&
-         (('contains' in node && (node as Node).contains(event.target as Node)) ||
-            ('current' in node && 'contains' && (node.current as Node).contains(event.target as Node)))
-      ) {
+      if (event.target == node) return
+
+      if ('contains' in node && (node as Node).contains(event.target as Node)) {
          return
       }
-      paramsRef.current.handler(event)
-   })
+      handler?.(event)
+   }
 
-   useEventListener(document, 'click', eventCb.current, { shouldInjectEvent: shouldInjectEvent })
+   useEventListener(() => document, 'click', eventCb, { capture: true, ...(options ?? {}) })
 }
