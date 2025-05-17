@@ -15,7 +15,7 @@ export default defineConfig({
          include: ['src/lib/**/*'],
          exclude: ['src/lib/use-combined-key-event-listener'],
       },
-      include: ['src/lib/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+      include: ['src/lib/**/*.test.{tsx,ts}'],
       exclude: [
          '**/node_modules/**',
          '**/dist/**',
