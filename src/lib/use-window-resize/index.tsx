@@ -8,15 +8,22 @@ import { useEventListener } from '../use-event-listener'
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-window-resize.html
  */
-export default function useWindowResize<T>(cb: () => T, options?: { defaultValue?: T; shouldInjectEvent?: boolean }) {
-   const [result, setResult] = useState(options?.defaultValue ?? cb)
+export default function useWindowResize<T>({
+   handler,
+   options,
+}: {
+   handler: () => T
+   options?: { defaultValue?: T; shouldInjectEvent?: boolean }
+}) {
+   const [result, setResult] = useState(options?.defaultValue ?? handler)
 
-   useEventListener(
-      () => window,
-      'resize',
-      () => setResult(cb),
-      { shouldInjectEvent: options?.shouldInjectEvent ?? true }
-   )
-
+   useEventListener({
+      target: () => window,
+      event: 'resize',
+      handler: () => setResult(handler),
+      options: {
+         shouldInjectEvent: options?.shouldInjectEvent ?? true,
+      },
+   })
    return result
 }

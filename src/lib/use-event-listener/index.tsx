@@ -12,25 +12,50 @@ import useSyncedRef from '../use-synced-ref'
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-event-listener.html
  */
-export function useEventListener<K extends keyof DocumentEventMap>(
-   target: EvTarget,
-   event: K,
-   handler?: (event: DocumentEventMap[K]) => void,
+export function useEventListener<K extends keyof DocumentEventMap>({
+   target,
+   event,
+   handler,
+   options,
+}: {
+   target: EvTarget
+   event: K
+   handler?: (event: DocumentEventMap[K]) => void
    options?: EvOptions
-): void
-export function useEventListener<K extends keyof WindowEventMap>(
-   target: EvTarget,
-   event: K,
-   handler?: (event: WindowEventMap[K]) => void,
+}): void
+export function useEventListener<K extends keyof WindowEventMap>({
+   target,
+   event,
+   handler,
+   options,
+}: {
+   target: EvTarget
+   event: K
+   handler?: (event: WindowEventMap[K]) => void
    options?: EvOptions
-): void
-export function useEventListener<K extends keyof GlobalEventHandlersEventMap>(
-   target: EvTarget,
-   event: K,
-   handler?: (event: GlobalEventHandlersEventMap[K]) => void,
+}): void
+export function useEventListener<K extends keyof GlobalEventHandlersEventMap>({
+   target,
+   event,
+   handler,
+   options,
+}: {
+   target: EvTarget
+   event: K
+   handler?: (event: GlobalEventHandlersEventMap[K]) => void
    options?: EvOptions
-): void
-export function useEventListener(target: EvTarget, event: string, handler?: EvHandler, options?: EvOptions) {
+}): void
+export function useEventListener({
+   target,
+   event,
+   handler,
+   options,
+}: {
+   target: EvTarget
+   event: string
+   handler?: EvHandler
+   options?: EvOptions
+}) {
    const [elementNode, setElementNode] = useState<EventTarget | null>(() =>
       typeof target === 'function' ? target() : null
    )

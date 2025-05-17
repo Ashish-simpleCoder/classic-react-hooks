@@ -10,11 +10,15 @@ import { useEventListener } from '../use-event-listener'
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-outside-click.html
  */
-export default function useOutsideClick(
-   target: EvTarget,
-   handler?: (event: DocumentEventMap['click']) => void,
+export default function useOutsideClick({
+   target,
+   handler,
+   options,
+}: {
+   target: EvTarget
+   handler?: (event: DocumentEventMap['click']) => void
    options?: EvOptions
-) {
+}) {
    const eventCb = (event: DocumentEventMap['click']) => {
       const node = typeof target == 'function' ? target() : null // node which need to be tracked if click has occured within it or not
 
@@ -28,5 +32,13 @@ export default function useOutsideClick(
       handler?.(event)
    }
 
-   useEventListener(() => document, 'click', eventCb, { capture: true, ...(options ?? {}) })
+   useEventListener({
+      target: () => document,
+      event: 'click',
+      handler: eventCb,
+      options: {
+         capture: true,
+         ...options,
+      },
+   })
 }

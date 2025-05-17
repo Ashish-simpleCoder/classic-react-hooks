@@ -6,10 +6,16 @@ import { EvTarget } from '../../types'
 
 describe('mounting and unmounting', () => {
    it('should render', () => {
-      renderHook(() => useEventListener(() => null, 'click', undefined, {}))
+      renderHook(() =>
+         useEventListener({
+            target: () => null,
+            event: 'click',
+            options: {},
+         })
+      )
 
       // @ts-expect-error  handling the edge case if target is not type of function
-      renderHook(() => useEventListener(null, 'click', undefined, {}))
+      renderHook(() => useEventListener({ target: null, event: 'click' }))
    })
 
    it('should not add event if handler is not provided', () => {
@@ -19,20 +25,28 @@ describe('mounting and unmounting', () => {
       const fn = vi.fn()
 
       renderHook(() => {
-         useEventListener(() => div, 'click')
+         useEventListener({
+            target: () => div,
+            event: 'click',
+         })
       })
 
       expect(addSpy).toHaveBeenCalledTimes(0)
       expect(removeSpy).not.toHaveBeenCalled()
 
       renderHook(() => {
-         useEventListener(() => div, 'click', fn, { shouldInjectEvent: false })
+         useEventListener({
+            target: () => div,
+            event: 'click',
+            handler: fn,
+            options: { shouldInjectEvent: false },
+         })
       })
       expect(addSpy).toHaveBeenCalledTimes(0)
       expect(removeSpy).not.toHaveBeenCalled()
 
       renderHook(() => {
-         useEventListener(() => null, 'click', fn)
+         useEventListener({ target: () => null, event: 'click', handler: fn })
       })
       expect(addSpy).toHaveBeenCalledTimes(0)
       expect(removeSpy).not.toHaveBeenCalled()
@@ -45,7 +59,7 @@ describe('mounting and unmounting', () => {
       const fn = vi.fn()
 
       const { unmount } = renderHook(() => {
-         useEventListener(() => div, 'click', fn)
+         useEventListener({ target: () => div, event: 'click', handler: fn })
       })
 
       unmount()
@@ -58,11 +72,10 @@ describe('mounting and unmounting', () => {
       const addSpy = vi.spyOn(div, 'addEventListener')
       const removeSpy = vi.spyOn(div, 'removeEventListener')
 
-      const handler = vi.fn()
-      const target = () => div
+      const fn = vi.fn()
 
       const { rerender } = renderHook(() => {
-         useEventListener(target, 'click', handler)
+         useEventListener({ target: () => div, event: 'click', handler: fn })
       })
 
       expect(addSpy).toHaveBeenCalledTimes(1)
@@ -83,9 +96,14 @@ describe('mounting and unmounting', () => {
 
       const { rerender, unmount } = renderHook(
          (props: { capture: boolean; shouldInjectEvent: boolean; event: keyof DocumentEventMap; target: EvTarget }) => {
-            useEventListener(props.target, props.event, handler, {
-               capture: props.capture,
-               shouldInjectEvent: props.shouldInjectEvent,
+            useEventListener({
+               target: props.target,
+               event: props.event,
+               handler: handler,
+               options: {
+                  capture: props.capture,
+                  shouldInjectEvent: props.shouldInjectEvent,
+               },
             })
          },
          { initialProps: { capture: true, target: t, event: 'click', shouldInjectEvent: true } }
@@ -133,28 +151,29 @@ describe('mounting and unmounting', () => {
 describe('event trigger', () => {
    it('should trigger event with proper event context', () => {
       const div = document.createElement('div')
-      const handler = vi.fn()
+      const fn = vi.fn()
 
-      renderHook(() => useEventListener(() => div, 'click', handler))
+      renderHook(() => useEventListener({ target: () => div, event: 'click', handler: fn }))
 
       const ev = new Event('click')
 
       // first trigger
       div.dispatchEvent(ev)
-      expect(handler).toHaveBeenCalledTimes(1)
-      expect(handler).toHaveBeenCalledWith(ev)
+      expect(fn).toHaveBeenCalledTimes(1)
+      expect(fn).toHaveBeenCalledWith(ev)
 
       // second trigger
       div.dispatchEvent(ev)
-      expect(handler).toHaveBeenCalledTimes(2)
-      expect(handler).toHaveBeenCalledWith(ev)
+      expect(fn).toHaveBeenCalledTimes(2)
+      expect(fn).toHaveBeenCalledWith(ev)
    })
 
    it('should not trigger event after unmount', () => {
       const div = document.createElement('div')
-      const handler = vi.fn()
+      const fn = vi.fn()
 
-      const { unmount } = renderHook(() => useEventListener(() => div, 'click', handler))
+      // const { unmount } = renderHook(() => useEventListener(() => div, 'click', handler))
+      const { unmount } = renderHook(() => useEventListener({ target: () => div, event: 'click', handler: fn }))
 
       // unmount
       unmount()
@@ -162,26 +181,26 @@ describe('event trigger', () => {
       // test whether it is being triggered or not
       const ev = new Event('click')
       div.dispatchEvent(ev)
-      expect(handler).not.toHaveBeenCalled()
+      expect(fn).not.toHaveBeenCalled()
    })
 
    it('should trigger event with proper event context', () => {
       const div = document.createElement('div')
-      const handler = vi.fn()
+      const fn = vi.fn()
 
-      renderHook(() => useEventListener(() => div, 'click', handler))
+      renderHook(() => useEventListener({ target: () => div, event: 'click', handler: fn }))
 
       const ev = new Event('click')
 
       // first trigger
       div.dispatchEvent(ev)
-      expect(handler).toHaveBeenCalledTimes(1)
-      expect(handler).toHaveBeenCalledWith(ev)
+      expect(fn).toHaveBeenCalledTimes(1)
+      expect(fn).toHaveBeenCalledWith(ev)
 
       // second trigger
       div.dispatchEvent(ev)
-      expect(handler).toHaveBeenCalledTimes(2)
-      expect(handler).toHaveBeenCalledWith(ev)
+      expect(fn).toHaveBeenCalledTimes(2)
+      expect(fn).toHaveBeenCalledWith(ev)
    })
 })
 
@@ -192,13 +211,13 @@ describe('integration with react component', () => {
       const Wrapper = () => {
          const [counter, setCounter] = useState(0)
          const ref = useRef<ElementRef<'div'>>(null)
-         useEventListener(
-            () => ref.current,
-            'click',
-            () => {
+         useEventListener({
+            target: () => ref.current,
+            event: 'click',
+            handler: () => {
                fn(counter)
-            }
-         )
+            },
+         })
 
          return (
             <div>
