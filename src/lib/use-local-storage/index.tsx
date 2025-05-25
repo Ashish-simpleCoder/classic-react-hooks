@@ -13,7 +13,7 @@ import React, { useRef, useState } from 'react'
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-local-storage.html
  */
-export default function useLocalStorage<State>(key: string, defaultValue?: State) {
+export default function useLocalStorage<State>({ key, defaultValue }: { key: string; defaultValue?: State }) {
    const [state, setState] = useState<State>(() => {
       try {
          const item = localStorage.getItem(key)

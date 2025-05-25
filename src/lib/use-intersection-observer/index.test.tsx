@@ -26,13 +26,13 @@ describe('use-intersection-observer', () => {
    it('should run without error', () => {
       const div = document.createElement('div')
 
-      renderHook(() => useInterSectionObserver({targets:[()=>div]}))
+      renderHook(() => useInterSectionObserver({ targets: [() => div] }))
    })
 
    it('should call disconnect on un-mount', () => {
       const div = document.createElement('div')
 
-      const { unmount } = renderHook(() => useInterSectionObserver({targets:[()=>div]}))
+      const { unmount } = renderHook(() => useInterSectionObserver({ targets: [() => div] }))
 
       expect(IntersectionObserverSpy.mock.results[0]?.value.disconnect).toHaveBeenCalledTimes(0)
       unmount()

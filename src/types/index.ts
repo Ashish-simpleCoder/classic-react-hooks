@@ -8,7 +8,6 @@ export interface EvOptions extends AddEventListenerOptions {
 }
 export type EvHandler = (event: Event) => void
 
-
 // use-intersection type
 export interface IntersectionOptions extends IntersectionObserverInit {
    only_trigger_once?: boolean | Array<boolean>
