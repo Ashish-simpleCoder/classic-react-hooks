@@ -12,21 +12,21 @@ describe('use-debounced-fn', () => {
 
    it('should return the debounced callback', () => {
       const callback = vi.fn()
-      const { result } = renderHook(() => useDebouncedFn(callback, 300))
+      const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
 
       expect(typeof result.current).toBe('function')
    })
 
    it('should not fire callback on initialization', () => {
       const callback = vi.fn()
-      renderHook(() => useDebouncedFn(callback, 300))
+      renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
 
       expect(callback).not.toHaveBeenCalled()
    })
 
    it('should return the debounced callback with default 300ms delay', async () => {
       const callback = vi.fn()
-      const { result } = renderHook(() => useDebouncedFn(callback))
+      const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
       result.current(10)
       vi.advanceTimersByTime(100)
@@ -41,7 +41,7 @@ describe('use-debounced-fn', () => {
 
    it('should call deboucnced function with given arguments', async () => {
       const callback = vi.fn()
-      const { result } = renderHook(() => useDebouncedFn(callback))
+      const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
       result.current(10)
       vi.advanceTimersByTime(300)
@@ -55,7 +55,7 @@ describe('use-debounced-fn', () => {
    it('should debounce the callback with custom delay', () => {
       const callback = vi.fn()
 
-      const { result } = renderHook(() => useDebouncedFn(callback, 500))
+      const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 500 }))
 
       result.current(2)
       vi.advanceTimersByTime(300)
@@ -75,7 +75,7 @@ describe('use-debounced-fn', () => {
    it('should cleanup the timers on unmount', async () => {
       const callback = vi.fn()
 
-      const { result, unmount } = renderHook(() => useDebouncedFn(callback, 500))
+      const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 500 }))
 
       result.current()
       unmount()
@@ -87,7 +87,7 @@ describe('use-debounced-fn', () => {
       let delay = 200
       const callback = vi.fn()
 
-      const { result, rerender } = renderHook(() => useDebouncedFn(callback, delay))
+      const { result, rerender } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay }))
       result.current()
       vi.advanceTimersByTime(200)
       expect(callback).toHaveBeenCalledTimes(1)
@@ -118,7 +118,7 @@ describe('use-debounced-fn', () => {
          console.log(tempValue)
       })
 
-      const { result, rerender } = renderHook(() => useDebouncedFn(callback))
+      const { result, rerender } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
       result.current()
       vi.advanceTimersByTime(300)

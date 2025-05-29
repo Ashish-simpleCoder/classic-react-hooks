@@ -11,19 +11,28 @@ const DEFAULT_DELAY = 300
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-debounced-fn.html
  *
  */
-export default function useDebouncedFn<T extends (...args: any[]) => any>(cb: T, delay = DEFAULT_DELAY) {
+export default function useDebouncedFn<T extends (...args: any[]) => any>({
+   callbackToBounce,
+   delay = DEFAULT_DELAY,
+}: {
+   callbackToBounce: T
+   delay?: number
+}) {
    const paramsRef = useSyncedRef({
-      cb,
+      callbackToBounce,
       delay,
    })
    const timerId = useRef<NodeJS.Timeout>()
 
    const debouncedCb = useRef({
-      fn: (...args: Parameters<typeof cb>) => {
+      fn: (...args: Parameters<typeof callbackToBounce>) => {
          if (timerId.current) {
             clearTimeout(timerId.current)
          }
-         timerId.current = setTimeout(() => paramsRef.current.cb.call(null, ...args), paramsRef.current.delay)
+         timerId.current = setTimeout(
+            () => paramsRef.current.callbackToBounce.call(null, ...args),
+            paramsRef.current.delay
+         )
       },
       cleanup: () => clearTimeout(timerId.current),
    })
@@ -42,15 +51,21 @@ export default function useDebouncedFn<T extends (...args: any[]) => any>(cb: T,
  *  A wrapper function which returns debounced version of passed callback.
  *  If needed to work outside of react, then use this wrapper function.
  */
-export function debouncedFnWrapper<T extends (...args: any[]) => any>(cb: T, delay = DEFAULT_DELAY) {
+export function debouncedFnWrapper<T extends (...args: any[]) => any>({
+   callbackToBounce,
+   delay = DEFAULT_DELAY,
+}: {
+   callbackToBounce: T
+   delay?: number
+}) {
    let timerId: NodeJS.Timeout
 
    return {
-      fn: (...args: Parameters<typeof cb>) => {
+      fn: (...args: Parameters<typeof callbackToBounce>) => {
          if (timerId) {
             clearTimeout(timerId)
          }
-         timerId = setTimeout(() => cb.call(null, ...args), delay)
+         timerId = setTimeout(() => callbackToBounce.call(null, ...args), delay)
       },
       cleanup: () => clearTimeout(timerId),
    }
