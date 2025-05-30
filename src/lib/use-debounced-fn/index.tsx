@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useRef } from 'react'
-import useSyncedRef from '../use-synced-ref'
 
 const DEFAULT_DELAY = 300
 
@@ -13,29 +12,22 @@ const DEFAULT_DELAY = 300
  */
 export default function useDebouncedFn<T extends (...args: any[]) => any>({
    callbackToBounce,
-   delay = DEFAULT_DELAY,
+   delay,
 }: {
    callbackToBounce: T
    delay?: number
 }) {
-   const paramsRef = useSyncedRef({
+   const paramsRef = useRef({
       callbackToBounce,
       delay,
    })
-   const timerId = useRef<NodeJS.Timeout>()
 
-   const debouncedCb = useRef({
-      fn: (...args: Parameters<typeof callbackToBounce>) => {
-         if (timerId.current) {
-            clearTimeout(timerId.current)
-         }
-         timerId.current = setTimeout(
-            () => paramsRef.current.callbackToBounce.call(null, ...args),
-            paramsRef.current.delay
-         )
-      },
-      cleanup: () => clearTimeout(timerId.current),
-   })
+   // tracking props with immutable object
+   paramsRef.current.delay = delay
+   paramsRef.current.callbackToBounce = callbackToBounce
+
+   // so can access the updated props inside debouncedFnWrapper function
+   const debouncedCb = useRef(debouncedFnWrapper(paramsRef.current))
 
    useEffect(() => {
       return () => {
@@ -51,21 +43,21 @@ export default function useDebouncedFn<T extends (...args: any[]) => any>({
  *  A wrapper function which returns debounced version of passed callback.
  *  If needed to work outside of react, then use this wrapper function.
  */
-export function debouncedFnWrapper<T extends (...args: any[]) => any>({
-   callbackToBounce,
-   delay = DEFAULT_DELAY,
-}: {
-   callbackToBounce: T
-   delay?: number
-}) {
+export function debouncedFnWrapper<T extends (...args: any[]) => any>(props: { callbackToBounce: T; delay?: number }) {
    let timerId: NodeJS.Timeout
 
    return {
-      fn: (...args: Parameters<typeof callbackToBounce>) => {
+      fn: (...args: Parameters<typeof props.callbackToBounce>) => {
          if (timerId) {
             clearTimeout(timerId)
          }
-         timerId = setTimeout(() => callbackToBounce.call(null, ...args), delay)
+         timerId = setTimeout(() => {
+            try {
+               props.callbackToBounce.call(null, ...args)
+            } catch (err) {
+               throw err
+            }
+         }, props.delay ?? DEFAULT_DELAY)
       },
       cleanup: () => clearTimeout(timerId),
    }

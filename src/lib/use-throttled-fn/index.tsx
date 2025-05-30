@@ -1,6 +1,5 @@
 'use client'
 import React, { useRef } from 'react'
-import useSyncedRef from '../use-synced-ref'
 
 const DEFAULT_DELAY = 300
 
@@ -11,30 +10,50 @@ const DEFAULT_DELAY = 300
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-throttled-fn.html
  *
  */
-export default function useThrottledFn<T extends (...args: any[]) => any>(cb: T, delay = DEFAULT_DELAY) {
-   const paramsRef = useSyncedRef({
-      cb,
+export default function useThrottledFn<T extends (...args: any[]) => any>({
+   callbackToThrottle,
+   delay,
+}: {
+   callbackToThrottle: T
+   delay?: number
+}) {
+   const paramsRef = useRef({
+      callbackToThrottle,
       delay,
    })
 
-   const throttledCb = useRef(throttledFnWrapper(paramsRef.current.cb, paramsRef.current.delay))
+   // tracking props with immutable object
+   paramsRef.current.delay = delay
+   paramsRef.current.callbackToThrottle = callbackToThrottle
+
+   // so can access the updated props inside debouncedFnWrapper function
+   const throttledCb = useRef(throttledFnWrapper(paramsRef.current))
+
    return throttledCb.current
 }
 
 /**
  * @description
- *  A wrapper function which is used internally in `useThrttledFn` hook.
+ *  A wrapper function which is used internally in `useThrottledFn` hook.
  */
-export function throttledFnWrapper<T extends (...args: any[]) => any>(cb: T, delay = DEFAULT_DELAY) {
+export function throttledFnWrapper<T extends (...args: any[]) => any>(props: {
+   callbackToThrottle: T
+   delay?: number
+}) {
    let lastExecutionTime = 0
 
-   return function (...args: Parameters<typeof cb>) {
+   return function (...args: Parameters<typeof props.callbackToThrottle>) {
       const currentTime = Date.now()
 
-      if (currentTime - lastExecutionTime >= delay) {
-         // @ts-ignore
-         cb.call(this, ...args)
-         lastExecutionTime = currentTime
+      if (currentTime - lastExecutionTime >= (props.delay ?? DEFAULT_DELAY)) {
+         try {
+            // @ts-expect-error -> making "this" as "any" type working
+            props.callbackToThrottle.call(this, ...args)
+         } catch (err) {
+            throw err
+         } finally {
+            lastExecutionTime = currentTime
+         }
       }
    }
 }
