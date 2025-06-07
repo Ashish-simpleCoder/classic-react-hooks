@@ -1,5 +1,13 @@
 # classic-react-hooks
 
+## 2.0.0-canary.0
+
+### Major Changes
+
+Breaking
+-  v2 release prepare
+- Rewrite all of the hooks and their documenation
+
 ## 1.4.0
 
 ### Minor Changes

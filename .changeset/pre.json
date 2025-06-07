@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "canary",
+  "initialVersions": {
+    "classic-react-hooks": "1.4.0"
+  },
+  "changesets": [
+    "icy-boats-make"
+  ]
+}
