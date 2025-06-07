@@ -32,7 +32,28 @@ export default defineConfig({
          },
          {
             text: `v${version}`,
-            link: `https://github.com/Ashish-simpleCoder/classic-react-hooks/releases/tag/v${version}`,
+            items: [
+               {
+                  items: [
+                     {
+                        text: `v${version}`,
+                        link: `https://github.com/Ashish-simpleCoder/classic-react-hooks/releases/tag/v${version}`,
+                     },
+                  ],
+               },
+               {
+                  items: [
+                     {
+                        text: 'Unreleased',
+                        link: `https://canary-classic-react-hooks.vercel.app/`,
+                     },
+                     {
+                        text: 'v1.x',
+                        link: `https://v1-classic-react-hooks.vercel.app`,
+                     },
+                  ],
+               },
+            ],
          },
       ],
 
