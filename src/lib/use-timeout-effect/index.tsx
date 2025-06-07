@@ -8,9 +8,9 @@ import useSyncedRef from '../use-synced-ref'
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-timeout-effect.html
  */
-export default function useTimeoutEffect(cb: () => void, timeout = 100) {
+export default function useTimeoutEffect({ handler, timeout = 100 }: { handler: () => void; timeout?: number }) {
    let paramsRef = useSyncedRef({
-      cb,
+      handler,
       timeout,
    })
    const timeoutId = useRef<NodeJS.Timeout>()
@@ -19,12 +19,12 @@ export default function useTimeoutEffect(cb: () => void, timeout = 100) {
       clearTimer: () => clearTimeout(timeoutId.current),
       restartTimer: (new_interval?: number) => {
          handlers.current.clearTimer()
-         timeoutId.current = setTimeout(paramsRef.current.cb, new_interval ?? paramsRef.current.timeout)
+         timeoutId.current = setTimeout(() => paramsRef.current.handler(), new_interval ?? paramsRef.current.timeout)
       },
    })
 
    useEffect(() => {
-      timeoutId.current = setTimeout(paramsRef.current.cb, paramsRef.current.timeout)
+      timeoutId.current = setTimeout(() => paramsRef.current.handler(), paramsRef.current.timeout)
       return handlers.current.clearTimer
    }, [])
 

@@ -14,6 +14,7 @@ export default defineConfig({
          all: true,
          include: ['src/lib/**/*'],
          exclude: ['src/lib/use-combined-key-event-listener'],
+         reporter:['html','text']
       },
       include: ['src/lib/**/*.test.{tsx,ts}'],
       exclude: [

@@ -8,9 +8,9 @@ import useSyncedRef from '../use-synced-ref'
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-interval-effect.html
  */
-export default function useIntervalEffect(cb: () => void, interval = 100) {
+export default function useIntervalEffect({ handler, interval = 100 }: { handler: () => void; interval?: number }) {
    let paramsRef = useSyncedRef({
-      cb,
+      handler,
       interval,
    })
    const intervalId = useRef<NodeJS.Timeout>()
@@ -19,12 +19,12 @@ export default function useIntervalEffect(cb: () => void, interval = 100) {
       clearTimer: () => clearInterval(intervalId.current),
       restartTimer: (new_interval?: number) => {
          handlers.current.clearTimer()
-         intervalId.current = setInterval(paramsRef.current.cb, new_interval ?? paramsRef.current.interval)
+         intervalId.current = setInterval(() => paramsRef.current.handler(), new_interval ?? paramsRef.current.interval)
       },
    })
 
    useEffect(() => {
-      intervalId.current = setInterval(paramsRef.current.cb, paramsRef.current.interval)
+      intervalId.current = setInterval(() => paramsRef.current.handler(), paramsRef.current.interval)
       return handlers.current.clearTimer
    }, [])
 

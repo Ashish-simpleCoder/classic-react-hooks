@@ -4,20 +4,34 @@ outline: deep
 
 # use-is-online
 
--  A simple hook for getting the network connection state.
+A React hook that provides real-time network connection status using the browser's `navigator.onLine` API.
+
+### Features
+
+-  **Real-time updates:** Real-time network status updates
+-  **SSR safe:** SSR-safe with proper hydration handling
+-  **Lightweight:** Lightweight with no external dependencies
+-  **Core hook:** Built on React's useSyncExternalStore for optimal performance
 
 ### Returns
 
--  `connectionState` : boolean
+-  `isOnline (boolean):` Current network connection state
 
-### Usage
+   -  `true` when the browser is online
+   -  `false` when the browser is offline
+
+### Usage Examples
+
+#### Basic Network query
 
 ```ts
 import { useIsOnline } from 'classic-react-hooks'
 
-export default function YourComponent() {
+function NetworkStatus() {
    const isOnline = useIsOnline()
 
-   return <div>{isOnline ? 'online' : 'offline'}</div>
+   return <div>Connection: {isOnline ? '🟢 Online' : '🔴 Offline'}</div>
 }
 ```
+
+### Important Notes

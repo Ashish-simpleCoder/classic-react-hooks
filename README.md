@@ -1,6 +1,6 @@
 # 🚀 classic-react-hooks
 
-An awesome collection of `feature` packed custom hooks.
+Essential Custom Hooks for React Developers
 
 <br />
 
@@ -36,23 +36,6 @@ https://classic-react-hooks.vercel.app/
 - Changeset for sementic version releases
 - Vitest for testing the components
 - tsup for build tooling 
-
-
-## ⚛️ Hook APIs
-
--  use-event-listener
--  use-copy-to-clipboard
--  use-local-storage
--  use-outside-click
--  use-debounced-fn
--  use-throttled-hook
--  use-is-online
--  use-timeout-effect
--  use-interval-effect
--  use-synced-ref
--  use-synced-effect
--  use-on-mount-effect
--  use-counter
 
 
 ## 🚀 Install in your project

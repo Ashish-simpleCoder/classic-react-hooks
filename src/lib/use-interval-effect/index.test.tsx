@@ -15,7 +15,7 @@ describe('use-interval-effect', () => {
 
    it('should fire callback with default interval of 100ms after the mount', () => {
       const fn = vi.fn()
-      renderHook(() => useIntervalEffect(fn))
+      renderHook(() => useIntervalEffect({ handler: fn }))
 
       expect(fn).toHaveBeenCalledTimes(0)
       vi.advanceTimersByTime(100)
@@ -24,7 +24,7 @@ describe('use-interval-effect', () => {
 
    it('should fire callback after the given interval', () => {
       const fn = vi.fn()
-      renderHook(() => useIntervalEffect(fn, 500))
+      renderHook(() => useIntervalEffect({ handler: fn, interval: 500 }))
 
       vi.advanceTimersByTime(500)
       expect(fn).toHaveBeenCalledTimes(1)
@@ -35,7 +35,7 @@ describe('use-interval-effect', () => {
 
    it('should clear the interval with clearTimer', () => {
       const fn = vi.fn()
-      const { result } = renderHook(() => useIntervalEffect(fn, 500))
+      const { result } = renderHook(() => useIntervalEffect({ handler: fn, interval: 500 }))
 
       result.current.clearTimer()
       vi.advanceTimersByTime(500)
@@ -44,7 +44,7 @@ describe('use-interval-effect', () => {
 
    it('should set the interval with restartTimer', () => {
       const fn = vi.fn()
-      const { result } = renderHook(() => useIntervalEffect(fn, 500))
+      const { result } = renderHook(() => useIntervalEffect({ handler: fn, interval: 500 }))
 
       vi.advanceTimersByTime(500)
       expect(fn).toHaveBeenCalledTimes(1)
@@ -63,7 +63,7 @@ describe('use-interval-effect', () => {
 
    it('should clear interval on unmount', () => {
       const fn = vi.fn()
-      const { unmount, result } = renderHook(() => useIntervalEffect(fn, 500))
+      const { unmount, result } = renderHook(() => useIntervalEffect({ handler: fn, interval: 500 }))
       // cleanup the timer
       vi.advanceTimersByTime(400)
       unmount()
