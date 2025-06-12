@@ -8,8 +8,26 @@ import useSyncedRef from '../use-synced-ref'
 
 /**
  * @description
- *  A hook which handles dom events in efficient and declarative manner.
+ *  A React hook that provides a declarative way to add DOM event listeners with automatic cleanup.
  *
+ * @example
+   import { useRef } from 'react'
+   import { useEventListener } from 'classic-react-hooks'
+
+   export default function ClickExample() {
+      const buttonRef = useRef<HTMLButtonElement>(null)
+
+      useEventListener({
+         target: () => buttonRef.current,
+         event: 'click',
+         handler: (e) => {
+            console.log('Button clicked!', e)
+         },
+      })
+
+      return <button ref={buttonRef}>Click me</button>
+   }
+ * 
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-event-listener.html
  */
 export function useEventListener<K extends keyof DocumentEventMap>({

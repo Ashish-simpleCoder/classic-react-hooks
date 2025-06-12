@@ -5,7 +5,44 @@ const DEFAULT_DELAY = 300
 
 /**
  * @description
- *  A hook which returns a throttled function.
+ *  A React hook that returns a throttled version of a callback function.
+ *
+ * @example 
+   import { useState } from 'react'
+   import { useThrottledFn } from 'classic-react-hooks'
+
+   export default function AutoSave() {
+      const [content, setContent] = useState('')
+      const [saving, setSaving] = useState(false)
+
+      const saveContent = useThrottledFn({
+         callbackToThrottle: async (text) => {
+            setSaving(true)
+            try {
+               await saveToAPI(text)
+               console.log('Content saved!')
+            } catch (error) {
+               console.error('Save failed:', error)
+            } finally {
+               setSaving(false)
+            }
+         },
+         delay: 2000, // Auto-save every 2 seconds at most
+      })
+
+      const handleChange = (e) => {
+         const newContent = e.target.value
+         setContent(newContent)
+         saveContent(newContent)
+      }
+
+      return (
+         <div>
+            <textarea value={content} onChange={handleChange} placeholder='Type your content...' />
+            {saving && <p>Saving...</p>}
+         </div>
+      )
+   } 
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-throttled-fn.html
  *

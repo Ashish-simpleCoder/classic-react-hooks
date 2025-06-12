@@ -4,8 +4,30 @@ import { useEventListener } from '../use-event-listener'
 
 /**
  * @description
- * A hook which evaluates the passed callback on window resize event and returns the result of that callback.
- *
+ * -  A React hook that evaluates a callback function on window resize events and returns the result.
+  *  - Perfect for responsive behavior based on window dimensions.
+ * @example
+   import { useWindowResize } from 'classic-react-hooks'
+
+   function ResponsiveComponent() {
+      const breakpoint = useWindowResize(() => {
+         const width = window.innerWidth
+         if (width < 640) return 'sm'
+         if (width < 768) return 'md'
+         if (width < 1024) return 'lg'
+         return 'xl'
+      })
+
+      return (
+         <div>
+            <h1>Current breakpoint: {breakpoint}</h1>
+            {breakpoint === 'sm' && <MobileLayout />}
+            {breakpoint === 'md' && <TabletLayout />}
+            {['lg', 'xl'].includes(breakpoint) && <DesktopLayout />}
+         </div>
+      )
+   }
+ * 
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-window-resize.html
  */
 export default function useWindowResize<T>({

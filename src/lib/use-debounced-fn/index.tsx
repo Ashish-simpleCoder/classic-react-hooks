@@ -40,8 +40,54 @@ export default function useDebouncedFn<T extends (...args: any[]) => any>({
 
 /**
  * @description
- *  A wrapper function which returns debounced version of passed callback.
- *  If needed to work outside of react, then use this wrapper function.
+ * A React hook that returns a debounced version of any function, delaying its execution until after a specified delay has passed since the last time it was invoked.
+ * 
+ * @example
+   import { useState, useEffect } from 'react'
+   import { useDebouncedFn } from 'classic-react-hooks'
+
+   export default function SearchInput() {
+      const [query, setQuery] = useState('')
+      const [results, setResults] = useState([])
+
+      const debouncedSearch = useDebouncedFn({
+         callbackToBounce: async (searchTerm: string) => {
+            if (searchTerm.trim()) {
+               const response = await fetch(`https://dummyjson.com/users/search?q=${searchTerm}`)
+               const data = await response.json()
+               setResults(data.results)
+            }
+         },
+         delay: 500,
+      })
+
+      const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+         const value = e.target.value
+         setQuery(value)
+         debouncedSearch(value)
+      }
+
+      useEffect(() => {
+         ;(async function () {
+            const response = await fetch(`https://dummyjson.com/users`)
+            const data = await response.json()
+            setResults(data.results)
+         })()
+      }, [])
+
+      return (
+         <div>
+            <input value={query} onChange={handleInputChange} placeholder='Search products...' />
+            <div>
+               {results.map((result) => (
+                  <div key={result.id}>{result.name}</div>
+               ))}
+            </div>
+         </div>
+      )
+   }
+ * 
+ *  @see Docs https://classic-react-hooks.vercel.app/hooks/use-debounced-fn.html
  */
 export function debouncedFnWrapper<T extends (...args: any[]) => any>(props: { callbackToBounce: T; delay?: number }) {
    let timerId: NodeJS.Timeout

@@ -4,8 +4,25 @@ import useSyncedRef from '../use-synced-ref'
 
 /**
  * @description
- * A hook which fires the provided callback only once when the given timeout is passed, just like the setTimeout.
+ * A React hook that fires a provided callback after a specified timeout, similar to `setTimeout`, but with additional control methods for clearing and restarting the timer.
  *
+ * @example
+ * import { useState } from 'react'
+   import useTimeoutEffect from './useTimeoutEffect'
+
+   export default function BasicExample() {
+      const [message, setMessage] = useState('')
+
+      useTimeoutEffect({
+         handler: () => {
+            setMessage('Timer executed!')
+         },
+         timeout: 2000,
+      })
+
+      return <div>{message}</div>
+   }
+ * 
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-timeout-effect.html
  */
 export default function useTimeoutEffect({ handler, timeout = 100 }: { handler: () => void; timeout?: number }) {

@@ -4,10 +4,17 @@ import React, { useEffect } from 'react'
 
 /**
  * @description
- * A hooks that fires the given callback only once after the mount.
+ * A React hook that executes a callback function only once after the component mounts. This is a simplified wrapper around useEffect with an empty dependency array.
  *
- * It doesn't take any dependencies.
- *
+ * @example
+   import { useOnMountEffect } from 'classic-react-hooks'
+   export default function YourComponent() {
+      useOnMountEffect(() => {
+         console.log('initial mount')
+      })
+
+      return <div></div>
+   }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-on-mount-effect.html
  */

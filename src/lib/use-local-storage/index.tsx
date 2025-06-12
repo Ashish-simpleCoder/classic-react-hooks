@@ -4,12 +4,30 @@ import React, { useRef, useState } from 'react'
 
 /**
  * @description
- * A hook for managing the states with `local-storage`.
+ * A React hook that synchronizes state with localStorage, providing `persistent` state management across browser `sessions`.
  *
- * It working is just like the `useState`.
- *
- * It automatically updates the state in `local-storage`.
- *
+ * @example
+   import { useLocalStorage } from 'classic-react-hooks'
+
+   function UserPreferences() {
+      const [theme, setTheme] = useLocalStorage({ key: 'theme', defaultValue: 'light' })
+      const [language, setLanguage] = useLocalStorage({ key: 'language', defaultValue: 'en' })
+
+      return (
+         <div>
+            <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+               <option value='light'>Light</option>
+               <option value='dark'>Dark</option>
+            </select>
+
+            <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+               <option value='en'>English</option>
+               <option value='es'>Spanish</option>
+               <option value='fr'>French</option>
+            </select>
+         </div>
+      )
+   }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-local-storage.html
  */

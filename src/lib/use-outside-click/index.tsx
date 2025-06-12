@@ -6,7 +6,35 @@ import { useEventListener } from '../use-event-listener'
 
 /**
  * @description
- * A hook that fires the given callback when clicked outside anywhere of the given html element.
+ * A React hook that detects outside click for specified element and triggers the given callback.
+ *
+ * @example
+   import { useRef, useState } from 'react'
+   import { useOutsideClick } from 'classic-react-hooks'
+
+   function Modal() {
+      const [isOpen, setIsOpen] = useState(false)
+      const modalRef = useRef<HTMLDivElement>(null)
+
+      useOutsideClick({
+         target: () => modalRef.current,
+         handler: () => setIsOpen(false),
+      })
+
+      if (!isOpen) {
+         return <button onClick={() => setIsOpen(true)}>Open Modal</button>
+      }
+
+      return (
+         <div className='modal-overlay'>
+            <div ref={modalRef} class='modal-content bg-white p-8 rounded-lg shadow-md'>
+               <h2>Modal Title</h2>
+               <p>Click outside this modal to close it.</p>
+               <button onClick={() => setIsOpen(false)}>Close</button>
+            </div>
+         </div>
+      )
+   }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-outside-click.html
  */

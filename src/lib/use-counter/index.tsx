@@ -8,8 +8,28 @@ const LOWERCASED_COUNTER_TEXT = COUNTER_TEXT.toLowerCase() as Lowercase<typeof C
 
 /**
  * @description
- *  A simple hook for managing counter.
+ * A type-safe React hook for managing counter state with customizable step values and dynamic property naming.
  *
+ * @example
+   import { useCounter } from 'classic-react-hooks'
+
+   export default function YourComponent() {
+      const { counter, decrementCounter, incrementCounter } = useCounter()
+
+      // If key is passed then properties within the object is prefixed with it.
+      // const { userCounter, incrementUserCounter, decrementUserCounter } = useCounter("user")
+
+      return (
+         <div>
+            <div>
+               <button onClick={decrementCounter}>decrement</button>
+               <p>{counter}</p>
+               <button onClick={incrementCounter}>increment</button>
+            </div>
+         </div>
+      )
+   }
+ * 
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-counter.html
  *
  */

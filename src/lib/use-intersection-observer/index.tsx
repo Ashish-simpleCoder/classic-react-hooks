@@ -4,9 +4,54 @@ import { useEffect, useState } from 'react'
 
 /**
  * @description
- *  A hook which provides a way for listening to the Intersection Observer event for given target.
- *
- *  It takes an array of targets and returns an array of boolean values which represents whether the targets are intersecting to the screen or not.
+ *  A React hook that provides a declarative way to observe multiple elements with the Intersection Observer API, returning their visibility states with advanced triggering options.
+ * 
+ * @example
+   import { useRef } from 'react'
+   import { useInterSectionObserver } from 'classic-react-hooks'
+
+   export default function BasicIntersection() {
+      const box1Ref = useRef<HTMLDivElement>(null)
+      const box2Ref = useRef<HTMLDivElement>(null)
+      const box3Ref = useRef<HTMLDivElement>(null)
+
+      const [isBox1Visible, isBox2Visible, isBox3Visible] = useInterSectionObserver({
+         targets: [() => box1Ref.current, () => box2Ref.current, () => box3Ref.current],
+      })
+
+      return (
+         <div>
+            <div className='h-screen flex items-center justify-center text-xl'>Scroll down to see boxes</div>
+
+            <div
+               ref={box1Ref}
+               className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
+                  isBox1Visible ? 'bg-green-500' : 'bg-red-500'
+               }`}
+            >
+               Box 1 - {isBox1Visible ? 'Visible' : 'Hidden'}
+            </div>
+
+            <div
+               ref={box2Ref}
+               className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
+                  isBox2Visible ? 'bg-blue-500' : 'bg-gray-500'
+               }`}
+            >
+               Box 2 - {isBox2Visible ? 'Visible' : 'Hidden'}
+            </div>
+
+            <div
+               ref={box3Ref}
+               className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
+                  isBox3Visible ? 'bg-purple-500' : 'bg-orange-500'
+               }`}
+            >
+               Box 3 - {isBox3Visible ? 'Visible' : 'Hidden'}
+            </div>
+         </div>
+      )
+   }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-intersection-observer.html
  */
