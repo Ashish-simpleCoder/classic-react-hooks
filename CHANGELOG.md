@@ -1,12 +1,19 @@
 # classic-react-hooks
 
+## 2.0.0-canary.1
+
+### Minor Changes
+
+-  44ce4b9: Docs - add usage example in js-doc for all of the hooks
+
 ## 2.0.0-canary.0
 
 ### Major Changes
 
 Breaking
+
 -  v2 release prepare
-- Rewrite all of the hooks and their documenation
+-  Rewrite all of the hooks and their documenation
 
 ## 1.4.0
 
