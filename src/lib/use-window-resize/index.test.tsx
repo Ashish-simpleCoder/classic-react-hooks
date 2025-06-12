@@ -1,7 +1,6 @@
-import { renderHook } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 import { vi } from 'vitest'
 import useWindowResize from '.'
-import { act } from 'react'
 
 describe('use-window-resize', () => {
    it('should run without errors', () => {
