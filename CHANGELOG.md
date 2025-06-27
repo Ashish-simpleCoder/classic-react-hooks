@@ -1,5 +1,13 @@
 # classic-react-hooks
 
+## 2.0.0-canary.2
+
+### Minor Changes
+
+-  703c876: - breaking: remove useIsOnline hook
+   -  Feat: add useCanReachToInternet for getting network connection
+   -  Feat: add useCanReachToInternetCtx and CanReachToInternetCtxProvider for subscribing the application to get network reachability with context
+
 ## 2.0.0-canary.1
 
 ### Minor Changes
