@@ -5,6 +5,7 @@
     "classic-react-hooks": "1.4.0"
   },
   "changesets": [
-    "icy-boats-make"
+    "icy-boats-make",
+    "tender-sites-occur"
   ]
 }
