@@ -10,7 +10,11 @@ export { default as useLocalStorage } from './lib/use-local-storage'
 export { default as useDebouncedFn, debouncedFnWrapper } from './lib/use-debounced-fn'
 export { default as useThrottledFn, throttledFnWrapper } from './lib/use-throttled-fn'
 
-export { default as useIsOnline } from './lib/use-is-online'
+export { default as useCanReachToInternet } from './lib/use-can-reach-to-internet'
+export {
+   useCanReachToInternetCtx,
+   CanReachToInternetCtxProvider as CanReachToInternetProvider,
+} from './lib/use-can-reach-to-internet/can-reach-to-internet-context'
 
 export { default as useSyncedRef } from './lib/use-synced-ref'
 

@@ -113,7 +113,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             { text: 'use-outside-click', link: 'use-outside-click' },
             { text: 'use-debounced-fn', link: 'use-debounced-fn' },
             { text: 'use-throttled-fn', link: 'use-throttled-fn' },
-            { text: 'use-is-online', link: 'use-is-online' },
+            { text: 'use-can-reach-to-internet', link: 'use-can-reach-to-internet' },
             { text: 'use-timeout-effect', link: 'use-timeout-effect' },
             { text: 'use-interval-effect', link: 'use-interval-effect' },
             { text: 'use-synced-ref', link: 'use-synced-ref' },

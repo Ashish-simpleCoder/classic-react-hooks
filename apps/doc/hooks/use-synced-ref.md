@@ -10,8 +10,8 @@ outline: deep
 ### Features
 
 -  **Reactive:** Automatic synchronization with any value
--  **Prevent State Closure:**Prevents stale closure problems
--  **No Re-render:**Zero re-renders - purely ref-based
+-  **Prevent State Closure:** Prevents stale closure problems
+-  **No Re-render:** Zero re-renders - purely ref-based
 
 ### Parameters
 
