@@ -8,17 +8,9 @@ outline: deep
 
 ### Parameters
 
-| Parameter |          Type           | Required | Default Value | Description |
-| --------- | :---------------------: | :------: | :-----------: | ----------- |
-| Object    | [Props](#parametertype) |    ❌    |       -       | Object      |
-
-### Returns
-
-[`CopyToClipboardFn`](#returntype) : A function for copying the data into clipboard
-
-### Types
-
----
+| Parameter |          Type           | Required | Default Value | Description                      |
+| --------- | :---------------------: | :------: | :-----------: | -------------------------------- |
+| Props     | [Props](#parametertype) |    ❌    |       -       | Pass success and error callbacks |
 
 #### ParameterType
 
@@ -31,6 +23,10 @@ type Props = {
 type OnSuccess = () => void
 type OnError = (err: Error) => void
 ```
+
+### Returns
+
+[`CopyToClipboardFn`](#returntype) - A function for copying the data into clipboard
 
 #### ReturnType
 

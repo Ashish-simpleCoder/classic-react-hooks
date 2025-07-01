@@ -20,9 +20,7 @@ A comprehensive React hook for monitoring internet connectivity status that goes
 | --------- | :---------------------------------: | :------: | :-----------: | -------------------------------------------------- |
 | options   | [CanReachToInternetOptions](#types) |    ❌    |      {}       | Configuration object for customizing hook behavior |
 
-#### CanReachToInternetOptions
-
-#### Types
+#### Parameter Types
 
 ```ts
 type CanReachToInternetOptions = {
@@ -95,6 +93,30 @@ function DataFetchingComponent() {
    return <YourDataComponent />
 }
 ```
+
+### Problem It Solves
+
+---
+
+#### The Problem with `navigator.onLine`
+
+`navigator.onLine` only tells you if the browser thinks it's connected to a network, not if it can actually reach the internet.
+
+##### Common Scenarios Where `navigator.onLine` Fails
+
+-  **Limited Connectivity:** Your device is connected to a router, but the router has no internet connection. The browser sees the local network connection and reports online status as true.
+-  **Network Issues:** DNS problems or ISP outages where you have network connection but can't reach to external servers.
+-  **Captive Portals:** You're connected to WiFi at a hotel, airport but haven't authenticated yet. `navigator.onLine` returns true, but you can't access any websites.
+
+---
+
+#### How `useCanReachToInternet` solve these problems
+
+It provides two layers of connectivity detection
+
+-  **`isOnline`:** Browser's basic network status (via `navigator.onLine`)
+-  **`canReachToInternet`:** Actual internet reachability (via real HTTP requests to a test server)
+-  **`isFullyConnected`:** Both conditions must be true for genuine internet access
 
 ### Common Use Cases
 

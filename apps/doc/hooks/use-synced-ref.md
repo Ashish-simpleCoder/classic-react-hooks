@@ -4,8 +4,9 @@ outline: deep
 
 # use-synced-ref
 
--  A React hook that creates a ref that automatically stays in sync with the provided value.
--  This eliminates the need to manually update refs and helps avoid stale closure issues in callbacks and effects.
+A React hook that creates a ref that automatically stays in sync with the provided value.
+
+This eliminates the need to manually update refs and helps avoid stale closure issues in callbacks and effects.
 
 ### Features
 

@@ -4,15 +4,16 @@ outline: deep
 
 # use-window-resize
 
--  A React hook that evaluates a callback function on window resize events and returns the result.
--  Perfect for responsive behavior based on window dimensions.
+A React hook that evaluates a callback function on window resize events and returns the result.
+
+Perfect for responsive behavior based on window dimensions.
 
 ### Features
 
--  **Custom handler** Execute custom logic on window resize
--  **Reactive** Automatic re-evaluation and state updates
--  **Configurable** Configurable default values and event injection
--  **Underlying hook** At its core, it uses `useEventListener` hook
+-  **Custom handler:** Execute custom logic on window resize
+-  **Reactive:** Automatic re-evaluation and state updates
+-  **Configurable:** Configurable default values and event injection
+-  **Underlying hook:** At its core, it uses `useEventListener` hook
 
 ### Parameters
 

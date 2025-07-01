@@ -4,8 +4,9 @@ outline: deep
 
 # use-outside-click
 
--  A React hook that detects outside click for specified element and triggers the given callback.
--  Perfect for implementing modals, dropdowns and other UI components that need to be closed when users click outside of them.
+A React hook that detects outside click for specified element and triggers the given callback.
+
+Perfect for implementing modals, dropdowns and other UI components that need to be closed when users click outside of them.
 
 ### Features
 

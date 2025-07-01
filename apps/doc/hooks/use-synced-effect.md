@@ -4,8 +4,9 @@ outline: deep
 
 # use-synced-effect
 
--  A React hook that executes a callback when dependencies change, similar to `useEffect`, but skips execution on the initial mount.
--  This is particularly useful when you want to respond to state changes without triggering side effects during the component's first render.
+A React hook that executes a callback when dependencies change, similar to `useEffect`, but skips execution on the initial mount.
+
+This is particularly useful when you want to respond to state changes without triggering side effects during the component's first render.
 
 ### Features
 
@@ -89,7 +90,6 @@ function SearchComponent() {
 ### Important notes
 
 -  Empty dependency array [] means the effect will never run (since there are no dependencies to change)
--  No dependency array means the effect will never run (same as array [])
 
 ### Common Use Cases
 

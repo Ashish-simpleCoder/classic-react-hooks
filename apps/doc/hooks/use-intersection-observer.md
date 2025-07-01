@@ -43,7 +43,7 @@ export interface IntersectionOptions extends IntersectionObserverInit {
 }
 ```
 
-### Return Value
+### Returns
 
 Returns an array of boolean values (`Array<IsTargetIntersecting>`) where each boolean represents whether the corresponding target element is currently intersecting (visible) or not.
 

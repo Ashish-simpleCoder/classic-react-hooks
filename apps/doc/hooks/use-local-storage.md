@@ -4,15 +4,16 @@ outline: deep
 
 # use-local-storage
 
--  A React hook that synchronizes state with localStorage, providing `persistent` state management across browser `sessions`.
--  Works exactly like `useState` but automatically persists data to localStorage.
+A React hook that synchronizes state with localStorage, providing `persistent` state management across browser `sessions`.
+
+Works exactly like `useState` but automatically persists data to localStorage.
 
 ### Features
 
 -  **Automatic sync:** Automatic localStorage synchronization
 -  **Persistence updates:** Seamless state updates with persistence
 -  **Error handling:** Built-in error handling and fallbacks
--  **Compatible API:** useState-compatible API
+-  **Compatible API:** `useState` compatible API
 -  **Automatic parsing:** JSON serialization/deserialization
 
 ### Parameters

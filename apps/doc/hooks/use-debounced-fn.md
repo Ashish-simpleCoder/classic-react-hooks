@@ -4,13 +4,14 @@ outline: deep
 
 # use-debouced-fn
 
--  A React hook that returns a debounced version of any function, delaying its execution until after a specified delay has passed since the last time it was invoked.
--  Perfect for optimizing performance in scenarios like search inputs, API calls, or resize handlers.
+A React hook that returns a debounced version of any function, delaying its execution until after a specified delay has passed since the last time it was invoked.
+
+Perfect for optimizing performance in scenarios like search inputs, API calls, or resize handlers.
 
 ### Features
 
--  **Debouncing Functionality:** The primary feature is delaying function execution until after a specified period of inactivity. If the function is called again before the delay expires, the previous call is cancelled and the timer resets.
--  **Configurable Delay:** You can specify a custom delay period, with a sensible default of 300ms if none is provided.
+-  **Debouncing Functionality:** Delaying function execution until after a specified period of inactivity. Calling the function again before the delay expires, the previous call is cancelled and the timer resets.
+-  **Configurable Delay:** You can specify a custom delay period, with a sensible default of 300ms.
 -  **Dynamic Props Updates:** The hook properly handles updates to both the callback function and delay value during re-renders without losing the debouncing behavior.
 -  **Performance optimized:** Prevents excessive function calls
 -  **Auto cleanup:** Automatically clears timers on component unmount and on delay prop change

@@ -4,8 +4,9 @@ outline: deep
 
 # use-counter
 
--  A Hook for Fun
--  A type-safe React hook for managing counter state with customizable step values and dynamic property naming.
+A Hook for Fun
+
+A type-safe React hook for managing counter state with customizable step values and dynamic property naming.
 
 #### Features
 

@@ -6,8 +6,9 @@ outline: deep
 
 A React hook that returns a throttled version of a callback function.
 
--  Throttling ensures that the function is called at most once per specified time interval, regardless of how many times it's invoked.
--  This is particularly useful for performance optimization in scenarios like handling rapid user input, scroll events, or API calls.
+Throttling ensures that the function is called at most once per specified time interval, regardless of how many times it's invoked.
+
+This is particularly useful for performance optimization in scenarios like handling rapid user input, scroll events, or API calls.
 
 ### Features
 
