@@ -1,5 +1,12 @@
 # classic-react-hooks
 
+## 2.0.0-canary.3
+
+### Minor Changes
+
+-  3e110b2: - Doc: Add `what problem it solves` doc for useCanReachToInternet
+   -  Doc: Refactor the docs for hooks
+
 ## 2.0.0-canary.2
 
 ### Minor Changes
