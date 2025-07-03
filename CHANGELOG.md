@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.4
+
+### Minor Changes
+
+-  c52bb9f: Add CanReachToInterernetCtxProvder and useCanReachToInternetCtx component's documentation
+
 ## 2.0.0-canary.3
 
 ### Minor Changes
