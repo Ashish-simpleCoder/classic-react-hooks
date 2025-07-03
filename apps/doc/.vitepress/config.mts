@@ -113,13 +113,23 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             { text: 'use-outside-click', link: 'use-outside-click' },
             { text: 'use-debounced-fn', link: 'use-debounced-fn' },
             { text: 'use-throttled-fn', link: 'use-throttled-fn' },
-            { text: 'use-can-reach-to-internet', link: 'use-can-reach-to-internet' },
+            { text: 'use-can-reach-to-internet', link: 'use-can-reach-to-internet' ,collapsed: true,items:[
+               { text: 'CanReachToInternetCtxProvider', link: 'components/CanReachToInternetCtxProvider',base:'/' },
+            ]},
             { text: 'use-timeout-effect', link: 'use-timeout-effect' },
             { text: 'use-interval-effect', link: 'use-interval-effect' },
             { text: 'use-synced-ref', link: 'use-synced-ref' },
             { text: 'use-synced-effect', link: 'use-synced-effect' },
             { text: 'use-on-mount-effect', link: 'use-on-mount-effect' },
             { text: 'use-counter', link: 'use-counter' },
+         ]
+      },
+      {
+         text: 'Components',
+         collapsed: false,
+         base: "/components/",
+         items: [
+            { text: 'CanReachToInternetCtxProvider', link: 'CanReachToInternetCtxProvider' },
          ]
       },
    ]
