@@ -5,6 +5,7 @@
     "classic-react-hooks": "1.4.0"
   },
   "changesets": [
+    "cuddly-melons-turn",
     "icy-boats-make",
     "pink-pugs-eat",
     "tender-sites-occur"
