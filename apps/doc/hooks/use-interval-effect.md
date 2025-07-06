@@ -6,30 +6,30 @@ outline: deep
 
 A React hook that executes a callback function at regular intervals, similar to `setInterval` but with additional control methods for clearing and restarting the timer.
 
-### Features
+## Features
 
 -  **Scheduled execution:** Executes a callback with a fixed time delay between each call
 -  **Flexible:** Provides methods to clear or restart the timer
 -  **Automatic Cleanup:** Automatically cleans up timer on component unmount
 -  **Syncronization:** Syncs with the latest callback and timeout values
 
-### Parameters
+## Parameters
 
 | Parameter |   Type   | Required | Default Value | Description                                      |
 | --------- | :------: | :------: | :-----------: | ------------------------------------------------ |
 | handler   | Function |    ✅    |       -       | Callback function executed at each interval      |
 | interval  |  number  |    ❌    |      100      | Time in milliseconds between callback executions |
 
-### Returns
+## Returns
 
 -  Returns an object with control methods:
 
    -  `clearTimer` : `() => void` Cancels the current interval, preventing the handler from executing
    -  `restartTimer` : `() => void` Clears the current timer and starts a new one. Optionally accepts a new interval value
 
-### Usage
+## Usage
 
-#### Basic example
+### Basic example
 
 ```ts
 import { useState } from 'react'
@@ -55,7 +55,7 @@ export default function Counter() {
 }
 ```
 
-### Common Use Cases
+## Common Use Cases
 
 -  Countdown timers
 -  Real-time updates (clocks, progress bars)

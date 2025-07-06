@@ -6,7 +6,7 @@ outline: deep
 
 A React Context provider and hook for sharing internet connectivity status across your component tree without prop drilling. Built on top of the `useCanReachToInternet` hook to provide centralized connectivity monitoring.
 
-### Features
+## Features
 
 -  **Centralized connectivity state:** Share connectivity status across your entire app
 -  **No prop drilling:** Access connectivity data from any component in the tree

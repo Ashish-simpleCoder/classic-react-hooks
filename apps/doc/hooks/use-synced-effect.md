@@ -8,23 +8,23 @@ A React hook that executes a callback when dependencies change, similar to `useE
 
 This is particularly useful when you want to respond to state changes without triggering side effects during the component's first render.
 
-### Features
+## Features
 
 -  **Skip initial mount:** Skipping the callback on initial mount
 -  **Reactive:** Running the callback only when dependencies actually change
 -  **React StrictMode:** Handling React StrictMode double execution correctly
 -  **Flexible:** Supporting cleanup functions just like useEffect
 
-### Parameters
+## Parameters
 
 | Parameter |         Type         | Required | Default Value | Description                                                                          |
 | --------- | :------------------: | :------: | :-----------: | ------------------------------------------------------------------------------------ |
 | cb        | React.EffectCallback |    ✅    |       -       | Callback function to execute when dependencies change. Can return a cleanup function |
 | deps      | React.DependencyList |    ❌    |      []       | Array of dependencies to watch for changes                                           |
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Usage - Responding to State Changes
+### Basic Usage - Responding to State Changes
 
 ```ts
 import { useState } from 'react'
@@ -45,7 +45,7 @@ export default function YourComponent() {
 }
 ```
 
-#### With Cleanup Function
+### With Cleanup Function
 
 ```ts
 import { useState } from 'react'
@@ -78,7 +78,7 @@ function SearchComponent() {
 }
 ```
 
-### Comparison with useEffect
+## Comparison with useEffect
 
 | Scenario            | useEffect        | useSyncedEffect      |
 | ------------------- | ---------------- | -------------------- |
@@ -87,10 +87,10 @@ function SearchComponent() {
 | Cleanup support     | ✅ Yes           | ✅ Yes               |
 | StrictMode handling | ⚠️ May run twice | ✅ Handles correctly |
 
-### Important notes
+## Important notes
 
 -  Empty dependency array [] means the effect will never run (since there are no dependencies to change)
 
-### Common Use Cases
+## Common Use Cases
 
 -  Use everywhere just like `useEffect`

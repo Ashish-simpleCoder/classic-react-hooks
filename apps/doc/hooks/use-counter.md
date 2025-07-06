@@ -8,11 +8,11 @@ A Hook for Fun
 
 A type-safe React hook for managing counter state with customizable step values and dynamic property naming.
 
-#### Features
+## Features
 
 -  Find out yourself buddy
 
-### Parameters
+## Parameters
 
 | Parameter    | Type   | Required | Default Value | Description                                                               |
 | ------------ | ------ | :------: | :-----------: | ------------------------------------------------------------------------- |
@@ -21,25 +21,25 @@ A type-safe React hook for managing counter state with customizable step values 
 | initialValue | number |    ❌    |       0       | Initial value for the counter.                                            |
 | stepper      | number |    ❌    |       1       | Amount to increment/decrement by on each operation.                       |
 
-### Returns
+## Returns
 
 Returns a type-safe object with dynamically named properties:
 
-#### Without key (default):
+### Without key (default):
 
 -  `counter:` number - Current counter value
 -  `incrementCounter:` () => void - Function to increment counter
 -  `decrementCounter:` () => void - Function to decrement counter
 
-#### With key (e.g., "user"):
+### With key (e.g., "user"):
 
 -  `userCounter:` number - Current counter value
 -  `incrementUserCounter:` () => void - Function to increment counter
 -  `decrementUserCounter:` () => void - Function to decrement counter
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Counter
+### Basic Counter
 
 ```ts
 import { useCounter } from 'classic-react-hooks'
@@ -62,7 +62,7 @@ export default function YourComponent() {
 }
 ```
 
-#### Named Counter with Custom Step
+### Named Counter with Custom Step
 
 ```ts
 import { useCounter } from 'classic-react-hooks'

@@ -6,7 +6,7 @@ outline: deep
 
 A comprehensive React hook for monitoring internet connectivity status that goes beyond basic online/offline detection by actually testing network reachability.
 
-### Features
+## Features
 
 -  **Real connectivity testing:** Performs actual HTTP requests to verify internet access
 -  **Dual-layer detection:** Combines browser's `navigator.onLine` with network reachability tests
@@ -14,13 +14,13 @@ A comprehensive React hook for monitoring internet connectivity status that goes
 -  **Manual control:** Start/stop polling and force connectivity checks on demand
 -  **Cleanup handling:** Proper cleanup of network requests and timers to prevent memory leaks
 
-### Parameters
+## Parameters
 
 | Parameter |                Type                 | Required | Default Value | Description                                        |
 | --------- | :---------------------------------: | :------: | :-----------: | -------------------------------------------------- |
 | options   | [CanReachToInternetOptions](#types) |    ❌    |      {}       | Configuration object for customizing hook behavior |
 
-#### Parameter Types
+### Parameter Types
 
 ```ts
 type CanReachToInternetOptions = {
@@ -35,7 +35,7 @@ type CanReachToInternetOptions = {
 type CanReachToInternetBoolean = boolean
 ```
 
-### Returns
+## Returns
 
 | Property                      | Type            | Description                                                                      |
 | ----------------------------- | --------------- | -------------------------------------------------------------------------------- |
@@ -49,9 +49,9 @@ type CanReachToInternetBoolean = boolean
 | `forceCheckNetwork`           | `() => void`    | Function to manually trigger a connectivity check                                |
 | `getCanReachToInternetStatus` | `() => boolean` | Function to get current internet reachability status                             |
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Network query
+### Basic Network query
 
 ```ts
 import { useCanReachToInternet } from 'classic-react-hooks'
@@ -69,7 +69,7 @@ function NetworkStatus() {
 }
 ```
 
-#### Conditional Rendering Based on Connectivity
+### Conditional Rendering Based on Connectivity
 
 ```ts
 import { useCanReachToInternet } from 'classic-react-hooks'
@@ -94,15 +94,13 @@ function DataFetchingComponent() {
 }
 ```
 
-### Problem It Solves
+## Problem It Solves
 
----
-
-#### The Problem with `navigator.onLine`
+### The Problem with `navigator.onLine`
 
 `navigator.onLine` only tells you if the browser thinks it's connected to a network, not if it can actually reach the internet.
 
-##### Common Scenarios Where `navigator.onLine` Fails
+#### Common Scenarios Where `navigator.onLine` Fails
 
 -  **Limited Connectivity:** Your device is connected to a router, but the router has no internet connection. The browser sees the local network connection and reports online status as true.
 -  **Network Issues:** DNS problems or ISP outages where you have network connection but can't reach to external servers.
@@ -110,7 +108,7 @@ function DataFetchingComponent() {
 
 ---
 
-#### How `useCanReachToInternet` solve these problems
+### How `useCanReachToInternet` solve these problems
 
 It provides two layers of connectivity detection
 
@@ -118,13 +116,13 @@ It provides two layers of connectivity detection
 -  **`canReachToInternet`:** Actual internet reachability (via real HTTP requests to a test server)
 -  **`isFullyConnected`:** Both conditions must be true for genuine internet access
 
-### Common Use Cases
+## Common Use Cases
 
 -  User experience: Show connection status, disable features when offline
 -  Error handling: Distinguish between network errors and server errors
 -  Auto-retry logic: Retry failed requests when connectivity is restored
 
-### Important Notes
+## Important Notes
 
 -  Performance Considerations:
    -  Network polling makes regular HTTP requests - use appropriate intervals

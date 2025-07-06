@@ -8,25 +8,25 @@ A React hook that creates a ref that automatically stays in sync with the provid
 
 This eliminates the need to manually update refs and helps avoid stale closure issues in callbacks and effects.
 
-### Features
+## Features
 
 -  **Reactive:** Automatic synchronization with any value
 -  **Prevent State Closure:** Prevents stale closure problems
 -  **No Re-render:** Zero re-renders - purely ref-based
 
-### Parameters
+## Parameters
 
 | Parameter | Type | Required | Default Value | Description                                       |
 | --------- | :--: | :------: | :-----------: | ------------------------------------------------- |
 | value     | any  |    ✅    |       -       | Any value to be tracked and kept in sync with ref |
 
-### Returns
+## Returns
 
 -  Returns a `React.MutableRefObject<T>` that always contains the latest value of the provided state.
 
-### Usage
+## Usage
 
-#### Basic Example
+### Basic Example
 
 ```ts
 import { useState } from 'react'
@@ -54,9 +54,9 @@ export default function Counter() {
 }
 ```
 
-### Problem It Solves
+## Problem It Solves
 
-#### The Stale Closure Problem
+### The Stale Closure Problem
 
 In React, when you use hooks like useEffect, useCallback, or setTimeout with dependency arrays, you often encounter stale closure issues:
 
@@ -96,7 +96,7 @@ function SolvedComponent() {
 }
 ```
 
-### Common Use Cases
+## Common Use Cases
 
 -  Accessing latest state in intervals/timeouts
 -  Event handlers that need current state

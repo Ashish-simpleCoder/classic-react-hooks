@@ -6,13 +6,13 @@ outline: deep
 
 -  A hook for copying the data in the clipboard with success and error callbacks.
 
-### Parameters
+## Parameters
 
 | Parameter |          Type           | Required | Default Value | Description                      |
 | --------- | :---------------------: | :------: | :-----------: | -------------------------------- |
 | Props     | [Props](#parametertype) |    ❌    |       -       | Pass success and error callbacks |
 
-#### ParameterType
+### ParameterType
 
 ```ts
 type Props = {
@@ -24,17 +24,17 @@ type OnSuccess = () => void
 type OnError = (err: Error) => void
 ```
 
-### Returns
+## Returns
 
 [`CopyToClipboardFn`](#returntype) - A function for copying the data into clipboard
 
-#### ReturnType
+### ReturnType
 
 ```ts
 type CopyToClipboardFn = (data: string, onSuccess?: OnSuccess, onError?: OnError) => Promise<void>
 ```
 
-### Usage
+## Usage
 
 ```ts
 import { useState } from 'react'

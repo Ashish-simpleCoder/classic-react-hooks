@@ -8,13 +8,13 @@ A React hook that detects outside click for specified element and triggers the g
 
 Perfect for implementing modals, dropdowns and other UI components that need to be closed when users click outside of them.
 
-### Features
+## Features
 
 -  **Precise trigger:** Precise outside click detection
 -  **Performance:** Optimized with capture phase events
 -  **Underlying hook:** At its core, it uses `useEventListener` hook
 
-### Parameters
+## Parameters
 
 | Parameter |        Type         | Required | Default Value | Description                                      |
 | --------- | :-----------------: | :------: | :-----------: | ------------------------------------------------ |
@@ -22,7 +22,7 @@ Perfect for implementing modals, dropdowns and other UI components that need to 
 | handler   | [EvHandler](#types) |    ❌    |   undefined   | Callback executed on outside click               |
 | options   | [EvOptions](#types) |    ❌    |   undefined   | Event listener options and feature flags         |
 
-#### Types
+### Types
 
 ```ts
 type EvTarget = () => EventTarget | null
@@ -39,9 +39,9 @@ interface EvOptions extends AddEventListenerOptions {
 }
 ```
 
-### Usage Examples
+## Usage Examples
 
-#### Modal Component
+### Modal Component
 
 ```ts
 import { useRef, useState } from 'react'
@@ -131,7 +131,7 @@ function DynamicTarget() {
 }
 ```
 
-### Common Use Cases
+## Common Use Cases
 
 -  Modal dialogs - Close when clicking backdrop
 -  Dropdown menus - Hide when clicking elsewhere

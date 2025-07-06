@@ -6,7 +6,7 @@ outline: deep
 
 A React hook that provides a declarative way to observe multiple elements with the Intersection Observer API, returning their visibility states with advanced triggering options.
 
-### Features
+## Features
 
 -  **Multiple targets:** Observe multiple elements simultaneously
 -  **Flexible triggering:** Control whether elements trigger once or continuously
@@ -17,7 +17,7 @@ A React hook that provides a declarative way to observe multiple elements with t
 -  **Performance:** Elements with `only_trigger_once: true` are automatically unobserved after first intersection
 -  **Per-element control:** Use `only_trigger_once` as an array to control trigger behavior per element
 
-### Parameters
+## Parameters
 
 | Parameter      |                  Type                  | Required |            Default            | Description                                             |
 | -------------- | :------------------------------------: | :------: | :---------------------------: | ------------------------------------------------------- |
@@ -26,7 +26,7 @@ A React hook that provides a declarative way to observe multiple elements with t
 | onIntersection |       (target: Element) => void        |    ❌    |           undefined           | Callback executed when an element becomes visible       |
 |                |
 
-#### Types
+### Types
 
 ```ts
 export type IntersectionObserverTarget = () => Element | null
@@ -43,13 +43,13 @@ export interface IntersectionOptions extends IntersectionObserverInit {
 }
 ```
 
-### Returns
+## Returns
 
 Returns an array of boolean values (`Array<IsTargetIntersecting>`) where each boolean represents whether the corresponding target element is currently intersecting (visible) or not.
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Usage - Multiple Elements
+### Basic Usage - Multiple Elements
 
 ```ts
 import { useRef } from 'react'
@@ -222,11 +222,11 @@ export default function WithCallback() {
 }
 ```
 
-### Important Notes
+## Important Notes
 
 -  If IntersectionObserver is not supported, a warning is logged and the hook gracefully degrades.
 
-### Common Use Cases
+## Common Use Cases
 
 -  Lazy loading images or content
 -  Triggering animations on scroll

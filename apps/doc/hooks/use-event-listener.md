@@ -6,7 +6,7 @@ outline: deep
 
 A React hook that provides a declarative way to add DOM event listeners with automatic cleanup.
 
-### Features
+## Features
 
 -  **Auto cleanup:** Events are automatically removed on unmount or dependency changes
 -  **Reactive:** The hook re-evaluates and potentially re-attaches listeners when any dependency changes (target, event, options)
@@ -14,7 +14,7 @@ A React hook that provides a declarative way to add DOM event listeners with aut
 -  **Performance:** Event listeners are only attached when all conditions are met: target exists, handler is provided, and `shouldInjectEvent` is true
 -  **Standard options:** Full support for all `AddEventListenerOptions` (capture, once, passive, signal)
 
-### Parameters
+## Parameters
 
 | Parameter |        Type         | Required | Default Value | Description                                      |
 | --------- | :-----------------: | :------: | :-----------: | ------------------------------------------------ |
@@ -24,7 +24,7 @@ A React hook that provides a declarative way to add DOM event listeners with aut
 | options   | [EvOptions](#types) |    ❌    |   undefined   | Event listener options and feature flags         |
 |           |
 
-#### Types
+### Types
 
 ```ts
 export type EvTarget = () => EventTarget | null
@@ -42,9 +42,9 @@ export interface EvOptions extends AddEventListenerOptions {
 }
 ```
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Click Handler
+### Basic Click Handler
 
 ```ts
 import { useRef } from 'react'
@@ -65,7 +65,7 @@ export default function ClickExample() {
 }
 ```
 
-#### Window Events
+### Window Events
 
 ```ts
 import { useEventListener } from 'classic-react-hooks'
@@ -83,7 +83,7 @@ export default function WindowExample() {
 }
 ```
 
-#### Conditional Event Listening
+### Conditional Event Listening
 
 ```ts
 import { useState } from 'react'
@@ -112,6 +112,6 @@ export default function ConditionalExample() {
 }
 ```
 
-### Common Use Cases
+## Common Use Cases
 
 -  Adding dom events (e.g 'click', 'keydown', 'resize')

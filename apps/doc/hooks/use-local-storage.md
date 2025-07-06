@@ -8,7 +8,7 @@ A React hook that synchronizes state with localStorage, providing `persistent` s
 
 Works exactly like `useState` but automatically persists data to localStorage.
 
-### Features
+## Features
 
 -  **Automatic sync:** Automatic localStorage synchronization
 -  **Persistence updates:** Seamless state updates with persistence
@@ -16,23 +16,23 @@ Works exactly like `useState` but automatically persists data to localStorage.
 -  **Compatible API:** `useState` compatible API
 -  **Automatic parsing:** JSON serialization/deserialization
 
-### Parameters
+## Parameters
 
 | Parameter    |  Type  | Required | Default Value | Description                               |
 | ------------ | :----: | :------: | :-----------: | ----------------------------------------- |
 | key          | string |    ✅    |       -       | Unique key for localStorage item          |
 | defaultValue |  any   |    ❌    |   undefined   | Initial value when no stored value exists |
 
-### Returns
+## Returns
 
 -  It returns an array containing:
 
    1. `state:` Current value (type inferred from defaultValue)
    2. `setState:` State setter function (identical to useState setter)
 
-### Usage Examples
+## Usage Examples
 
-#### Basic User Preferences
+### Basic User Preferences
 
 ```ts
 import { useLocalStorage } from 'classic-react-hooks'
@@ -120,14 +120,14 @@ function ProfileForm() {
 }
 ```
 
-### Important Notes
+## Important Notes
 
 -  **Automatic Serialization:** Data is automatically serialized to JSON when storing.
 -  **Synchronous Updates:** State updates are synchronous and immediately persisted.
 -  **No storage events:** Changes in one tab don't automatically sync to other tabs (consider storage events for that).
 -  **Fallback value:** Always provide default values for SSR fallback.
 
-### Common Use Cases
+## Common Use Cases
 
 -  Theme preferences (dark/light mode)
 -  Form draft saving (auto-save functionality)

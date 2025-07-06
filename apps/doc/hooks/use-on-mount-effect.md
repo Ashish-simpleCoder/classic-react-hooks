@@ -8,15 +8,15 @@ A React hook that executes a callback function only once after the component mou
 
 This hook is perfect for initialization logic that should run exactly once when a component first renders.
 
-### Parameters
+## Parameters
 
 | Parameter |         Type         | Required | Default Value | Description                                                                   |
 | --------- | :------------------: | :------: | :-----------: | ----------------------------------------------------------------------------- |
 | cb        | React.EffectCallback |    ✅    |       -       | Callback function to execute once after mount. Can return a cleanup function. |
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Usage - Initialization Logic
+### Basic Usage - Initialization Logic
 
 ```ts
 import { useOnMountEffect } from 'classic-react-hooks'
@@ -30,7 +30,7 @@ export default function YourComponent() {
 }
 ```
 
-### Comparison with useEffect
+## Comparison with useEffect
 
 | Scenario            | useEffect(cb, [])    | useOnMountEffect(cb)      |
 | ------------------- | -------------------- | ------------------------- |
@@ -40,7 +40,7 @@ export default function YourComponent() {
 | TypeScript support  | ✅ Yes               | ✅ Yes                    |
 | Cleanup support     | ✅ Yes               | ✅ Yes                    |
 
-### Common Use Cases
+## Common Use Cases
 
 -  Setting up initial state or configuration
 -  Any one-time setup that shouldn't repeat after component mount

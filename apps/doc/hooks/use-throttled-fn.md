@@ -10,27 +10,27 @@ Throttling ensures that the function is called at most once per specified time i
 
 This is particularly useful for performance optimization in scenarios like handling rapid user input, scroll events, or API calls.
 
-### Features
+## Features
 
 -  **Throttling Functionality:** Limits function execution to at most once per specified time period
 -  **Configurable Delay:** Accepts a custom delay period with a default of 300ms
 -  **Dynamic Props Updates:** The hook properly handles updates to both the callback function and delay value during re-renders without losing the debouncing behavior
 -  **Performance optimized:** Prevents excessive function calls
 
-### Parameters
+## Parameters
 
 | Parameter          |   Type   | Required | Default Value | Description                                               |
 | ------------------ | :------: | :------: | :-----------: | --------------------------------------------------------- |
 | callbackToThrottle | Function |    ✅    |       -       | The callback function that should be throttled            |
 | delay              |  number  |    ❌    |      300      | Delay in milliseconds between allowed function executions |
 
-### Returns
+## Returns
 
 -  Returns a throttled version of the provided callback function that maintains the same signature and behavior, but with throttling applied.
 
-### Usage Examples
+## Usage Examples
 
-#### Basic API throttling
+### Basic API throttling
 
 ```ts
 import { useState } from 'react'
@@ -70,13 +70,13 @@ export default function AutoSave() {
 }
 ```
 
-### Common Use Cases
+## Common Use Cases
 
 -  Real-time form validation
 -  Prevent excessive API calls
 -  Throttle scroll event processing
 
-### Alternative: Non-React Usage
+## Alternative: Non-React Usage
 
 For use outside of React components, use the standalone wrapper:
 

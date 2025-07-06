@@ -8,7 +8,7 @@ A React hook that returns a debounced version of any function, delaying its exec
 
 Perfect for optimizing performance in scenarios like search inputs, API calls, or resize handlers.
 
-### Features
+## Features
 
 -  **Debouncing Functionality:** Delaying function execution until after a specified period of inactivity. Calling the function again before the delay expires, the previous call is cancelled and the timer resets.
 -  **Configurable Delay:** You can specify a custom delay period, with a sensible default of 300ms.
@@ -16,20 +16,20 @@ Perfect for optimizing performance in scenarios like search inputs, API calls, o
 -  **Performance optimized:** Prevents excessive function calls
 -  **Auto cleanup:** Automatically clears timers on component unmount and on delay prop change
 
-### Parameters
+## Parameters
 
 | Parameter        |   Type   | Required | Default Value | Description                                           |
 | ---------------- | :------: | :------: | :-----------: | ----------------------------------------------------- |
 | callbackToBounce | Function |    ✅    |       -       | The function to be debounced                          |
 | delay            |  number  |    ❌    |      300      | Delay in milliseconds before the function is executed |
 
-### Returns
+## Returns
 
 -  Returns a debounced version of the provided function that will only execute after the specified delay has passed since the last invocation.
 
-### Usage Examples
+## Usage Examples
 
-#### Basic debouncing
+### Basic debouncing
 
 ```ts
 import { useState, useEffect } from 'react'
@@ -77,13 +77,13 @@ export default function SearchInput() {
 }
 ```
 
-### Common Use Cases
+## Common Use Cases
 
 -  Delay API calls until user stops typing
 -  Validate fields after user pauses input
 -  Prevent excessive API calls
 
-### Alternative: Non-React Usage
+## Alternative: Non-React Usage
 
 For use outside of React components, use the standalone wrapper:
 

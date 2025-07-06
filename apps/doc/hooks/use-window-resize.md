@@ -8,14 +8,14 @@ A React hook that evaluates a callback function on window resize events and retu
 
 Perfect for responsive behavior based on window dimensions.
 
-### Features
+## Features
 
 -  **Custom handler:** Execute custom logic on window resize
 -  **Reactive:** Automatic re-evaluation and state updates
 -  **Configurable:** Configurable default values and event injection
 -  **Underlying hook:** At its core, it uses `useEventListener` hook
 
-### Parameters
+## Parameters
 
 | Parameter |       Type        | Required | Default Value | Description                                 |
 | --------- | :---------------: | :------: | :-----------: | ------------------------------------------- |
@@ -23,20 +23,20 @@ Perfect for responsive behavior based on window dimensions.
 | options   | [Options](#types) |    ❌    |   undefined   | Configuration options                       |
 |           |
 
-#### Types
+### Types
 
 ```ts
 type Handler<T> = () => T
 type Options<T> = { shouldInjectEvent?: boolean; defaultValue?: T }
 ```
 
-### Returns
+## Returns
 
 -  Returns the current result of the `handler` function, updated whenever the window is resized.
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Responsive Breakpoints
+### Basic Responsive Breakpoints
 
 ```ts
 import { useWindowResize } from 'classic-react-hooks'
@@ -98,9 +98,9 @@ function ComponentWithDefault() {
 }
 ```
 
-### Advanced Usage
+## Advanced Usage
 
-#### Debounced Resize Handler
+### Debounced Resize Handler
 
 ```ts
 import { useMemo } from 'react'
@@ -122,11 +122,11 @@ function ExpensiveCalculation() {
 }
 ```
 
-### Important Notes
+## Important Notes
 
 -  Initial value is determined by either `defaultValue` or calling `handler()` immediately.
 
-### Common Use Cases
+## Common Use Cases
 
 -  Creating dynamic layouts
 -  Toggling element visibility based on window dimension
