@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.5
+
+### Minor Changes
+
+-  51e96f8: Doc update
+
 ## 2.0.0-canary.4
 
 ### Minor Changes
