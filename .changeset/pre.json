@@ -5,6 +5,7 @@
     "classic-react-hooks": "1.4.0"
   },
   "changesets": [
+    "clean-coats-occur",
     "cuddly-melons-turn",
     "good-vans-impress",
     "icy-boats-make",
