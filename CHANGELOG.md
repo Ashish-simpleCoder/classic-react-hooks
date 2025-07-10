@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.6
+
+### Patch Changes
+
+-  c20ae22: Include src folder in npm publish
+
 ## 2.0.0-canary.5
 
 ### Minor Changes
