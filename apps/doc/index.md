@@ -27,6 +27,6 @@ features:
      details: 100% open-source — contributions are welcome!
 
    - icon: 🌲
-     title: Tree-Shakeble
+     title: Tree-Shakeable
      details: Lightweight, minimal bundle sizes
 ---

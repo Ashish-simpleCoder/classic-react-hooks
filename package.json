@@ -25,7 +25,9 @@
    "module": "dist/index.mjs",
    "typings": "dist/index.d.ts",
    "files": [
-      "dist"
+      "dist",
+      "src",
+      "tsup.config.ts"
    ],
    "scripts": {
       "build": "pnpm clean && tsup",
