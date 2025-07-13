@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.7
+
+### Patch Changes
+
+-  cc71e9c: Update docs for copy-to-clipboard and deboucned-fn hook
+
 ## 2.0.0-canary.6
 
 ### Patch Changes
