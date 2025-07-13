@@ -7,6 +7,52 @@ const DEFAULT_DELAY = 300
  * @description
  *  A hook which returns a debounced function.
  *
+ * @example
+ * 
+   import { useState, useEffect } from 'react'
+   import { useDebouncedFn } from 'classic-react-hooks'
+
+   export default function SearchInput() {
+      const [query, setQuery] = useState('')
+      const [results, setResults] = useState([])
+
+      const debouncedSearch = useDebouncedFn({
+         callbackToBounce: async (searchTerm: string) => {
+            if (searchTerm.trim()) {
+               const response = await fetch(`https://dummyjson.com/users/search?q=${searchTerm}`)
+               const data = await response.json()
+               setResults(data.results)
+            }
+         },
+         delay: 500,
+      })
+
+      const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+         const value = e.target.value
+         setQuery(value)
+         debouncedSearch(value)
+      }
+
+      useEffect(() => {
+         ;(async function () {
+            const response = await fetch(`https://dummyjson.com/users`)
+            const data = await response.json()
+            setResults(data.results)
+         })()
+      }, [])
+
+      return (
+         <div>
+            <input value={query} onChange={handleInputChange} placeholder='Search products...' />
+            <div>
+               {results.map((result) => (
+                  <div key={result.id}>{result.name}</div>
+               ))}
+            </div>
+         </div>
+      )
+   }
+ *     
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-debounced-fn.html
  *
  */
