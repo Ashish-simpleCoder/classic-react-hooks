@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.8
+
+### Patch Changes
+
+-  56478c2: Docs: Update features and overview section
+
 ## 2.0.0-canary.7
 
 ### Patch Changes
