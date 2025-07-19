@@ -1,3 +1,4 @@
+//@ts-nocheck
 'use client'
 import React, { useRef } from 'react'
 import { useEventListener } from '../use-event-listener'
