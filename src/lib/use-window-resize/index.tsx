@@ -46,6 +46,7 @@ export default function useWindowResize<T>({
       options: {
          shouldInjectEvent: options?.shouldInjectEvent ?? true,
       },
+      layoutEffect: true,
    })
    return result
 }

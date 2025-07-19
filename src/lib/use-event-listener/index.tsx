@@ -1,7 +1,7 @@
 'use client'
 import type { EvHandler, EvOptions, EvTarget } from '../../types'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
 /* Have taken reference from ChakraUI's use-event-listener for typing out the props in type-safe manner. */
@@ -35,45 +35,56 @@ export function useEventListener<K extends keyof DocumentEventMap>({
    event,
    handler,
    options,
+   layoutEffect,
 }: {
    target: EvTarget
    event: K
    handler?: (event: DocumentEventMap[K]) => void
    options?: EvOptions
+   layoutEffect?: boolean
 }): void
 export function useEventListener<K extends keyof WindowEventMap>({
    target,
    event,
    handler,
    options,
+   layoutEffect,
 }: {
    target: EvTarget
    event: K
    handler?: (event: WindowEventMap[K]) => void
    options?: EvOptions
+   layoutEffect?: boolean
 }): void
 export function useEventListener<K extends keyof GlobalEventHandlersEventMap>({
    target,
    event,
    handler,
    options,
+   layoutEffect,
 }: {
    target: EvTarget
    event: K
    handler?: (event: GlobalEventHandlersEventMap[K]) => void
    options?: EvOptions
+   layoutEffect?: boolean
 }): void
 export function useEventListener({
    target,
    event,
    handler,
    options,
+   layoutEffect,
 }: {
    target: EvTarget
    event: string
    handler?: EvHandler
    options?: EvOptions
+   layoutEffect?: boolean
 }) {
+   // Determining which hook to use -> layout or effect
+   const useSelectedHook = layoutEffect ? useLayoutEffect : useEffect
+
    const [elementNode, setElementNode] = useState<EventTarget | null>(() =>
       typeof target === 'function' ? target() : null
    )
@@ -108,9 +119,9 @@ export function useEventListener({
       signal = options.signal
    }
 
-   useEffect(() => {
+   useSelectedHook(() => {
       setElementNode(typeof target === 'function' ? target() : null)
    }, [target])
 
-   useEffect(listener.current.effectCb, [elementNode, event, shouldInjectEvent, capture, once, passive, signal])
+   useSelectedHook(listener.current.effectCb, [elementNode, event, shouldInjectEvent, capture, once, passive, signal])
 }
