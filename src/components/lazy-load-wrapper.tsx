@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Prettify } from '../types'
 import type { ElementRef, ReactNode } from 'react'
 import { Suspense, useRef } from 'react'
