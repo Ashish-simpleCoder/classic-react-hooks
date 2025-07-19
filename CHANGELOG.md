@@ -1,5 +1,12 @@
 # classic-react-hooks
 
+## 2.0.0-canary.9
+
+### Minor Changes
+
+-  e73af53: Feat: Introduce `layoutEffect` boolean prop in use-event-listener hook to pickup `useEffect` between `useLayoutEffect`. By default `useEffect` hook will be used.
+   Feat: Using layoutEffect for use-window-resize hook.
+
 ## 2.0.0-canary.8
 
 ### Patch Changes
