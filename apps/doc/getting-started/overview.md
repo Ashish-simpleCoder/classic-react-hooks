@@ -1,9 +1,12 @@
 # Overview
 
-## What is **classic-react-hooks**?
+**_`classic-react-hooks`_** is a robust library of custom React hooks and components, offering powerful and efficient APIs to help you build features in a more declarative, modular, and maintainable way.
 
--  **`classic-react-hooks`** is a collection of feature-rich custom React hooks designed to simplify your daily development tasks.
--  It promotes a declarative, easy-to-write, and maintainable coding style.
+## What is classic-react-hooks?
+
+**_`classic-react-hooks`_** is a collection of feature-rich custom React hooks designed to simplify your daily development tasks.
+
+It encourages a clean, declarative and modular coding style that's easy to write, maintain, and scale.
 
 ## Installation
 
@@ -32,4 +35,5 @@ bun add classic-react-hooks
 -  📚 Comprehensive collection of custom hooks
 -  🛡️ Type-safe (built with TypeScript)
 -  🌲 Tree-shakable for optimized bundle size
+-  📦 Zero external dependencies
 -  ⚡ Lightweight, minimal, and easy to integrate

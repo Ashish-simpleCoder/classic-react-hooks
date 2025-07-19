@@ -22,11 +22,19 @@ features:
      title: Type-safe
      details: Built with TypeScript
 
+   - icon: 🌲
+     title: Tree-Shakeable
+     details: Optimized bundle sizes
+
+   - icon: 📦
+     title: No dependencies
+     details: Zero external dependencies
+
+   - icon: ⚡
+     title: Minimalistic
+     details: Lightweight, minimal, and easy to integrate
+
    - icon: 🌏
      title: Open-Source
      details: 100% open-source — contributions are welcome!
-
-   - icon: 🌲
-     title: Tree-Shakeable
-     details: Lightweight, minimal bundle sizes
 ---
