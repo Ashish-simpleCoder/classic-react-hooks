@@ -4,233 +4,272 @@ outline: deep
 
 # use-intersection-observer
 
-A React hook that provides a declarative way to observe multiple elements with the Intersection Observer API, returning their visibility states with advanced triggering options.
+A React hook that provides a declarative way to observe element visibility using the Intersection Observer API with automatic cleanup and type-safe manner.
+
+## Browser Support
+
+::: danger Important
+
+This hook automatically checks for `IntersectionObserver` support and logs a warning in development if it's not available. The hook will gracefully handle unsupported browsers by not creating observers.
+:::
+
+::: info
+IntersectionObserver is supported in all modern browsers. For older browsers, you may need to include a polyfill.
+:::
 
 ## Features
 
--  **Multiple targets:** Observe multiple elements simultaneously
--  **Flexible triggering:** Control whether elements trigger once or continuously
--  **Per-element configuration:** Different trigger behavior for each element
--  **Auto cleanup:** Observer is automatically disconnected on unmount
--  **Fallback support:** Graceful degradation when IntersectionObserver is not available
--  **Callback support:** Execute custom logic when elements become visible
--  **Performance:** Elements with `only_trigger_once: true` are automatically unobserved after first intersection
--  **Per-element control:** Use `only_trigger_once` as an array to control trigger behavior per element
+-  **Auto cleanup:** Observer is automatically disconnected on unmount or element changes
+-  **Reactive:** The hook re-evaluates and potentially re-creates observers when dependencies change
+-  **Type-safe:** Full TypeScript support with dynamic property naming based on key
+-  **Flexible keys:** Support for custom property naming through the `key` parameter
+-  **Standard options:** Full support for all `IntersectionObserverInit` options (root, rootMargin, threshold)
+-  **Performance:** Observer is only created when element exists and IntersectionObserver is supported
+-  **One-time observation:** Built-in support for observing elements only once
 
 ## Parameters
 
-| Parameter      |                  Type                  | Required |            Default            | Description                                             |
-| -------------- | :------------------------------------: | :------: | :---------------------------: | ------------------------------------------------------- |
-| targets        | [IntersectionObserverTarget[]](#types) |    ✅    |               -               | Array of functions that return target elements          |
-| options        |     [IntersectionOptions](#types)      |    ❌    | "{ only_trigger_once: true }" | Intersection observer options and custom configurations |
-| onIntersection |       (target: Element) => void        |    ❌    |           undefined           | Callback executed when an element becomes visible       |
-|                |
+| Parameter |                 Type                  | Required | Default Value | Description                                        |
+| --------- | :-----------------------------------: | :------: | :-----------: | -------------------------------------------------- |
+| options   | [IntersectionObserverOptions](#types) |    ❌    |   undefined   | Configuration object for the intersection observer |
 
 ### Types
 
 ```ts
-export type IntersectionObserverTarget = () => Element | null
-export type IsTargetIntersecting = boolean
+export interface BaseIntersectionObserverOptions {
+   onIntersection?: (entry: IntersectionObserverEntry) => void
+   onlyTriggerOnce?: boolean
+}
 
-export interface IntersectionOptions extends IntersectionObserverInit {
-   // Standard IntersectionObserverInit:
-   // root?: Element | Document | null
-   // rootMargin?: string
-   // threshold?: number | number[]
+export interface IntersectionObserverOptions<Key extends string = ''>
+   extends IntersectionObserverInit,
+      BaseIntersectionObserverOptions {
+   key?: Key
+}
 
-   // Custom options
-   only_trigger_once?: boolean | boolean[] // Control per-element trigger behavior
+export type IntersectionObserverResult<Key extends string> = {
+   // Dynamic property names based on key
+   [K in Key as Key extends '' ? 'element' : `${Key}Element`]: HTMLElement | null
+} & {
+   [K in Key as Key extends '' ? 'setElementRef' : `set${Capitalize<Key>}ElementRef`]: (
+      elementNode: HTMLElement | null
+   ) => void
+} & {
+   [K in Key as Key extends '' ? 'isElementIntersecting' : `is${Capitalize<Key>}ElementIntersecting`]: boolean
 }
 ```
 
-## Returns
+### Options Properties
 
-Returns an array of boolean values (`Array<IsTargetIntersecting>`) where each boolean represents whether the corresponding target element is currently intersecting (visible) or not.
+| Property          |                     Type                     |   Default   | Description                                    |
+| ----------------- | :------------------------------------------: | :---------: | ---------------------------------------------- |
+| `key`             |                   `string`                   |    `''`     | Custom key for property naming                 |
+| `onIntersection`  | `(entry: IntersectionObserverEntry) => void` | `undefined` | Callback fired on intersection changes         |
+| `onlyTriggerOnce` |                  `boolean`                   |   `false`   | Whether to observe only the first intersection |
+| `root`            |        `Element \| Document \| null`         |   `null`    | Root element for intersection                  |
+| `rootMargin`      |                   `string`                   |   `'0px'`   | Margin around root element                     |
+| `threshold`       |             `number \| number[]`             |     `0`     | Intersection ratio threshold(s)                |
+
+## Return Value
+
+The hook returns an object with dynamically named properties based on the `key` parameter:
+
+-  **Without key:** `element`, `setElementRef`, `isElementIntersecting`
+-  **With key:** `{key}Element`, `set{Key}ElementRef`, `is{Key}ElementIntersecting`
+
+::: info
+**`element`:** Holds the element reference which is being observed, it's initial undefined.
+
+**`setElementRef`:** Setter function to store the element reference within `element`, which is going tobe observed.
+
+**`isElementIntersecting`:** Holds the boolean intersection status of the `element` weather it is intersecting the screen or not.
+:::
 
 ## Usage Examples
 
-### Basic Usage - Multiple Elements
+### Basic Intersection Observer
 
-```ts
-import { useRef } from 'react'
-import { useInterSectionObserver } from 'classic-react-hooks'
+```tsx {4-9,18,21}
+import { useIntersectionObserver } from 'classic-react-hooks'
 
-export default function BasicIntersection() {
-   const box1Ref = useRef<HTMLDivElement>(null)
-   const box2Ref = useRef<HTMLDivElement>(null)
-   const box3Ref = useRef<HTMLDivElement>(null)
-
-   const [isBox1Visible, isBox2Visible, isBox3Visible] = useInterSectionObserver({
-      targets: [() => box1Ref.current, () => box2Ref.current, () => box3Ref.current],
+export default function BasicExample() {
+   const { element, setElementRef, isElementIntersecting } = useIntersectionObserver({
+      threshold: 0.5,
+      onIntersection: (entry) => {
+         console.log('Intersection changed:', entry.isIntersecting)
+      },
    })
 
    return (
-      <div>
-         <div className='h-screen flex items-center justify-center text-xl'>Scroll down to see boxes</div>
-
-         <div
-            ref={box1Ref}
-            className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
-               isBox1Visible ? 'bg-green-500' : 'bg-red-500'
-            }`}
-         >
-            Box 1 - {isBox1Visible ? 'Visible' : 'Hidden'}
-         </div>
-
-         <div
-            ref={box2Ref}
-            className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
-               isBox2Visible ? 'bg-blue-500' : 'bg-gray-500'
-            }`}
-         >
-            Box 2 - {isBox2Visible ? 'Visible' : 'Hidden'}
-         </div>
-
-         <div
-            ref={box3Ref}
-            className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
-               isBox3Visible ? 'bg-purple-500' : 'bg-orange-500'
-            }`}
-         >
-            Box 3 - {isBox3Visible ? 'Visible' : 'Hidden'}
+      <div style={{ height: '200vh' }}>
+         <div style={{ marginTop: '100vh' }}>
+            <div
+               ref={setElementRef}
+               style={{
+                  padding: '20px',
+                  backgroundColor: isElementIntersecting ? 'lightgreen' : 'lightcoral',
+               }}
+            >
+               {isElementIntersecting ? 'Visible!' : 'Not visible'}
+            </div>
          </div>
       </div>
    )
 }
 ```
 
-#### Per-Element Trigger Control
+### Using Custom Keys
 
-```ts
-import { useRef } from 'react'
-import { useInterSectionObserver } from 'classic-react-hooks'
+::: details Example
 
-export default function PerElementTrigger() {
-   const onceRef = useRef<HTMLDivElement>(null)
-   const continuousRef = useRef<HTMLDivElement>(null)
-   const alsoOnceRef = useRef<HTMLDivElement>(null)
+```tsx {4-8}
+import { useIntersectionObserver } from 'classic-react-hooks'
 
-   const [isOnceVisible, isContinuousVisible, isAlsoOnceVisible] = useInterSectionObserver({
-      targets: [() => onceRef.current, () => continuousRef.current, () => alsoOnceRef.current],
-      options: {
-         // Per-element trigger control: [once, continuous, once]
-         only_trigger_once: [true, false, true],
-         threshold: 0.5,
-      },
+export default function CustomKeyExample() {
+   const { heroElement, setHeroElementRef, isHeroElementIntersecting } = useIntersectionObserver({
+      key: 'hero', // [!code ++]
+      threshold: 0.3,
+      rootMargin: '-50px',
    })
 
    return (
       <div>
-         <div className='h-screen flex items-center justify-center text-xl font-semibold'>
-            Scroll to see different behaviors
-         </div>
-
-         <div
-            ref={onceRef}
-            className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
-               isOnceVisible ? 'bg-green-500' : 'bg-red-500'
-            }`}
+         <header
+            ref={setHeroElementRef}
+            style={{
+               height: '400px',
+               backgroundColor: isHeroElementIntersecting ? 'blue' : 'gray',
+               color: 'white',
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+            }}
          >
-            Triggers Once - {isOnceVisible ? 'Triggered!' : 'Waiting...'}
-         </div>
-
-         <div className='h-96 flex items-center justify-center text-gray-600 text-lg'>Scroll past and back up</div>
-
-         <div
-            ref={continuousRef}
-            className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
-               isContinuousVisible ? 'bg-blue-500' : 'bg-gray-500'
-            }`}
-         >
-            Continuous - {isContinuousVisible ? 'Visible' : 'Hidden'}
-         </div>
-
-         <div className='h-96 flex items-center justify-center text-gray-600 text-lg'>Scroll past and back up</div>
-
-         <div
-            ref={alsoOnceRef}
-            className={`h-48 my-12 mx-auto max-w-md flex items-center justify-center text-white font-semibold text-lg rounded-lg transition-colors duration-300 ${
-               isAlsoOnceVisible ? 'bg-purple-500' : 'bg-orange-500'
-            }`}
-         >
-            Also Triggers Once - {isAlsoOnceVisible ? 'Triggered!' : 'Waiting...'}
+            <h1>Hero Section {isHeroElementIntersecting ? '(Visible)' : '(Hidden)'}</h1>
+         </header>
+         <div style={{ height: '200vh', padding: '20px' }}>
+            <p>Scroll to see the hero section intersection status change</p>
          </div>
       </div>
    )
 }
 ```
 
-#### With Intersection Callback
+:::
 
-```ts
-import { useRef, useState } from 'react'
-import { useInterSectionObserver } from 'classic-react-hooks'
+### One-Time Trigger
 
-export default function WithCallback() {
-   const [lastIntersected, setLastIntersected] = useState<string>('')
-   const box1Ref = useRef<HTMLDivElement>(null)
-   const box2Ref = useRef<HTMLDivElement>(null)
+::: details Example
 
-   const [isBox1Visible, isBox2Visible] = useInterSectionObserver({
-      targets: [() => box1Ref.current, () => box2Ref.current],
-      options: {
-         threshold: 0.8,
-         only_trigger_once: false,
-      },
-      onIntersection: (target) => {
-         // Get the element's text content to identify which one intersected
-         const elementText = target.textContent || 'Unknown'
-         setLastIntersected(`${elementText} became visible at ${new Date().toLocaleTimeString()}`)
+```tsx {7-16}
+import { useState } from 'react'
+import { useIntersectionObserver } from 'classic-react-hooks'
 
-         // You could also trigger animations, analytics, lazy loading, etc.
-         console.log('Element intersected:', target)
+export default function OneTimeExample() {
+   const [hasBeenSeen, setHasBeenSeen] = useState(false)
+
+   const { setElementRef, isElementIntersecting } = useIntersectionObserver({
+      onlyTriggerOnce: true, // [!code ++]
+      threshold: 0.8,
+      onIntersection: (entry) => {
+         if (entry.isIntersecting) {
+            setHasBeenSeen(true)
+            console.log('Element seen for the first time!')
+         }
       },
    })
 
    return (
-      <div>
-         <div className='fixed top-0 left-0 bg-white p-3 border border-gray-300 rounded-br-lg shadow-md z-50 max-w-sm'>
-            <div className='text-sm font-medium text-gray-700'>Last intersected:</div>
-            <div className='text-xs text-gray-600 mt-1'>{lastIntersected || 'None yet'}</div>
+      <div style={{ height: '200vh' }}>
+         <div style={{ marginTop: '150vh' }}>
+            <div
+               ref={setElementRef}
+               style={{
+                  padding: '40px',
+                  backgroundColor: hasBeenSeen ? 'gold' : 'lightblue',
+                  textAlign: 'center',
+               }}
+            >
+               {hasBeenSeen ? 'I was seen! 🎉' : 'Scroll down to see me'}
+            </div>
          </div>
-
-         <div className='h-screen pt-24 flex items-center justify-center text-xl font-semibold'>
-            Scroll down to trigger intersections
-         </div>
-
-         <div
-            ref={box1Ref}
-            className={`h-72 my-24 mx-auto max-w-lg flex items-center justify-center text-2xl font-bold rounded-xl shadow-lg transition-colors duration-500 ${
-               isBox1Visible ? 'bg-green-300 text-green-800' : 'bg-red-300 text-red-800'
-            }`}
-         >
-            Box 1 - {isBox1Visible ? 'Visible' : 'Hidden'}
-         </div>
-
-         <div
-            ref={box2Ref}
-            className={`h-72 my-24 mx-auto max-w-lg flex items-center justify-center text-2xl font-bold rounded-xl shadow-lg transition-colors duration-500 ${
-               isBox2Visible ? 'bg-blue-300 text-blue-800' : 'bg-yellow-300 text-yellow-800'
-            }`}
-         >
-            Box 2 - {isBox2Visible ? 'Visible' : 'Hidden'}
-         </div>
-
-         <div className='h-screen flex items-center justify-center text-gray-500'>Bottom spacer</div>
       </div>
    )
 }
 ```
 
-## Important Notes
+:::
 
--  If IntersectionObserver is not supported, a warning is logged and the hook gracefully degrades.
+### Multiple Thresholds
+
+::: details Example
+
+```tsx {4-10}
+import { useIntersectionObserver } from 'classic-react-hooks'
+
+export default function MultipleThresholdsExample() {
+   const { setElementRef, isElementIntersecting } = useIntersectionObserver({
+      threshold: [0, 0.25, 0.5, 0.75, 1.0], // [!code ++]
+      onIntersection: (entry) => {
+         const percentage = Math.round(entry.intersectionRatio * 100)
+         console.log(`Element is ${percentage}% visible`)
+      },
+   })
+
+   return (
+      <div style={{ height: '200vh', padding: '20px' }}>
+         <div style={{ height: '100vh' }} />
+         <div
+            ref={setElementRef}
+            style={{
+               height: '300px',
+               backgroundColor: isElementIntersecting ? 'lightgreen' : 'lightcoral',
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+            }}
+         >
+            <h2>Check console for intersection percentage</h2>
+         </div>
+      </div>
+   )
+}
+```
+
+:::
 
 ## Common Use Cases
 
--  Lazy loading images or content
--  Triggering animations on scroll
--  Analytics tracking for element visibility
--  Infinite scrolling implementation
--  Performance optimization by conditionally rendering components
--  Scroll-triggered navigation highlighting
+-  **Lazy loading:** Load images or content when they come into view
+-  **Animation triggers:** Start animations when elements become visible
+-  **Analytics:** Track when users view certain sections
+-  **Infinite scrolling:** Load more content when reaching the end
+-  **Sticky navigation:** Show/hide navigation based on hero section visibility
+-  **Performance optimization:** Pause expensive operations when elements are not visible
+
+## Performance Notes
+
+::: info
+
+-  The hook uses `useSyncedRef` to avoid unnecessary re-renders when callback functions change
+-  Observer instances are automatically cleaned up and recreated only when necessary
+-  The `onlyTriggerOnce` option helps optimize performance by automatically disconnecting after first intersection
+   :::
+
+## TypeScript Benefits
+
+The hook provides excellent TypeScript support:
+
+-  **Dynamic property names:** Property names change based on the `key` parameter
+-  **Type inference:** Return types are automatically inferred from the key
+-  **Full IntersectionObserver API support:** All standard options are typed correctly
+
+```tsx
+// Without key
+const { element, setElementRef, isElementIntersecting } = useIntersectionObserver()
+
+// With key 'sidebar'
+const { sidebarElement, setSidebarElementRef, isSidebarElementIntersecting } = useIntersectionObserver({
+   key: 'sidebar',
+})
+```

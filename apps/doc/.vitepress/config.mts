@@ -10,6 +10,10 @@ export default defineConfig({
    lastUpdated: true,
    cleanUrls: false,
 
+   markdown: {
+      lineNumbers: true,
+   },
+
    sitemap: {
       hostname: 'https://classic-react-hooks.vercel.app',
       transformItems(items) {
@@ -107,6 +111,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
          items: [
             { text: 'use-event-listener', link: 'use-event-listener' },
             { text: 'use-intersection-observer', link: 'use-intersection-observer' },
+            { text: 'use-multi-intersection-observer', link: 'use-multi-intersection-observer' },
             { text: 'use-window-resize', link: 'use-window-resize' },
             { text: 'use-copy-to-clipboard', link: 'use-copy-to-clipboard' },
             { text: 'use-local-storage', link: 'use-local-storage' },
