@@ -1,5 +1,12 @@
 # classic-react-hooks
 
+## 2.0.0-canary.11
+
+### Minor Changes
+
+-  4f5bb6c: - breaking: use the implementation and working for `useIntersection` observer hook.
+   -  feat: introduce new hook `useMultiIntersectionObserver` hook.
+
 ## 2.0.0-canary.10
 
 ### Patch Changes
