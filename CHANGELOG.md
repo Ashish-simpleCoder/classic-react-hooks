@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.10
+
+### Patch Changes
+
+-  5807a38: Add canary branch in CI release
+
 ## 2.0.0-canary.9
 
 ### Minor Changes
