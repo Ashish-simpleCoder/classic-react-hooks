@@ -1,5 +1,12 @@
 # classic-react-hooks
 
+## 2.0.0-canary.12
+
+### Patch Changes
+
+-  5877980: Docs: Start overhauling to new documentation
+   -  Create new docs for `use-event-listener` and `use-intersection-observer` hooks
+
 ## 2.0.0-canary.11
 
 ### Minor Changes
