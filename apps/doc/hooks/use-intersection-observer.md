@@ -6,8 +6,6 @@ outline: deep
 
 A React hook that provides a declarative way to observe element visibility using the Intersection Observer API with automatic cleanup and type-safe manner.
 
-## Browser Support
-
 ::: danger Important
 
 This hook automatically checks for `IntersectionObserver` support and logs a warning in development if it's not available. The hook will gracefully handle unsupported browsers by not creating observers.
@@ -27,13 +25,68 @@ IntersectionObserver is supported in all modern browsers. For older browsers, yo
 -  **Performance:** Observer is only created when element exists and IntersectionObserver is supported
 -  **One-time observation:** Built-in support for observing elements only once
 
+## Problem It Solves
+
+::: info **Multiple Instance Management**
+
+-  **Dynamic Key System:** Allows multiple intersection observers in the same component without naming conflicts
+-  **Type-Safe Property Generation:** Each instance gets uniquely named properties with full TypeScript support
+-  **Scalable Architecture:** Can observe unlimited elements without property collisions
+   :::
+
+::: info **Complex Intersection Observer Boilerplate**
+
+-  **Eliminates** repetitive `IntersectionObserver` setup and teardown code
+-  **Abstracts** away the complexity of observer lifecycle management
+-  **Reduces** component code by `15-20 lines` per intersection observation
+   :::
+
+::: info **One-Time Observation Complexity**
+
+-  `onlyTriggerOnce` option for automatically cleaning up observer after first intersection
+   :::
+
+::: info **Type Safety in Dynamic Scenarios**
+
+-  Full TypeScript support with template literal types
+-  IntelliSense support for dynamically generated property names
+
+```tsx
+// Without key
+const { element, setElementRef, isElementIntersecting } = useIntersectionObserver()
+
+// With key 'sidebar'
+const { sidebarElement, setSidebarElementRef, isSidebarElementIntersecting } = useIntersectionObserver({
+   key: 'sidebar',
+})
+```
+
+:::
+
+::: tip
+The hook uses `useSyncedRef` to avoid unnecessary re-renders when callback functions change
+:::
+
 ## Parameters
 
 | Parameter |                 Type                  | Required | Default Value | Description                                        |
 | --------- | :-----------------------------------: | :------: | :-----------: | -------------------------------------------------- |
 | options   | [IntersectionObserverOptions](#types) |    ❌    |   undefined   | Configuration object for the intersection observer |
 
-### Types
+### Options Parameter
+
+| Property          |                     Type                     |   Default   | Description                                    |
+| ----------------- | :------------------------------------------: | :---------: | ---------------------------------------------- |
+| `key`             |                   `string`                   |    `''`     | Custom key for property naming                 |
+| `onIntersection`  | `(entry: IntersectionObserverEntry) => void` | `undefined` | Callback fired on intersection changes         |
+| `onlyTriggerOnce` |                  `boolean`                   |   `false`   | Whether to observe only the first intersection |
+| `root`            |        `Element \| Document \| null`         |   `null`    | Root element for intersection                  |
+| `rootMargin`      |                   `string`                   |   `'0px'`   | Margin around root element                     |
+| `threshold`       |             `number \| number[]`             |     `0`     | Intersection ratio threshold(s)                |
+
+### Type Definitions
+
+::: details
 
 ```ts
 export interface BaseIntersectionObserverOptions {
@@ -59,18 +112,9 @@ export type IntersectionObserverResult<Key extends string> = {
 }
 ```
 
-### Options Properties
+:::
 
-| Property          |                     Type                     |   Default   | Description                                    |
-| ----------------- | :------------------------------------------: | :---------: | ---------------------------------------------- |
-| `key`             |                   `string`                   |    `''`     | Custom key for property naming                 |
-| `onIntersection`  | `(entry: IntersectionObserverEntry) => void` | `undefined` | Callback fired on intersection changes         |
-| `onlyTriggerOnce` |                  `boolean`                   |   `false`   | Whether to observe only the first intersection |
-| `root`            |        `Element \| Document \| null`         |   `null`    | Root element for intersection                  |
-| `rootMargin`      |                   `string`                   |   `'0px'`   | Margin around root element                     |
-| `threshold`       |             `number \| number[]`             |     `0`     | Intersection ratio threshold(s)                |
-
-## Return Value
+## Return Value(s)
 
 The hook returns an object with dynamically named properties based on the `key` parameter:
 
@@ -246,30 +290,3 @@ export default function MultipleThresholdsExample() {
 -  **Infinite scrolling:** Load more content when reaching the end
 -  **Sticky navigation:** Show/hide navigation based on hero section visibility
 -  **Performance optimization:** Pause expensive operations when elements are not visible
-
-## Performance Notes
-
-::: info
-
--  The hook uses `useSyncedRef` to avoid unnecessary re-renders when callback functions change
--  Observer instances are automatically cleaned up and recreated only when necessary
--  The `onlyTriggerOnce` option helps optimize performance by automatically disconnecting after first intersection
-   :::
-
-## TypeScript Benefits
-
-The hook provides excellent TypeScript support:
-
--  **Dynamic property names:** Property names change based on the `key` parameter
--  **Type inference:** Return types are automatically inferred from the key
--  **Full IntersectionObserver API support:** All standard options are typed correctly
-
-```tsx
-// Without key
-const { element, setElementRef, isElementIntersecting } = useIntersectionObserver()
-
-// With key 'sidebar'
-const { sidebarElement, setSidebarElementRef, isSidebarElementIntersecting } = useIntersectionObserver({
-   key: 'sidebar',
-})
-```

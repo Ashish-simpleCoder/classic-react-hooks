@@ -41,7 +41,7 @@ const forcefullyTriggerIntersection = (entry?: Partial<IntersectionObserverEntry
    ])
 }
 
-describe('useMultipleIntersectionObserver', () => {
+describe('use-multi-intersection-observer', () => {
    it('creates observers for multiple keys', () => {
       const { result } = renderHook(() => useMultipleIntersectionObserver(['header', 'footer', 'sidebar']))
 

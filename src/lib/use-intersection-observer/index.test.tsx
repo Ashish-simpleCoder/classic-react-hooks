@@ -41,7 +41,7 @@ const forcefullyTriggerIntersection = (entry?: Partial<IntersectionObserverEntry
    ])
 }
 
-describe('useIntersectionObserver', () => {
+describe('use-intersection-observer', () => {
    describe('basic functionality', () => {
       it('should return correct default property names when no key is provided', () => {
          const { result } = renderHook(() => useIntersectionObserver())
@@ -380,7 +380,7 @@ function TestComponent({ hookKey }: { hookKey?: string }) {
    )
 }
 
-describe('useIntersectionObserver integration tests', () => {
+describe('use-intersection-observer integration tests', () => {
    it('should work in a real component without key', () => {
       render(<TestComponent />)
 
