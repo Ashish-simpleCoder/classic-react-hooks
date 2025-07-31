@@ -7,7 +7,7 @@ outline: deep
 A React hook that provides a convenient way to observe multiple elements simultaneously using the Intersection Observer API. Built on top of `useIntersectionObserver` for consistent behavior and TypeScript support.
 
 ::: warning
-This hook requires you to understand about `useIntersectionHook`. As it is built on top it, so it will help you to better understand about features of this hook. Read here [useIntersectionHook](use-intersection-observer.html)
+This hook requires you to understand the working of `useIntersectionObserver` hook. As it is built on top it, so it will help you to better understand about features of this hook. Read here [useIntersectionObserver](use-intersection-observer.html)
 :::
 
 ## Features
@@ -19,6 +19,76 @@ This hook requires you to understand about `useIntersectionHook`. As it is built
 -  **Auto cleanup:** All observers are automatically cleaned up on unmount
 -  **Performance optimized:** Each observer is independently managed for optimal performance
 
+## Problem It Solves
+
+::: info Multiple Hook Instance Boilerplate
+**_Problem:_** Managing many intersection observers requires repetitive hook calls
+
+```ts
+// ❌ Without your hook - repetitive and verbose
+const hero = useIntersectionObserver({ key: 'hero', threshold: 0.5 })
+const about = useIntersectionObserver({ key: 'about', threshold: 0.5 })
+const services = useIntersectionObserver({ key: 'services', threshold: 0.5 })
+const contact = useIntersectionObserver({ key: 'contact', threshold: 0.5 })
+```
+
+**_Solution:_** Single hook call for multiple observers
+
+```ts
+// ✅ With your hook - clean and DRY
+const sections = useMultipleIntersectionObserver(['hero', 'about', 'services', 'contact'], { threshold: 0.5 })
+```
+
+:::
+
+::: info Memory and Performance Optimization
+**_Problem:_** Managing lifecycle of multiple observers manually
+
+-  Risk of memory leaks with multiple observer instances
+-  Complex cleanup logic for dynamic observer sets
+
+**_Solution:_** Automated lifecycle management
+
+-  Leverages the proven cleanup logic of the base hook
+-  Efficient memory usage through shared configuration
+   :::
+
+::: info Component Organization and Maintainability
+**_Problem:_** Managing many observer hooks clutters component logic
+
+-  Multiple hook calls at component top level
+-  Scattered observer logic throughout component
+-  Difficult to understand observer relationships
+
+**_Solution:_** Clean, organized observer management
+
+-  Single hook call consolidates all observer logic
+-  Clear relationship between observed elements
+-  Easier to reason about component behavior
+   :::
+
+::: info Type Safety at Scale
+**_Problem:_** Maintaining type safety with multiple dynamically named properties
+
+-  Lost type inference when managing multiple observers manually
+-  No IntelliSense for dynamically generated property names
+-  Runtime errors from typos in property access
+
+**_Solution:_** Full type safety across all observers
+
+```ts
+// ✅ Full type safety and IntelliSense
+const observers = useMultipleIntersectionObserver(['hero', 'footer'] as const)
+// TypeScript knows: observers.hero.setHeroElementRef, observers.hero.isHeroElementIntersecting
+// TypeScript knows: observers.footer.setFooterElementRef, observers.footer.isFooterElementIntersecting
+```
+
+:::
+
+::: tip
+For better performance with many elements, consider grouping related observations or using a single observer with multiple targets if the behavior is identical.
+:::
+
 ## Parameters
 
 | Parameter |               Type                | Required | Default Value | Description                                       |
@@ -26,19 +96,7 @@ This hook requires you to understand about `useIntersectionHook`. As it is built
 | keys      |         `readonly Key[]`          |    ✅    |       -       | Array of unique keys for creating named observers |
 | options   | [MultipleObserverOptions](#types) |    ❌    |   undefined   | Shared configuration for all observers            |
 
-### Types
-
-```ts
-export type MultipleObserverOptions = Omit<IntersectionObserverOptions, 'key'>
-
-// Return type is a record where each key maps to its observer result
-type MultipleIntersectionObserverResult<Key extends string> = Record<
-   Key,
-   ReturnType<typeof useIntersectionObserver<Key>>
->
-```
-
-### Options Properties
+### Options Parameter
 
 All options from `useIntersectionObserver` except `key` (which is provided via the `keys` array):
 
@@ -50,21 +108,23 @@ All options from `useIntersectionObserver` except `key` (which is provided via t
 | `rootMargin`      |                   `string`                   |   `'0px'`   | Margin around root element                     |
 | `threshold`       |             `number \| number[]`             |     `0`     | Intersection ratio threshold(s)                |
 
-## Return Value
+### Type Definitions
 
-The hook returns a record object where each key from the input array maps to its corresponding intersection observer result:
+::: details
 
 ```ts
-{
-  [key]: {
-    [`${key}Element`]: HTMLElement | null,
-    [`set${Capitalize<Key>}ElementRef`]: (element: HTMLElement | null) => void,
-    [`is${Capitalize<Key>}ElementIntersecting`]: boolean
-  }
-}
+export type MultipleObserverOptions = Omit<IntersectionObserverOptions, 'key'>
+
+// Return type is a record where each key maps to its observer result
+type MultipleIntersectionObserverResult<Key extends string> = Record<
+   Key,
+   ReturnType<typeof useIntersectionObserver<Key>>
+>
 ```
 
-## Return Value
+:::
+
+## Return Value(s)
 
 The hook returns a record object where each key from the input array maps to its corresponding intersection observer result:
 
@@ -83,7 +143,7 @@ The hook returns a record object where each key from the input array maps to its
 ```
 
 ::: info
-**`{key}Element`:** Holds the element reference which is being observed, it's initial undefined.
+**`{key}Element`:** Holds the element reference which is being observed, it's initially undefined.
 
 **`set{Capitalize<key>}ElementRef`:** Setter function to store the element reference within `element`, which is going tobe observed.
 
@@ -150,6 +210,10 @@ export default function MultipleObserversExample() {
    )
 }
 ```
+
+::: danger Important
+Each key in the array creates a separate `useIntersectionObserver` instance. While this provides maximum flexibility, consider the performance impact when observing many elements simultaneously.
+:::
 
 ### Navigation Visibility Tracker
 
@@ -248,44 +312,3 @@ export default function NavigationTracker() {
 -  **Animation choreography:** Coordinate animations across multiple elements
 -  **Performance monitoring:** Track which sections users actually view
 -  **Infinite scroll sections:** Manage multiple loading zones in complex layouts
-
-## Performance Considerations
-
-::: danger Important
-Each key in the array creates a separate `useIntersectionObserver` instance. While this provides maximum flexibility, consider the performance impact when observing many elements simultaneously.
-:::
-
-::: tip
-For better performance with many elements, consider grouping related observations or using a single observer with multiple targets if the behavior is identical.
-:::
-
-## TypeScript Benefits
-
-The hook provides excellent TypeScript support with:
-
--  **Readonly keys array:** Ensures keys are treated as literal types for better inference
--  **Mapped return types:** Each key gets properly typed observer properties
--  **Consistent API:** All observers follow the same naming pattern as the base hook
-
-```tsx
-// Type-safe usage
-const observers = useMultipleIntersectionObserver(['hero', 'about'] as const)
-
-// TypeScript knows these properties exist:
-observers.hero.setHeroElementRef
-observers.hero.isHeroElementIntersecting
-observers.about.setAboutElementRef
-observers.about.isAboutElementIntersecting
-```
-
-## Relationship to useIntersectionObserver
-
-::: details
-
-This hook is a thin wrapper around `useIntersectionObserver` that:
-
--  Creates multiple observer instances with the same configuration
--  Provides a convenient API for managing related observations
--  Maintains all the features and behavior of the base hook
--  Uses the same TypeScript patterns for consistent developer experience
-   :::
