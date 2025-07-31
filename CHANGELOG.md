@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.13
+
+### Minor Changes
+
+-  ff4615c: docs: revamp to new doc version for `use-multi-intersection-observer`
+
 ## 2.0.0-canary.12
 
 ### Patch Changes
