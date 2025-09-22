@@ -5,6 +5,7 @@
     "classic-react-hooks": "1.4.0"
   },
   "changesets": [
+    "brown-wolves-play",
     "clean-coats-occur",
     "cool-emus-lie",
     "cuddly-melons-turn",

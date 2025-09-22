@@ -1,5 +1,27 @@
 # classic-react-hooks
 
+## 2.0.0-canary.14
+
+### Minor Changes
+
+-  a2f9744: ## Major Rewrite for the Documentation
+   -  home page and overview
+   -  use-can-reach-to-internet
+   -  use-copy-to-clipboard
+   -  use-counter
+   -  use-debounced-fn
+   -  use-event-listener
+   -  use-intersection-observer
+   -  use-multi-intersection-observer
+   -  use-interval-effect
+   -  use-on-mount-effect
+   -  use-outside-effect
+   -  use-synced-effect
+   -  use-synced-ref
+   -  use-throttled-fn
+   -  use-timeout-effect
+   -  use-window-resize
+
 ## 2.0.0-canary.13
 
 ### Minor Changes
