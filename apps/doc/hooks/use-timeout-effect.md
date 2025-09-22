@@ -9,9 +9,8 @@ A React hook that fires a provided callback after a specified timeout, similar t
 ## Features
 
 -  **Scheduled execution:** Executes a callback after a specified delay
--  **Flexible:** Provides methods to clear or restart the timer
--  **Automatic Cleanup:** Automatically cleans up timer on component unmount
--  **Syncronization:** Syncs with the latest callback and timeout values
+-  **Flexible control:** Provides methods to clear or restart the timer
+-  **Auto cleanup:** Automatically clears up timer on component unmount
 
 ## Parameters
 
@@ -20,12 +19,14 @@ A React hook that fires a provided callback after a specified timeout, similar t
 | handler   | Function |    ✅    |       -       | The callback function to execute after the timeout     |
 | timeout   |  number  |    ❌    |      100      | The delay in milliseconds before executing the handler |
 
-## Returns
+## Return value(s)
 
--  Returns an object with control methods:
+This hooks returns an object having several utility functions for controlling the timeout-effect:
 
-   -  `clearTimer` : `() => void` Cancels the current timeout, preventing the handler from executing
-   -  `restartTimer` : `() => void` Clears the current timer and starts a new one. Optionally accepts a new timeout value
+| Property     | Type                            | Description                                                                                                                                                                                    |
+| ------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| clearTimer   | () => void                      | Clears the current timeout timer, preventing the handler from executing if it hasn't already run. Similar to calling `clearTimeout()` on a standard timeout.                                   |
+| restartTimer | (new_interval?: number) => void | Clears the current timer and starts a new one. Optionally accepts a `new_interval` parameter to use a different timeout duration. If no interval is provided, uses the original timeout value. |
 
 ## Usage Examples
 
@@ -48,8 +49,3 @@ export default function BasicExample() {
    return <div>{message}</div>
 }
 ```
-
-## Important Notes
-
--  The hook uses `useSyncedRef` to ensure the latest callback and timeout values are always used.
--  The restartTimer method can accept an optional new timeout value, otherwise it uses the original timeout.

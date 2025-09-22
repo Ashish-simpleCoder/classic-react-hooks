@@ -4,52 +4,31 @@ outline: deep
 
 # use-intersection-observer
 
-A React hook that provides a declarative way to observe element visibility using the Intersection Observer API with automatic cleanup and type-safe manner.
+A React hook that provides a declarative way to observe element visibility using the [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) API.
 
 ::: danger Important
 
 This hook automatically checks for `IntersectionObserver` support and logs a warning in development if it's not available. The hook will gracefully handle unsupported browsers by not creating observers.
 :::
 
-::: info
-IntersectionObserver is supported in all modern browsers. For older browsers, you may need to include a polyfill.
-:::
-
 ## Features
 
--  **Auto cleanup:** Observer is automatically disconnected on unmount or element changes
--  **Reactive:** The hook re-evaluates and potentially re-creates observers when dependencies change
--  **Type-safe:** Full TypeScript support with dynamic property naming based on key
--  **Flexible keys:** Support for custom property naming through the `key` parameter
--  **Standard options:** Full support for all `IntersectionObserverInit` options (root, rootMargin, threshold)
--  **Performance:** Observer is only created when element exists and IntersectionObserver is supported
+-  **Auto cleanup:** Automatic cleanup of observers on unmount and dependency change
+-  **Reactive:** Potentially re-attaches observers on dependency change(element, onlyTriggerOnce)
+-  **Flexible keys:** Support for custom property naming through the `key` parameter with full-type safety
 -  **One-time observation:** Built-in support for observing elements only once
+-  **Standard options:** Full support for all `IntersectionObserverInit` options ([root](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/root), [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds))
+
+::: tip
+The hook uses `useSyncedRef` to avoid unnecessary re-renders when callback functions change
+:::
 
 ## Problem It Solves
 
-::: info **Multiple Instance Management**
+::: details **Multiple Instance Management with Type-Safety**
 
--  **Dynamic Key System:** Allows multiple intersection observers in the same component without naming conflicts
--  **Type-Safe Property Generation:** Each instance gets uniquely named properties with full TypeScript support
+-  **Type-Safe & Dynamic Key Property Generation:** Each instance gets uniquely named properties with full TypeScript support and IntelliSense
 -  **Scalable Architecture:** Can observe unlimited elements without property collisions
-   :::
-
-::: info **Complex Intersection Observer Boilerplate**
-
--  **Eliminates** repetitive `IntersectionObserver` setup and teardown code
--  **Abstracts** away the complexity of observer lifecycle management
--  **Reduces** component code by `15-20 lines` per intersection observation
-   :::
-
-::: info **One-Time Observation Complexity**
-
--  `onlyTriggerOnce` option for automatically cleaning up observer after first intersection
-   :::
-
-::: info **Type Safety in Dynamic Scenarios**
-
--  Full TypeScript support with template literal types
--  IntelliSense support for dynamically generated property names
 
 ```tsx
 // Without key
@@ -63,26 +42,36 @@ const { sidebarElement, setSidebarElementRef, isSidebarElementIntersecting } = u
 
 :::
 
-::: tip
-The hook uses `useSyncedRef` to avoid unnecessary re-renders when callback functions change
-:::
+::: details **One-Time Observation Complexity**
+
+-  `onlyTriggerOnce` option for automatically cleaning up observer after first intersection
+   :::
 
 ## Parameters
 
-| Parameter |                 Type                  | Required | Default Value | Description                                        |
-| --------- | :-----------------------------------: | :------: | :-----------: | -------------------------------------------------- |
-| options   | [IntersectionObserverOptions](#types) |    ❌    |   undefined   | Configuration object for the intersection observer |
+| Parameter |                       Type                       | Required | Default Value | Description                                        |
+| --------- | :----------------------------------------------: | :------: | :-----------: | -------------------------------------------------- |
+| options   | [IntersectionObserverOptions](#type-definitions) |    ❌    |   undefined   | Configuration object for the intersection observer |
 
 ### Options Parameter
 
-| Property          |                     Type                     |   Default   | Description                                    |
-| ----------------- | :------------------------------------------: | :---------: | ---------------------------------------------- |
-| `key`             |                   `string`                   |    `''`     | Custom key for property naming                 |
-| `onIntersection`  | `(entry: IntersectionObserverEntry) => void` | `undefined` | Callback fired on intersection changes         |
-| `onlyTriggerOnce` |                  `boolean`                   |   `false`   | Whether to observe only the first intersection |
-| `root`            |        `Element \| Document \| null`         |   `null`    | Root element for intersection                  |
-| `rootMargin`      |                   `string`                   |   `'0px'`   | Margin around root element                     |
-| `threshold`       |             `number \| number[]`             |     `0`     | Intersection ratio threshold(s)                |
+The `options` parameter accepts an object that extends the standard `IntersectionObserverInit` with an additional custom property for conditional event handling and post callback.
+
+#### Standard IntersectionObserverInit Options
+
+| Property   |            Type             | Default | Description                     |
+| ---------- | :-------------------------: | :-----: | ------------------------------- |
+| key        |           string            |   ''    | Custom key for property naming  |
+| root       | Element \| Document \| null |  null   | Root element for intersection   |
+| rootMargin |           string            |   0px   | Margin around root element      |
+| threshold  |     number \| number[]      |    0    | Intersection ratio threshold(s) |
+
+#### Custom Options
+
+| Property        |                    Type                    |  Default  | Description                                               |
+| --------------- | :----------------------------------------: | :-------: | --------------------------------------------------------- |
+| onlyTriggerOnce |                  boolean                   |   false   | Controls whether to observe only the initial intersection |
+| onIntersection  | (entry: IntersectionObserverEntry) => void | undefined | Callback fired on every intersection of the element       |
 
 ### Type Definitions
 
@@ -122,12 +111,18 @@ The hook returns an object with dynamically named properties based on the `key` 
 -  **With key:** `{key}Element`, `set{Key}ElementRef`, `is{Key}ElementIntersecting`
 
 ::: info
-**`element`:** Holds the element reference which is being observed, it's initial undefined.
+**`element`:** Holds the reference of element which is being observed, initial value is undefined.
 
-**`setElementRef`:** Setter function to store the element reference within `element`, which is going tobe observed.
+**`setElementRef`:** A Setter function to store the element reference within `element`, which will be observed.
 
 **`isElementIntersecting`:** Holds the boolean intersection status of the `element` weather it is intersecting the screen or not.
 :::
+
+## Common Use Cases
+
+-  **Lazy loading:** Load images or content when they come into view
+-  **Infinite scrolling:** Load more content when reaching the end
+-  **Performance optimization:** Pause expensive operations when elements are not visible
 
 ## Usage Examples
 
@@ -145,15 +140,9 @@ export default function BasicExample() {
    })
 
    return (
-      <div style={{ height: '200vh' }}>
-         <div style={{ marginTop: '100vh' }}>
-            <div
-               ref={setElementRef}
-               style={{
-                  padding: '20px',
-                  backgroundColor: isElementIntersecting ? 'lightgreen' : 'lightcoral',
-               }}
-            >
+      <div className='h-[200vh]'>
+         <div className='mt-[100vh]'>
+            <div ref={setElementRef} className={`p-5 ${isElementIntersecting ? 'bg-green-200' : 'bg-red-200'}`}>
                {isElementIntersecting ? 'Visible!' : 'Not visible'}
             </div>
          </div>
@@ -180,18 +169,13 @@ export default function CustomKeyExample() {
       <div>
          <header
             ref={setHeroElementRef}
-            style={{
-               height: '400px',
-               backgroundColor: isHeroElementIntersecting ? 'blue' : 'gray',
-               color: 'white',
-               display: 'flex',
-               alignItems: 'center',
-               justifyContent: 'center',
-            }}
+            className={`h-96 ${
+               isHeroElementIntersecting ? 'bg-blue-500' : 'bg-gray-500'
+            } text-white flex items-center justify-center`}
          >
-            <h1>Hero Section {isHeroElementIntersecting ? '(Visible)' : '(Hidden)'}</h1>
+            <h1 className='text-3xl font-bold'>Hero Section {isHeroElementIntersecting ? '(Visible)' : '(Hidden)'}</h1>
          </header>
-         <div style={{ height: '200vh', padding: '20px' }}>
+         <div className='h-[200vh] p-5'>
             <p>Scroll to see the hero section intersection status change</p>
          </div>
       </div>
@@ -224,17 +208,10 @@ export default function OneTimeExample() {
    })
 
    return (
-      <div style={{ height: '200vh' }}>
-         <div style={{ marginTop: '150vh' }}>
-            <div
-               ref={setElementRef}
-               style={{
-                  padding: '40px',
-                  backgroundColor: hasBeenSeen ? 'gold' : 'lightblue',
-                  textAlign: 'center',
-               }}
-            >
-               {hasBeenSeen ? 'I was seen! 🎉' : 'Scroll down to see me'}
+      <div className='h-[200vh]'>
+         <div className='mt-[150vh]'>
+            <div ref={setElementRef} className={`p-10 text-center ${hasBeenSeen ? 'bg-yellow-300' : 'bg-blue-200'}`}>
+               {hasBeenSeen ? 'I was seen!' : 'Scroll down to see me'}
             </div>
          </div>
       </div>
@@ -261,19 +238,13 @@ export default function MultipleThresholdsExample() {
    })
 
    return (
-      <div style={{ height: '200vh', padding: '20px' }}>
-         <div style={{ height: '100vh' }} />
+      <div className='h-[200vh] p-5'>
+         <div className='h-screen' />
          <div
             ref={setElementRef}
-            style={{
-               height: '300px',
-               backgroundColor: isElementIntersecting ? 'lightgreen' : 'lightcoral',
-               display: 'flex',
-               alignItems: 'center',
-               justifyContent: 'center',
-            }}
+            className={`h-72 ${isElementIntersecting ? 'bg-green-200' : 'bg-red-200'} flex items-center justify-center`}
          >
-            <h2>Check console for intersection percentage</h2>
+            <h2 className='text-xl font-semibold'>Check console for intersection percentage</h2>
          </div>
       </div>
    )
@@ -281,12 +252,3 @@ export default function MultipleThresholdsExample() {
 ```
 
 :::
-
-## Common Use Cases
-
--  **Lazy loading:** Load images or content when they come into view
--  **Animation triggers:** Start animations when elements become visible
--  **Analytics:** Track when users view certain sections
--  **Infinite scrolling:** Load more content when reaching the end
--  **Sticky navigation:** Show/hide navigation based on hero section visibility
--  **Performance optimization:** Pause expensive operations when elements are not visible

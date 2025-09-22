@@ -6,13 +6,26 @@ outline: deep
 
 A React hook that executes a callback function only once after the component mounts. This is a simplified wrapper around useEffect with an empty dependency array.
 
+::: tip
 This hook is perfect for initialization logic that should run exactly once when a component first renders.
+:::
+
+## Features
+
+-  **One-time execution:** Runs callback only once after component mounts
+-  **Mount-only focus:** Explicitly designed for mount-time operations
+-  **Compatible API:** Wrapper around `useEffect` hook
 
 ## Parameters
 
-| Parameter |         Type         | Required | Default Value | Description                                                                   |
-| --------- | :------------------: | :------: | :-----------: | ----------------------------------------------------------------------------- |
-| cb        | React.EffectCallback |    ✅    |       -       | Callback function to execute once after mount. Can return a cleanup function. |
+| Parameter |         Type         | Required | Default Value | Description                                                                                             |
+| --------- | :------------------: | :------: | :-----------: | ------------------------------------------------------------------------------------------------------- |
+| cb        | React.EffectCallback |    ✅    |       -       | The callback function to execute once after component mounts. Can optionally return a cleanup function. |
+
+## Common Use Cases
+
+-  **Setup Initialization:** Running one-time setup code
+-  **Third-party libraries:** Initializing external libraries or plugins
 
 ## Usage Examples
 
@@ -39,8 +52,3 @@ export default function YourComponent() {
 | Dependency mistakes | ⚠️ Easy to forget [] | ✅ No dependencies needed |
 | TypeScript support  | ✅ Yes               | ✅ Yes                    |
 | Cleanup support     | ✅ Yes               | ✅ Yes                    |
-
-## Common Use Cases
-
--  Setting up initial state or configuration
--  Any one-time setup that shouldn't repeat after component mount

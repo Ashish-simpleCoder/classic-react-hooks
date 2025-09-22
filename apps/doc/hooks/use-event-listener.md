@@ -4,57 +4,87 @@ outline: deep
 
 # use-event-listener
 
-A React hook that provides a declarative way to add DOM event listeners with automatic cleanup.
+A React hook which provides a simple and declarative way to add DOM event listeners with automatic cleanup.
 
 ## Features
 
--  **Auto cleanup:** Events are automatically removed on unmount or dependency changes
--  **Reactive:** The hook re-evaluates and potentially re-attaches listeners when any dependency changes (target, event, options)
--  **Conditional events:** Built-in support for conditionally enabling/disabling event
--  **Performance:** Event listeners are only attached when all conditions are met: target exists, handler is provided, and `shouldInjectEvent` is true
+-  **Auto cleanup:** Automatic cleanup of events on unmount and dependency change
+-  **Reactive:** Potentially re-attaches listeners on dependency change(target, event, options)
+-  **Conditional event:** Conditional event support with feature flag. And listeners only get attached when:- target exists, handler is provided, and `shouldInjectEvent` is true
 -  **Standard options:** Full support for all `AddEventListenerOptions` (capture, once, passive, signal)
 
 ## Problem It Solves
 
-::: info **Declarative API**
+::: details **Boilerplate Reduction**
 
--  Event handling becomes part of component's declarative structure
--  Better integration with React's mental model
-   :::
+-  **Problem:** Manually managing event listeners in React components leads to verbose, repetitive and error-prone code with potential memory leaks.
 
-::: info **Boilerplate Reduction**
+```tsx
+// ❌ Problematic approach which is redundant and verbose
+function Component() {
+   const [scrollY, setScrollY] = useState(0)
+
+   useEffect(() => {
+      const handleScroll = () => {
+         setScrollY(window.scrollY)
+      }
+
+      window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll) // Doing proper cleanup on unmount
+   }, [])
+
+   return <div>Current: {scrollY}</div>
+}
+```
+
+**Solution:**
 
 -  Eliminates repetitive `addEventListener/removeEventListener` code
 -  Reduces component complexity by abstracting event handling logic
--  No need to manually manage cleanup in useEffect return functions.
-   Automatic cleanup ensures event listeners are removed when
+-  Automatic cleanup ensures listeners are removed when:-
 
    -> Component unmounts
 
-   -> Target element changes
+   -> `Target` element changes
 
-   -> Event type changes
+   -> `Event` type changes
 
-   -> Options params `shouldInjectEvent`, `capture`, `once`, `passive`, `signal` gets changed
+   -> Any of `Options` params:- `shouldInjectEvent`, `capture`, `once`, `passive`, `signal` gets changed
+
+```tsx
+// ✅ Clean, declarative approach
+function Component() {
+   const [scrollY, setScrollY] = useState(0)
+   const breakpoint = useEventListener({
+      target: () => window,
+      event: 'scroll',
+      handler: () => {
+         setScrollY(window.scrollY)
+      },
+   })
+
+   return <div>Current: {scrollY}</div>
+}
+```
 
 :::
 
-::: info **Performance Benefits**
+::: details **Performance Benefits**
 
--  Stable references which prevent event listeners from being repeatedly added/removed
+-  Stable references accross re-renders which prevents listeners from being repeatedly added/removed
 
--  Efficient dependency tracking in the effect hooks
+-  Efficient dependency tracking
 
 :::
 
 ## Parameters
 
-| Parameter |        Type         | Required | Default Value | Description                                      |
-| --------- | :-----------------: | :------: | :-----------: | ------------------------------------------------ |
-| target    | [EvTarget](#types)  |    ✅    |       -       | Function that returns the target element or null |
-| event     |       string        |    ✅    |       -       | Event name (e.g., 'click', 'keydown', 'resize')  |
-| handler   | [EvHandler](#types) |    ❌    |   undefined   | Event handler callback function                  |
-| options   | [EvOptions](#types) |    ❌    |   undefined   | Event listener options and feature flags         |
+| Parameter |              Type              | Required | Default Value | Description                                       |
+| --------- | :----------------------------: | :------: | :-----------: | ------------------------------------------------- |
+| target    | [EvTarget](#type-definitions)  |    ✅    |       -       | Target element on which the event is listened to. |
+| event     |             string             |    ✅    |       -       | Event name (e.g. 'click', 'keydown')              |
+| handler   | [EvHandler](#type-definitions) |    ❌    |   undefined   | Event listener callback function                  |
+| options   | [EvOptions](#type-definitions) |    ❌    |   undefined   | Event listener options and feature flags          |
 |           |
 
 ### Options Parameter
@@ -63,18 +93,18 @@ The `options` parameter accepts an object that extends the standard `AddEventLis
 
 #### Standard AddEventListenerOptions
 
-| Property  | Type          | Default     | Description                                                                      |
-| --------- | ------------- | ----------- | -------------------------------------------------------------------------------- |
-| `capture` | `boolean`     | `false`     | If `true`, the listener will be triggered during the capture phase               |
-| `once`    | `boolean`     | `false`     | If `true`, the listener will be automatically removed after being triggered once |
-| `passive` | `boolean`     | `false`     | If `true`, indicates that the function will never call `preventDefault()`        |
-| `signal`  | `AbortSignal` | `undefined` | An AbortSignal that can be used to remove the event listener                     |
+| Property | Type        | Default   | Description                                                                      |
+| -------- | ----------- | --------- | -------------------------------------------------------------------------------- |
+| capture  | boolean     | false     | If `true`, the listener will be triggered during the capture phase               |
+| once     | boolean     | false     | If `true`, the listener will be automatically removed after being triggered once |
+| passive  | boolean     | false     | If `true`, indicates that the function will never call `preventDefault()`        |
+| signal   | AbortSignal | undefined | An AbortSignal that can be used to remove the event listener                     |
 
 #### Custom Options
 
-| Property            | Type             | Default | Description                                                                                         |
-| ------------------- | ---------------- | ------- | --------------------------------------------------------------------------------------------------- |
-| `shouldInjectEvent` | `boolean \| any` | `true`  | Controls whether the event listener should be attached. When falsy, the event listener is not added |
+| Property          | Type           | Default | Description                                                                                         |
+| ----------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------- |
+| shouldInjectEvent | boolean \| any | true    | Controls whether the event listener should be attached. When false, the event listener is not added |
 
 ### Type Definitions
 
@@ -86,10 +116,10 @@ export type EvHandler = (event: Event) => void
 
 export interface EvOptions extends AddEventListenerOptions {
    // Standard AddEventListenerOptions:
-   // capture?: boolean
-   // once?: boolean
-   // passive?: boolean
-   // signal?: AbortSignal
+   capture?: boolean
+   once?: boolean
+   passive?: boolean
+   signal?: AbortSignal
 
    // Custom option:
    shouldInjectEvent?: boolean | any // Controls whether the event should be attached
@@ -102,15 +132,15 @@ export interface EvOptions extends AddEventListenerOptions {
 
 This hook does not return anything.
 
-| Return Value | Type   | Description                                                                                           |
-| ------------ | ------ | ----------------------------------------------------------------------------------------------------- |
-| `void`       | `void` | This hook does not return any value. It performs side effects only (adding/removing event listeners). |
+## Common Use Cases
+
+-  Adding dom events (e.g 'click', 'keydown', 'resize', 'scroll')
 
 ## Usage Examples
 
 ### Basic Click Handler
 
-```ts {5,7-13,15}
+```ts {7-13}
 import { useRef } from 'react'
 import { useEventListener } from 'classic-react-hooks'
 
@@ -129,9 +159,9 @@ export default function ClickExample() {
 }
 ```
 
-::: details
+### Listening Window Event
 
-### Window Events
+::: details Example
 
 ```ts {6-9}
 import { useEventListener } from 'classic-react-hooks'
@@ -153,7 +183,7 @@ export default function WindowExample() {
 
 ### Conditional Event Listening
 
-::: details
+::: details Example
 
 ```ts
 import { useState } from 'react'
@@ -175,8 +205,7 @@ export default function ConditionalExample() {
 
    return (
       <div>
-         <button onClick={() => setIsListening(!isListening)}>{isListening ? 'Stop' : 'Start'} Listening</button> //
-         [!code ++]
+         <button onClick={() => setIsListening(!isListening)}>{isListening ? 'Stop' : 'Start'} Listening</button>
          <p>Press any key (when listening is enabled)</p>
       </div>
    )
@@ -184,7 +213,3 @@ export default function ConditionalExample() {
 ```
 
 :::
-
-## Common Use Cases
-
--  Adding dom events (e.g 'click', 'keydown', 'resize')

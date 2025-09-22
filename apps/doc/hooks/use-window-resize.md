@@ -4,41 +4,68 @@ outline: deep
 
 # use-window-resize
 
-A React hook that evaluates a callback function on window resize events and returns the result.
+A React hook that evaluates provided callback function on window resize event and returns the result of it.
 
+::: tip
 Perfect for responsive behavior based on window dimensions.
+:::
+
+::: info
+At it's core, [useEventListener](use-event-listener.html) hook is used internally for listening to resize event.
+:::
 
 ## Features
 
 -  **Custom handler:** Execute custom logic on window resize
 -  **Reactive:** Automatic re-evaluation and state updates
 -  **Configurable:** Configurable default values and event injection
--  **Underlying hook:** At its core, it uses `useEventListener` hook
+-  **Performance:** It uses [useLayoutEffect](https://react.dev/reference/react/useLayoutEffect) hook for resize event listening
 
 ## Parameters
 
-| Parameter |       Type        | Required | Default Value | Description                                 |
-| --------- | :---------------: | :------: | :-----------: | ------------------------------------------- |
-| handler   | [Handler](#types) |    ✅    |       -       | Callback function executed on window resize |
-| options   | [Options](#types) |    ❌    |   undefined   | Configuration options                       |
+| Parameter |             Type             | Required | Default Value | Description                                 |
+| --------- | :--------------------------: | :------: | :-----------: | ------------------------------------------- |
+| handler   | [Handler](#type-definitions) |    ✅    |       -       | Callback function executed on window resize |
+| options   | [Options](#type-definitions) |    ❌    |   undefined   | Configuration options                       |
 |           |
 
-### Types
+### Options Parameter
+
+| Property          | Type        | Default   | Description                                                                                                             |
+| ----------------- | ----------- | --------- | ----------------------------------------------------------------------------------------------------------------------- |
+| defaultValue      | Generic `T` | undefined | The initial value returned before the first resize event. If not provided, the `handler` is called immediately on mount |
+| shouldInjectEvent | boolean     | true      | Controls whether the resize event listener should be attached. When `false`, the listener is not added                  |
+
+### Type Definitions
+
+::: details
 
 ```ts
 type Handler<T> = () => T
 type Options<T> = { shouldInjectEvent?: boolean; defaultValue?: T }
 ```
 
-## Returns
+:::
 
--  Returns the current result of the `handler` function, updated whenever the window is resized.
+## Return value(s)
+
+Returns the evaluated result of the `handler` function call on resize event.
+
+| Return Value                      | Type        | Description                |
+| --------------------------------- | ----------- | -------------------------- |
+| Result of `handler` function call | Generic `T` | Result to use in component |
+
+## Common Use Cases
+
+-  Creating dynamic layouts
+-  Toggling element visibility based on window dimension
+-  Dynamically lazy loading components for mobile and desktop screens
 
 ## Usage Examples
 
 ### Basic Responsive Breakpoints
 
-```ts
+```ts {4-10,15-17}
 import { useWindowResize } from 'classic-react-hooks'
 
 function ResponsiveComponent() {
@@ -61,36 +88,16 @@ function ResponsiveComponent() {
 }
 ```
 
-#### Window Dimensions Tracking
+### With Default Value
 
-```ts
-import { useWindowResize } from 'classic-react-hooks'
-
-function WindowDimensions() {
-   const dimensions = useWindowResize(() => ({
-      width: window.innerWidth,
-      height: window.innerHeight,
-      aspectRatio: window.innerWidth / window.innerHeight,
-   }))
-
-   return (
-      <div>
-         <p>Width: {dimensions.width}px</p>
-         <p>Height: {dimensions.height}px</p>
-         <p>Aspect Ratio: {dimensions.aspectRatio.toFixed(2)}</p>
-      </div>
-   )
-}
-```
-
-#### With Default Value
+:::details Example
 
 ```ts
 import { useWindowResize } from 'classic-react-hooks'
 
 function ComponentWithDefault() {
    const isMobile = useWindowResize(() => window.innerWidth < 768, {
-      defaultValue: false, // Assume desktop by default
+      defaultValue: false, // Assume desktop by default          // [!code ++]
       shouldInjectEvent: false,
    })
 
@@ -98,11 +105,15 @@ function ComponentWithDefault() {
 }
 ```
 
+:::
+
 ## Advanced Usage
 
 ### Debounced Resize Handler
 
-```ts
+::: details Example
+
+```ts {7-10}
 import { useMemo } from 'react'
 import { useWindowResize, useDebouncedFn } from 'classic-react-hooks'
 
@@ -122,12 +133,4 @@ function ExpensiveCalculation() {
 }
 ```
 
-## Important Notes
-
--  Initial value is determined by either `defaultValue` or calling `handler()` immediately.
-
-## Common Use Cases
-
--  Creating dynamic layouts
--  Toggling element visibility based on window dimension
--  Dynamically lazy loading components for mobile and desktop screens
+:::

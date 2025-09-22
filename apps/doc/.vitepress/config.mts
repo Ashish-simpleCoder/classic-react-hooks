@@ -118,9 +118,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
             { text: 'use-outside-click', link: 'use-outside-click' },
             { text: 'use-debounced-fn', link: 'use-debounced-fn' },
             { text: 'use-throttled-fn', link: 'use-throttled-fn' },
-            { text: 'use-can-reach-to-internet', link: 'use-can-reach-to-internet' ,collapsed: true,items:[
-               { text: 'CanReachToInternetCtxProvider', link: 'components/CanReachToInternetCtxProvider',base:'/' },
-            ]},
+            { text: 'use-can-reach-to-internet', link: 'use-can-reach-to-internet' ,collapsed: true},
             { text: 'use-timeout-effect', link: 'use-timeout-effect' },
             { text: 'use-interval-effect', link: 'use-interval-effect' },
             { text: 'use-synced-ref', link: 'use-synced-ref' },

@@ -4,29 +4,106 @@ outline: deep
 
 # use-synced-ref
 
-A React hook that creates a ref that automatically stays in sync with the provided value.
-
-This eliminates the need to manually update refs and helps avoid stale closure issues in callbacks and effects.
+A React hook that creates a ref that automatically stays in sync with the provided value, ensuring you always have access to the latest state in asynchronous operations.
 
 ## Features
 
--  **Reactive:** Automatic synchronization with any value
--  **Prevent State Closure:** Prevents stale closure problems
--  **No Re-render:** Zero re-renders - purely ref-based
+-  **Always current:** Ref automatically updates to reflect the latest value
+-  **Stale closure prevention:** Prevents accessing stale values in async operations
+-  **Simple API:** Minimal interface with automatic synchronization
+-  **Type safe:** Full TypeScript support with generic typing
+
+## Problem It Solves
+
+::: details **Stale Closure Problem**
+
+**Problem:** In React, when you capture state values in closures (like in `setTimeout`, event handlers, or async operations), you might get stale values due to how JavaScript closures work.
+
+```tsx
+// ❌ Problematic approach - stale closure issue
+function Component() {
+   const [count, setCount] = useState(0)
+
+   const handleAsyncOperation = () => {
+      setTimeout(() => {
+         // This will always log the value of count when handleAsyncOperation was called
+         // Not the current value after 2 seconds
+         console.log('Stale count:', count) // Might be outdated!
+      }, 2000)
+   }
+
+   return (
+      <div>
+         <p>Count: {count}</p>
+         <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+         <button onClick={handleAsyncOperation}>Log count after 2s</button>
+      </div>
+   )
+}
+```
+
+**Solution:**
+
+-  Provides a ref that always contains the current value
+-  Eliminates stale closure issues in async operations
+-  Ensures you can access the latest state regardless of when the closure was created
+
+```tsx
+// ✅ Clean approach with useSyncedRef
+function Component() {
+   const [count, setCount] = useState(0)
+   const countRef = useSyncedRef(count)
+
+   const handleAsyncOperation = () => {
+      setTimeout(() => {
+         // countRef.current always has the latest value
+         console.log('Current count:', countRef.current) // Always up-to-date!
+      }, 2000)
+   }
+
+   return (
+      <div>
+         <p>Count: {count}</p>
+         <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+         <button onClick={handleAsyncOperation}>Log count after 2s</button>
+      </div>
+   )
+}
+```
+
+:::
+
+::: details **Performance Benefits**
+
+-  Lightweight solution with minimal overhead
+-  No unnecessary re-renders or effect dependencies
+-  Simple ref assignment on every render ensures synchronization
+
+:::
 
 ## Parameters
 
-| Parameter | Type | Required | Default Value | Description                                       |
-| --------- | :--: | :------: | :-----------: | ------------------------------------------------- |
-| value     | any  |    ✅    |       -       | Any value to be tracked and kept in sync with ref |
+| Parameter | Type | Required | Default Value | Description                                 |
+| --------- | :--: | :------: | :-----------: | ------------------------------------------- |
+| state     |  T   |    ✅    |       -       | The value to keep synchronized with the ref |
 
-## Returns
+## Return Value(s)
 
--  Returns a `React.MutableRefObject<T>` that always contains the latest value of the provided state.
+This hook returns the ref version of the provided state, which auto syncs up
 
-## Usage
+| Return Value | Type          | Description                                                                           |
+| ------------ | ------------- | ------------------------------------------------------------------------------------- |
+| syncedRef    | RefObject<T\> | A mutable ref object whose `.current` property always contains the latest state value |
 
-### Basic Example
+## Common Use Cases
+
+-  **Async operations:** Accessing latest state in `setTimeout`, `setInterval`, or API calls
+-  **Event handlers:** Ensuring event callbacks have access to current state without stale closures
+-  **WebSocket handlers:** Accessing current state in WebSocket message handlers
+
+## Usage Examples
+
+### Basic State Synchronization
 
 ```ts
 import { useState } from 'react'
@@ -54,51 +131,44 @@ export default function Counter() {
 }
 ```
 
-## Problem It Solves
+### Event Handlers with Latest State
 
-### The Stale Closure Problem
+::: details Example
 
-In React, when you use hooks like useEffect, useCallback, or setTimeout with dependency arrays, you often encounter stale closure issues:
+```ts {6,11}
+import { useState, useCallback } from 'react'
+import { useSyncedRef } from 'classic-react-hooks'
 
-```ts
-// ❌ Problematic code
-function ProblematicComponent() {
-   const [count, setCount] = useState(0)
+export default function EventExample() {
+   const [messages, setMessages] = useState<string[]>([])
+   const messagesRef = useSyncedRef(messages)
 
-   useEffect(() => {
-      const interval = setInterval(() => {
-         console.log(count) // Always logs 0 (stale closure)
-      }, 1000)
-      return () => clearInterval(interval)
-   }, []) // Empty deps = stale closure
+   const handleKeyPress = useCallback((event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+         // Always access the latest messages array
+         const currentMessages = messagesRef.current
+         console.log('Current messages count:', currentMessages.length)
 
-   // vs
-
-   useEffect(() => {
-      const interval = setInterval(() => {
-         console.log(count) // Works but recreates interval on every count change
-      }, 1000)
-      return () => clearInterval(interval)
-   }, [count]) // Including count fixes staleness but causes recreation
-}
-
-// ✅ Solution with useSyncedRef
-function SolvedComponent() {
-   const [count, setCount] = useState(0)
-   const countRef = useSyncedRef(count)
+         setMessages((prev) => [...prev, `Message ${prev.length + 1}`])
+      }
+   }, []) // No need to include messages in dependencies
 
    useEffect(() => {
-      const interval = setInterval(() => {
-         console.log(countRef.current) // Always logs latest count
-      }, 1000)
-      return () => clearInterval(interval)
-   }, []) // Empty deps = no recreation, no staleness!
+      document.addEventListener('keydown', handleKeyPress)
+      return () => document.removeEventListener('keydown', handleKeyPress)
+   }, [handleKeyPress])
+
+   return (
+      <div>
+         <p>Press Enter to add messages</p>
+         <ul>
+            {messages.map((msg, index) => (
+               <li key={index}>{msg}</li>
+            ))}
+         </ul>
+      </div>
+   )
 }
 ```
 
-## Common Use Cases
-
--  Accessing latest state in intervals/timeouts
--  Event handlers that need current state
--  Custom hooks with complex state dependencies
--  Preventing effect recreations while avoiding stale closures
+:::
