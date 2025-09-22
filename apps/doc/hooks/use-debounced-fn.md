@@ -2,47 +2,87 @@
 outline: deep
 ---
 
-# use-debouced-fn
+# use-debounced-fn
 
 A React hook that returns a debounced version of any function, delaying its execution until after a specified delay has passed since the last time it was invoked.
 
-Perfect for optimizing performance in scenarios like search inputs, API calls, or resize handlers.
-
 ## Features
 
--  **Debouncing Functionality:** Delaying function execution until after a specified period of inactivity. Calling the function again before the delay expires, the previous call is cancelled and the timer resets.
--  **Configurable Delay:** You can specify a custom delay period, with a sensible default of 300ms.
--  **Dynamic Props Updates:** The hook properly handles updates to both the callback function and delay value during re-renders without losing the debouncing behavior.
--  **Performance optimized:** Prevents excessive function calls
--  **Auto cleanup:** Automatically clears timers on component unmount and on delay prop change
+-  **Auto cleanup:** Timeouts are automatically cleared on unmount or dependency changes
+-  **Flexible delay:** Configurable delay with sensible defaults
+-  **Performance optimized:** Prevents excessive function calls during rapid user interactions
+-  **Error handling:** Preserves original function's error behavior
 
-## Parameters
+## Problem It Solves
 
-| Parameter        |   Type   | Required | Default Value | Description                                           |
-| ---------------- | :------: | :------: | :-----------: | ----------------------------------------------------- |
-| callbackToBounce | Function |    ✅    |       -       | The function to be debounced                          |
-| delay            |  number  |    ❌    |      300      | Delay in milliseconds before the function is executed |
+::: details **Boilerplate Reduction**
 
-## Returns
+**Problem:** Manually implementing debouncing in React components leads to lengthy, error-prone code with potential memory leaks and stale closures.
 
--  Returns a debounced version of the provided function that will only execute after the specified delay has passed since the last invocation.
+```tsx
+// ❌ Problematic approach which is redundant and lengthy
+function SearchInput() {
+   const [query, setQuery] = useState('')
+   const [results, setResults] = useState([])
+   const timeoutRef = useRef<NodeJS.Timeout>()
 
-## Usage Examples
+   const handleSearch = useCallback(async (searchTerm: string) => {
+      if (timeoutRef.current) {
+         clearTimeout(timeoutRef.current)
+      }
 
-### Basic debouncing
+      timeoutRef.current = setTimeout(async () => {
+         try {
+            if (searchTerm.trim()) {
+               const response = await fetch(`/api/search?q=${searchTerm}`)
+               const data = await response.json()
+               setResults(data.results)
+            }
+         } catch (error) {
+            console.error('Search failed:', error)
+         }
+      }, 500)
+   }, [])
 
-```ts
-import { useState, useEffect } from 'react'
-import { useDebouncedFn } from 'classic-react-hooks'
+   useEffect(() => {
+      return () => {
+         if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current) // Manual cleanup on unmount
+         }
+      }
+   }, [])
 
-export default function SearchInput() {
+   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      setQuery(value)
+      handleSearch(value)
+   }
+
+   return <input value={query} onChange={handleInputChange} placeholder='Search...' />
+}
+```
+
+**Solution:**
+
+-  Eliminates repetitive debounce timing logic
+-  Automatic cleanup ensures timeouts are cleared when:
+
+   → Component unmounts
+
+   → Delay value changes
+
+   → Function reference changes
+
+```tsx
+// ✅ Clean, declarative approach
+function SearchInput() {
    const [query, setQuery] = useState('')
    const [results, setResults] = useState([])
 
    const debouncedSearch = useDebouncedFn({
       callbackToBounce: async (searchTerm: string) => {
          if (searchTerm.trim()) {
-            const response = await fetch(`https://dummyjson.com/users/search?q=${searchTerm}`)
+            const response = await fetch(`/api/search?q=${searchTerm}`)
             const data = await response.json()
             setResults(data.results)
          }
@@ -56,13 +96,80 @@ export default function SearchInput() {
       debouncedSearch(value)
    }
 
-   useEffect(() => {
-      ;(async function () {
-         const response = await fetch(`https://dummyjson.com/users`)
-         const data = await response.json()
-         setResults(data.results)
-      })()
-   }, [])
+   return <input value={query} onChange={handleInputChange} placeholder='Search...' />
+}
+```
+
+:::
+
+::: details **Performance Benefits**
+
+-  **Reduces execution frequency:** Limits function calls during rapid user input
+-  **Memory efficient:** Proper cleanup prevents memory leaks from pending timeouts
+-  **Stable references:** Function reference remains stable across re-renders
+
+:::
+
+## Parameters
+
+| Parameter        |               Type               | Required | Default Value | Description                                     |
+| ---------------- | :------------------------------: | :------: | :-----------: | ----------------------------------------------- |
+| callbackToBounce | [DebouncedFn](#type-definitions) |    ✅    |       -       | The function to debounce                        |
+| delay            |              number              |    ❌    |     300ms     | Delay in milliseconds before function execution |
+
+### Type Definitions
+
+::: details
+
+```ts
+export type DebouncedFn<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void
+```
+
+:::
+
+## Return Value(s)
+
+The hook returns a debounced version of the provided callback.
+
+| Return Value  | Type                               | Description                                                                             |
+| ------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `debouncedFn` | `(...args: Parameters<T>) => void` | Debounced version of the original function that delays execution by the specified delay |
+
+## Common Use Cases
+
+-  **Search functionality:** Debouncing search queries to reduce API calls
+-  **API rate limiting:** Preventing excessive API requests
+
+## Usage Examples
+
+### Basic Search Debouncing
+
+```tsx {10-17}
+import { useState } from 'react'
+import { useDebouncedFn } from 'classic-react-hooks'
+
+export default function SearchExample() {
+   const [query, setQuery] = useState('')
+   const [results, setResults] = useState([])
+
+   const debouncedSearch = useDebouncedFn({
+      callbackToBounce: async (searchTerm: string) => {
+         if (searchTerm.trim()) {
+            const response = await fetch(`https://api.example.com/search?q=${searchTerm}`)
+            const data = await response.json()
+            setResults(data.results)
+         } else {
+            setResults([])
+         }
+      },
+      delay: 500,
+   })
+
+   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      setQuery(value)
+      debouncedSearch(value)
+   }
 
    return (
       <div>
@@ -75,30 +182,4 @@ export default function SearchInput() {
       </div>
    )
 }
-```
-
-## Common Use Cases
-
--  Delay API calls until user stops typing
--  Validate fields after user pauses input
--  Prevent excessive API calls
-
-## Alternative: Non-React Usage
-
-For use outside of React components, use the standalone wrapper:
-
-```ts
-import { debouncedFnWrapper } from 'classic-react-hooks'
-
-const { fn: debouncedLog, cleanup } = debouncedFnWrapper({
-   callbackToBounce: (message: string) => console.log(message),
-   delay: 1000,
-})
-
-// Use the debounced function
-debouncedLog('Hello')
-debouncedLog('World') // Only 'World' will be logged after 1 second
-
-// Clean up when done
-cleanup()
 ```

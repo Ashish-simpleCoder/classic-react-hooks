@@ -21,7 +21,7 @@ A type-safe React hook for managing counter state with customizable step values 
 | initialValue | number |    ❌    |       0       | Initial value for the counter.                                            |
 | stepper      | number |    ❌    |       1       | Amount to increment/decrement by on each operation.                       |
 
-## Returns
+## Return value(s)
 
 Returns a type-safe object with dynamically named properties:
 

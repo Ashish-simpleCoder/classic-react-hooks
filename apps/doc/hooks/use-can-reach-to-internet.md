@@ -14,13 +14,58 @@ A comprehensive React hook for monitoring internet connectivity status that goes
 -  **Manual control:** Start/stop polling and force connectivity checks on demand
 -  **Cleanup handling:** Proper cleanup of network requests and timers to prevent memory leaks
 
+## Problem It Solves
+
+::: details The Problem with `navigator.onLine`
+
+**Problem:** `navigator.onLine` only tells you if the browser thinks it's connected to a network, not if it can actually reach the internet.
+
+Common Scenarios Where `navigator.onLine` Fails
+
+-  **Limited Connectivity:** Your device is connected to a router, but the router has no internet connection. The browser sees the local network connection and reports online status as true.
+-  **Network Issues:** DNS problems or ISP outages where you have network connection but can't reach to external servers.
+-  **Captive Portals:** You're connected to WiFi at a hotel, airport but haven't authenticated yet. `navigator.onLine` returns true, but you can't access any websites.
+
+---
+
+**Solution:** How `useCanReachToInternet` solve these problems
+
+It provides two layers of connectivity detection
+
+-  **`isOnline`:** Browser's basic network status (via `navigator.onLine`)
+-  **`canReachToInternet`:** Actual internet reachability (via real HTTP requests to a test server)
+-  **`isFullyConnected`:** Both conditions must be true for genuine internet access
+   :::
+
+## Important Notes
+
+::: danger Important
+
+-  Performance Considerations:
+   -  Network polling makes regular HTTP requests - use appropriate intervals
+   -  Consider battery usage on mobile devices with frequent polling
+   -  The hook automatically cleans up requests to prevent memory leaks
+-  CORS Limitations:
+   -  Uses `mode: 'no-cors'` for broader compatibility
+   -  Default test URL `(https://dns.google)` is chosen for reliability
+
+:::
+
 ## Parameters
 
-| Parameter |                Type                 | Required | Default Value | Description                                        |
-| --------- | :---------------------------------: | :------: | :-----------: | -------------------------------------------------- |
-| options   | [CanReachToInternetOptions](#types) |    ❌    |      {}       | Configuration object for customizing hook behavior |
+| Parameter |                      Type                      | Required | Default Value | Description                                        |
+| --------- | :--------------------------------------------: | :------: | :-----------: | -------------------------------------------------- |
+| options   | [CanReachToInternetOptions](#type-definitions) |    ❌    |      {}       | Configuration object for customizing hook behavior |
 
-### Parameter Types
+### Options Parameter
+
+| Property               | Type    | Default             | Description                                                                                                       |
+| ---------------------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| enableNetworkPolling   | boolean | true                | Controls whether the hook should automatically and continuously check internet connectivity at regular intervals. |
+| networkPollingInterval | number  | 3000                | Specifies the interval in milliseconds for polling.                                                               |
+| testUrl                | string  | https://dns.google' | The URL endpoint used to test actual internet connectivity with HEAD method.                                      |
+
+### Type Definitions
 
 ```ts
 type CanReachToInternetOptions = {
@@ -35,19 +80,27 @@ type CanReachToInternetOptions = {
 type CanReachToInternetBoolean = boolean
 ```
 
-## Returns
+## Return value(s)
 
-| Property                      | Type            | Description                                                                      |
-| ----------------------------- | --------------- | -------------------------------------------------------------------------------- |
-| `isOnline`                    | `boolean`       | Browser's native online/offline status from `navigator.onLine`                   |
-| `canReachToInternet`          | `boolean`       | Whether the device can actually reach the internet (verified via HTTP request)   |
-| `isFullyConnected`            | `boolean`       | Combined status: `true` when both `isOnline` and `canReachToInternet` are `true` |
-| `isNetworkPollingEnabled`     | `boolean`       | Current state of automatic network polling                                       |
-| `isCheckingConnection`        | `boolean`       | Whether a connectivity check is currently in progress                            |
-| `startNetworkPolling`         | `() => void`    | Function to start automatic network polling                                      |
-| `stopNetworkPolling`          | `() => void`    | Function to stop automatic network polling                                       |
-| `forceCheckNetwork`           | `() => void`    | Function to manually trigger a connectivity check                                |
-| `getCanReachToInternetStatus` | `() => boolean` | Function to get current internet reachability status                             |
+This hook provides full list of status flags and callbacks for internet reachability tracking
+
+| Property                    | Type          | Description                                                                      |
+| --------------------------- | ------------- | -------------------------------------------------------------------------------- |
+| isOnline                    | boolean       | Browser's native online/offline status from `navigator.onLine`                   |
+| canReachToInternet          | boolean       | Whether the device can actually reach the internet (verified via HTTP request)   |
+| isFullyConnected            | boolean       | Combined status: `true` when both `isOnline` and `canReachToInternet` are `true` |
+| isNetworkPollingEnabled     | boolean       | Current state of automatic network polling                                       |
+| isCheckingConnection        | boolean       | Whether a connectivity check is currently in progress                            |
+| startNetworkPolling         | () => void    | Function to start automatic network polling                                      |
+| stopNetworkPolling          | () => void    | Function to stop automatic network polling                                       |
+| forceCheckNetwork           | () => void    | Function to manually trigger a connectivity check                                |
+| getCanReachToInternetStatus | () => boolean | Function to get current internet reachability status                             |
+
+## Common Use Cases
+
+-  **Real Internet stats:** Show connection status, disable features when offline
+-  **Error handling:** Distinguish between network errors and server errors
+-  **Auto-retry logic:** Retry failed requests when connectivity is restored
 
 ## Usage Examples
 
@@ -70,6 +123,8 @@ function NetworkStatus() {
 ```
 
 ### Conditional Rendering Based on Connectivity
+
+::: details Example
 
 ```ts
 import { useCanReachToInternet } from 'classic-react-hooks'
@@ -94,41 +149,4 @@ function DataFetchingComponent() {
 }
 ```
 
-## Problem It Solves
-
-### The Problem with `navigator.onLine`
-
-`navigator.onLine` only tells you if the browser thinks it's connected to a network, not if it can actually reach the internet.
-
-#### Common Scenarios Where `navigator.onLine` Fails
-
--  **Limited Connectivity:** Your device is connected to a router, but the router has no internet connection. The browser sees the local network connection and reports online status as true.
--  **Network Issues:** DNS problems or ISP outages where you have network connection but can't reach to external servers.
--  **Captive Portals:** You're connected to WiFi at a hotel, airport but haven't authenticated yet. `navigator.onLine` returns true, but you can't access any websites.
-
----
-
-### How `useCanReachToInternet` solve these problems
-
-It provides two layers of connectivity detection
-
--  **`isOnline`:** Browser's basic network status (via `navigator.onLine`)
--  **`canReachToInternet`:** Actual internet reachability (via real HTTP requests to a test server)
--  **`isFullyConnected`:** Both conditions must be true for genuine internet access
-
-## Common Use Cases
-
--  User experience: Show connection status, disable features when offline
--  Error handling: Distinguish between network errors and server errors
--  Auto-retry logic: Retry failed requests when connectivity is restored
-
-## Important Notes
-
--  Performance Considerations:
-   -  Network polling makes regular HTTP requests - use appropriate intervals
-   -  Consider battery usage on mobile devices with frequent polling
-   -  The hook automatically cleans up requests to prevent memory leaks
--  CORS Limitations:
-   -  Uses `mode: 'no-cors'` for broader compatibility
-   -  Some URLs might not work due to CORS policies
-   -  Default test URL `(https://dns.google)` is chosen for reliability
+:::

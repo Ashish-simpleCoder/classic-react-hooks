@@ -8,26 +8,27 @@ A React hook that executes a callback function at regular intervals, similar to 
 
 ## Features
 
--  **Scheduled execution:** Executes a callback with a fixed time delay between each call
--  **Flexible:** Provides methods to clear or restart the timer
--  **Automatic Cleanup:** Automatically cleans up timer on component unmount
--  **Syncronization:** Syncs with the latest callback and timeout values
+-  **Recurring execution:** Executes a callback at regular intervals
+-  **Flexible control:** Provides methods to clear or restart the timer with different intervals
+-  **Auto cleanup:** Automatically clears up interval on component unmount
 
 ## Parameters
 
-| Parameter |   Type   | Required | Default Value | Description                                      |
-| --------- | :------: | :------: | :-----------: | ------------------------------------------------ |
-| handler   | Function |    ✅    |       -       | Callback function executed at each interval      |
-| interval  |  number  |    ❌    |      100      | Time in milliseconds between callback executions |
+| Parameter |   Type   | Required | Default Value | Description                                                     |
+| --------- | :------: | :------: | :-----------: | --------------------------------------------------------------- |
+| handler   | Function |    ✅    |       -       | The callback function to execute at each interval               |
+| interval  |  number  |    ❌    |      100      | The delay in milliseconds between each execution of the handler |
 
-## Returns
+## Return value(s)
 
--  Returns an object with control methods:
+This hooks returns an object having several utility functions for controlling the interval-effect:
 
-   -  `clearTimer` : `() => void` Cancels the current interval, preventing the handler from executing
-   -  `restartTimer` : `() => void` Clears the current timer and starts a new one. Optionally accepts a new interval value
+| Property     | Type                            | Description                                                                                                                                                                                      |
+| ------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| clearTimer   | () => void                      | Clears the current interval timer, stopping the recurring execution of the handler. Similar to calling `clearInterval()` on a standard interval.                                                 |
+| restartTimer | (new_interval?: number) => void | Clears the current timer and starts a new one. Optionally accepts a `new_interval` parameter to use a different interval duration. If no interval is provided, uses the original interval value. |
 
-## Usage
+## Usage Examples
 
 ### Basic example
 
@@ -54,9 +55,3 @@ export default function Counter() {
    )
 }
 ```
-
-## Common Use Cases
-
--  Countdown timers
--  Real-time updates (clocks, progress bars)
--  Polling APIs at regular intervals

@@ -6,38 +6,70 @@ outline: deep
 
 A React hook that detects outside click for specified element and triggers the given callback.
 
+::: tip
 Perfect for implementing modals, dropdowns and other UI components that need to be closed when users click outside of them.
+:::
 
 ## Features
 
 -  **Precise trigger:** Precise outside click detection
 -  **Performance:** Optimized with capture phase events
--  **Underlying hook:** At its core, it uses `useEventListener` hook
+-  **Underlying hook:** At its core, it uses [useEventListener](use-event-listener.html) hook
 
 ## Parameters
 
-| Parameter |        Type         | Required | Default Value | Description                                      |
-| --------- | :-----------------: | :------: | :-----------: | ------------------------------------------------ |
-| target    | [EvTarget](#types)  |    ✅    |       -       | Function that returns the target element or null |
-| handler   | [EvHandler](#types) |    ❌    |   undefined   | Callback executed on outside click               |
-| options   | [EvOptions](#types) |    ❌    |   undefined   | Event listener options and feature flags         |
+| Parameter |              Type              | Required | Default Value | Description                                      |
+| --------- | :----------------------------: | :------: | :-----------: | ------------------------------------------------ |
+| target    | [EvTarget](#type-definitions)  |    ✅    |       -       | Function that returns the target element or null |
+| handler   | [EvHandler](#type-definitions) |    ❌    |   undefined   | Callback executed on outside click               |
+| options   | [EvOptions](#type-definitions) |    ❌    |   undefined   | Event listener options and feature flags         |
 
-### Types
+#### Standard AddEventListenerOptions
 
-```ts
+| Property | Type        | Default   | Description                                                                      |
+| -------- | ----------- | --------- | -------------------------------------------------------------------------------- |
+| capture  | boolean     | false     | If `true`, the listener will be triggered during the capture phase               |
+| once     | boolean     | false     | If `true`, the listener will be automatically removed after being triggered once |
+| passive  | boolean     | false     | If `true`, indicates that the function will never call `preventDefault()`        |
+| signal   | AbortSignal | undefined | An AbortSignal that can be used to remove the event listener                     |
+
+#### Custom Options
+
+| Property          | Type           | Default | Description                                                                                         |
+| ----------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------- |
+| shouldInjectEvent | boolean \| any | true    | Controls whether the event listener should be attached. When false, the event listener is not added |
+
+### Type Definitions
+
+::: details
+
+```tsx
 type EvTarget = () => EventTarget | null
 type EvHandler = (event: DocumentEventMap['click']) => void
+
 interface EvOptions extends AddEventListenerOptions {
    // Standard AddEventListenerOptions:
-   // capture?: boolean
-   // once?: boolean
-   // passive?: boolean
-   // signal?: AbortSignal
+   capture?: boolean
+   once?: boolean
+   passive?: boolean
+   signal?: AbortSignal
 
    // Custom option:
    shouldInjectEvent?: boolean | any // Controls whether the event should be attached
 }
 ```
+
+:::
+
+## Return Value(s)
+
+This hook does not return anything.
+
+## Common Use Cases
+
+-  Modal dialogs - Close when clicking backdrop
+-  Dropdown menus - Hide when clicking elsewhere
+-  Context menus - Dismiss on outside click
 
 ## Usage Examples
 
@@ -72,9 +104,11 @@ function Modal() {
 }
 ```
 
-#### Conditional Outside Click
+### Conditional Outside Click
 
-```ts
+::: details Example
+
+```ts {10-12}
 function ConditionalOutsideClick() {
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [isPinned, setIsPinned] = useState(false)
@@ -103,9 +137,13 @@ function ConditionalOutsideClick() {
 }
 ```
 
-#### Dynamic Target
+:::
 
-```ts
+### Dynamic Target
+
+::: details Example
+
+```ts {5,12-14,18}
 function DynamicTarget() {
    const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
 
@@ -131,8 +169,4 @@ function DynamicTarget() {
 }
 ```
 
-## Common Use Cases
-
--  Modal dialogs - Close when clicking backdrop
--  Dropdown menus - Hide when clicking elsewhere
--  Context menus - Dismiss on outside click
+:::
