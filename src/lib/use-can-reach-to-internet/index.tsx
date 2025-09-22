@@ -111,6 +111,7 @@ export default function useCanReachToInternet(options: CanReachToInternetOptions
    const [isNetworkPollingEnabled, setIsNetworkPollingEnabled] = useState(config.enableNetworkPolling)
    const [isCheckingConnection, setIsCheckingConnection] = useState(false)
    const canReachToInternetRef = useSyncedRef(canReachToInternet)
+   let isInitialCallDone = useRef(false)
 
    // Use refs to track cleanup and prevent memory leaks
    const abortControllerRef = useRef<AbortController | null>(null)
@@ -183,6 +184,12 @@ export default function useCanReachToInternet(options: CanReachToInternetOptions
    }
 
    useEffect(() => {
+      // If network polling is stopped, then do not run again.
+      // Initially trigger checker function
+      if (isInitialCallDone.current && !isNetworkPollingEnabled) {
+         return
+      }
+      isInitialCallDone.current = true
       checkIfCanReachToInternet()
 
       return handlers.current.clearPendingOperations
@@ -207,8 +214,8 @@ function subscribe(callback: () => void) {
    window.addEventListener('offline', callback)
 
    return () => {
-      window.addEventListener('online', callback)
-      window.addEventListener('offline', callback)
+      window.removeEventListener('online', callback)
+      window.removeEventListener('offline', callback)
    }
 }
 // getting network connection status
