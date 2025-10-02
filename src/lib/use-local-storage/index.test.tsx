@@ -32,13 +32,13 @@ const createMockEventSystem = () => {
          if (!eventListeners[event]) {
             eventListeners[event] = []
          }
-         eventListeners[event].push(callback)
+         eventListeners[event]?.push(callback)
       }),
       removeEventListener: vi.fn((event: string, callback: Function) => {
          if (eventListeners[event]) {
-            const index = eventListeners[event].indexOf(callback)
-            if (index > -1) {
-               eventListeners[event].splice(index, 1)
+            const index = eventListeners[event]?.indexOf(callback)
+            if (index && index > -1) {
+               eventListeners[event]?.splice(index, 1)
             }
          }
       }),
