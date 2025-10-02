@@ -1,5 +1,12 @@
 # classic-react-hooks
 
+## 2.0.0-canary.16
+
+### Minor Changes
+
+-  87b8bbb: Feature:
+   -  Add cross-tab sync and ssr support and function based initial value support for `useLocalStorage` hook.
+
 ## 2.0.0-canary.15
 
 ### Minor Changes
