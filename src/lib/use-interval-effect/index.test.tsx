@@ -69,4 +69,26 @@ describe('use-interval-effect', () => {
       unmount()
       expect(fn).toHaveBeenCalledTimes(0)
    })
+
+   it('should clear the interval when <interval> prop changes', () => {
+      const fn = vi.fn()
+
+      let interval = 300
+      const { result, rerender } = renderHook(() => useIntervalEffect({ handler: fn, interval }))
+
+      vi.advanceTimersByTime(200)
+      expect(fn).not.toHaveBeenCalled()
+
+      interval = 500
+      rerender()
+
+      vi.advanceTimersByTime(200)
+      expect(fn).not.toHaveBeenCalled()
+
+      vi.advanceTimersByTime(300)
+      expect(fn).toHaveBeenCalledTimes(1)
+
+      vi.advanceTimersByTime(500)
+      expect(fn).toHaveBeenCalledTimes(2)
+   })
 })

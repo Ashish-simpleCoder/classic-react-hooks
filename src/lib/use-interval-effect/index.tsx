@@ -47,9 +47,9 @@ export default function useIntervalEffect({ handler, interval = 100 }: { handler
    })
 
    useEffect(() => {
-      intervalId.current = setInterval(() => paramsRef.current.handler(), paramsRef.current.interval)
+      intervalId.current = setInterval(() => paramsRef.current.handler(), interval)
       return handlers.current.clearTimer
-   }, [])
+   }, [interval])
 
    return {
       clearTimer: handlers.current.clearTimer,
