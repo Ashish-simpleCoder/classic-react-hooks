@@ -49,6 +49,25 @@ describe('useTimeoutEffect', () => {
    })
 
    describe('clearTimer functionality', () => {
+      it('should clear the timeout when <timeout> prop changes', () => {
+         const fn = vi.fn()
+
+         let timeout = 300
+         const { result, rerender } = renderHook(() => useTimeoutEffect({ handler: fn, timeout }))
+
+         vi.advanceTimersByTime(200)
+         expect(fn).not.toHaveBeenCalled()
+
+         timeout = 500
+         rerender()
+
+         vi.advanceTimersByTime(200)
+         expect(fn).not.toHaveBeenCalled()
+
+         vi.advanceTimersByTime(300)
+         expect(fn).toHaveBeenCalledTimes(1)
+      })
+
       it('should clear the timeout with clearTimer before timeout expires', () => {
          const fn = vi.fn()
          const { result } = renderHook(() => useTimeoutEffect({ handler: fn, timeout: 500 }))

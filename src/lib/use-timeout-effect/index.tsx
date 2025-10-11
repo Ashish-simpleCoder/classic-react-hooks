@@ -41,9 +41,9 @@ export default function useTimeoutEffect({ handler, timeout = 100 }: { handler: 
    })
 
    useEffect(() => {
-      timeoutId.current = setTimeout(() => paramsRef.current.handler(), paramsRef.current.timeout)
+      timeoutId.current = setTimeout(() => paramsRef.current.handler(), timeout)
       return handlers.current.clearTimer
-   }, [])
+   }, [timeout])
 
    return {
       clearTimer: handlers.current.clearTimer,
