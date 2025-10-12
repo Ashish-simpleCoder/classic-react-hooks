@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.17
+
+### Minor Changes
+
+-  0d1ac96: - Fix timeout and interval effect cleanup when interval changes
+
 ## 2.0.0-canary.16
 
 ### Minor Changes
