@@ -2,4 +2,4 @@
 'classic-react-hooks': minor
 ---
 
-- Fix missing import for `useMultipleIntersectionObserver` hook
+- Fix missing export for `useMultipleIntersectionObserver` hook
