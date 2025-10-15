@@ -26,3 +26,4 @@ export { default as useOnMountEffect } from './lib/use-on-mount-effect'
 export { default as useCounter } from './lib/use-counter'
 
 export { default as useInterSectionObserver } from './lib/use-intersection-observer'
+export { default as useMultipleIntersectionObserver } from './lib/use-multi-intersection-observer'
