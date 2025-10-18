@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.18
+
+### Minor Changes
+
+-  8305b6d: - Fix missing export for `useMultipleIntersectionObserver` hook
+
 ## 2.0.0-canary.17
 
 ### Minor Changes
