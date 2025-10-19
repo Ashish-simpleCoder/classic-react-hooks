@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.19
+
+### Minor Changes
+
+-  c534ff5: - Introduce second method `setElementRef` function for observing target with `ref` attribute (i.e. ref={setElementRef})
+
 ## 2.0.0-canary.18
 
 ### Minor Changes
