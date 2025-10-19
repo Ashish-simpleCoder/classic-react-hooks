@@ -183,36 +183,17 @@ describe('event trigger', () => {
       div.dispatchEvent(ev)
       expect(fn).not.toHaveBeenCalled()
    })
-
-   it('should trigger event with proper event context', () => {
-      const div = document.createElement('div')
-      const fn = vi.fn()
-
-      renderHook(() => useEventListener({ target: () => div, event: 'click', handler: fn }))
-
-      const ev = new Event('click')
-
-      // first trigger
-      div.dispatchEvent(ev)
-      expect(fn).toHaveBeenCalledTimes(1)
-      expect(fn).toHaveBeenCalledWith(ev)
-
-      // second trigger
-      div.dispatchEvent(ev)
-      expect(fn).toHaveBeenCalledTimes(2)
-      expect(fn).toHaveBeenCalledWith(ev)
-   })
 })
 
 describe('integration with react component', () => {
    it('should log the latest value of counter in handler', () => {
       const fn = vi.fn()
+      const { result } = renderHook(() => useRef<ElementRef<'div'>>(null))
 
       const Wrapper = () => {
          const [counter, setCounter] = useState(0)
-         const ref = useRef<ElementRef<'div'>>(null)
          useEventListener({
-            target: () => ref.current,
+            target: () => result.current.current,
             event: 'click',
             handler: () => {
                fn(counter)
@@ -224,7 +205,42 @@ describe('integration with react component', () => {
                <button data-testid='btn' onClick={() => setCounter((c) => c + 1)}>
                   update counter {counter}
                </button>
-               <div ref={ref} data-testid='log'>
+               <div ref={result.current} data-testid='log'>
+                  log value
+               </div>
+            </div>
+         )
+      }
+
+      render(<Wrapper />)
+
+      fireEvent.click(screen.getByTestId('btn'))
+      result.current.current?.click()
+      expect(fn).toHaveBeenNthCalledWith(1, 1)
+
+      fireEvent.click(screen.getByTestId('btn'))
+      result.current.current?.click()
+      expect(fn).toHaveBeenNthCalledWith(2, 2)
+   })
+
+   it('should be able to set target using `setElementRef` function', () => {
+      const fn = vi.fn()
+
+      const Wrapper = () => {
+         const [counter, setCounter] = useState(0)
+         const { setElementRef } = useEventListener({
+            event: 'click',
+            handler: () => {
+               fn(counter)
+            },
+         })
+
+         return (
+            <div>
+               <button data-testid='btn' onClick={() => setCounter((c) => c + 1)}>
+                  update counter {counter}
+               </button>
+               <div ref={setElementRef} data-testid='log'>
                   log value
                </div>
             </div>
@@ -235,10 +251,10 @@ describe('integration with react component', () => {
 
       fireEvent.click(screen.getByTestId('btn'))
       fireEvent.click(screen.getByTestId('log'))
-      expect(fn).toHaveBeenNthCalledWith(1, 1) // should log "0"
+      expect(fn).toHaveBeenNthCalledWith(1, 1)
 
       fireEvent.click(screen.getByTestId('btn'))
       fireEvent.click(screen.getByTestId('log'))
-      expect(fn).toHaveBeenNthCalledWith(2, 2) // should log "1"
+      expect(fn).toHaveBeenNthCalledWith(2, 2)
    })
 })

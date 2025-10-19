@@ -1,8 +1,12 @@
 'use client'
 import type { EvHandler, EvOptions, EvTarget } from '../../types'
 
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import useSyncedRef from '../use-synced-ref'
+
+export type UseEventListenerReturnValues = {
+   setElementRef: (elementNode: HTMLElement | null) => void
+}
 
 /* Have taken reference from ChakraUI's use-event-listener for typing out the props in type-safe manner. */
 
@@ -15,19 +19,17 @@ import useSyncedRef from '../use-synced-ref'
    import { useEventListener } from 'classic-react-hooks'
 
    export default function ClickExample() {
-      const buttonRef = useRef<HTMLButtonElement>(null)
 
-      useEventListener({
-         target: () => buttonRef.current,
+      const {setElementRef} = useEventListener({
          event: 'click',
          handler: (e) => {
             console.log('Button clicked!', e)
          },
       })
 
-      return <button ref={buttonRef}>Click me</button>
+      return <button ref={setElementRef}>Click me</button>
    }
- * 
+ *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-event-listener.html
  */
 export function useEventListener<K extends keyof DocumentEventMap>({
@@ -37,12 +39,12 @@ export function useEventListener<K extends keyof DocumentEventMap>({
    options,
    layoutEffect,
 }: {
-   target: EvTarget
+   target?: EvTarget
    event: K
    handler?: (event: DocumentEventMap[K]) => void
    options?: EvOptions
    layoutEffect?: boolean
-}): void
+}): UseEventListenerReturnValues
 export function useEventListener<K extends keyof WindowEventMap>({
    target,
    event,
@@ -50,12 +52,12 @@ export function useEventListener<K extends keyof WindowEventMap>({
    options,
    layoutEffect,
 }: {
-   target: EvTarget
+   target?: EvTarget
    event: K
    handler?: (event: WindowEventMap[K]) => void
    options?: EvOptions
    layoutEffect?: boolean
-}): void
+}): UseEventListenerReturnValues
 export function useEventListener<K extends keyof GlobalEventHandlersEventMap>({
    target,
    event,
@@ -63,12 +65,12 @@ export function useEventListener<K extends keyof GlobalEventHandlersEventMap>({
    options,
    layoutEffect,
 }: {
-   target: EvTarget
+   target?: EvTarget
    event: K
    handler?: (event: GlobalEventHandlersEventMap[K]) => void
    options?: EvOptions
    layoutEffect?: boolean
-}): void
+}): UseEventListenerReturnValues
 export function useEventListener({
    target,
    event,
@@ -76,7 +78,7 @@ export function useEventListener({
    options,
    layoutEffect,
 }: {
-   target: EvTarget
+   target?: EvTarget
    event: string
    handler?: EvHandler
    options?: EvOptions
@@ -88,6 +90,10 @@ export function useEventListener({
    const [elementNode, setElementNode] = useState<EventTarget | null>(() =>
       typeof target === 'function' ? target() : null
    )
+
+   const setElementRef = useRef((elementNode: HTMLElement | null) => {
+      setElementNode(elementNode)
+   })
 
    const listener = useSyncedRef({
       handler,
@@ -120,8 +126,12 @@ export function useEventListener({
    }
 
    useSelectedHook(() => {
-      setElementNode(typeof target === 'function' ? target() : null)
+      if (typeof target === 'function') {
+         setElementRef.current(target() as HTMLElement)
+      }
    }, [target])
 
    useSelectedHook(listener.current.effectCb, [elementNode, event, shouldInjectEvent, capture, once, passive, signal])
+
+   return { setElementRef: setElementRef.current }
 }

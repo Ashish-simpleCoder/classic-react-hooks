@@ -8,10 +8,17 @@ A React hook which provides a simple and declarative way to add DOM event listen
 
 ## Features
 
+-  **Flexible target observing:** Observe element with `target` prop or use setter function `setElementRef`
 -  **Auto cleanup:** Automatic cleanup of events on unmount and dependency change
 -  **Reactive:** Potentially re-attaches listeners on dependency change(target, event, options)
 -  **Conditional event:** Conditional event support with feature flag. And listeners only get attached when:- target exists, handler is provided, and `shouldInjectEvent` is true
 -  **Standard options:** Full support for all `AddEventListenerOptions` (capture, once, passive, signal)
+
+::: warning Usage Note
+
+-  Do not pass `target` prop if using `setElementRef` and vise-versa.
+
+:::
 
 ## Problem It Solves
 
@@ -130,7 +137,23 @@ export interface EvOptions extends AddEventListenerOptions {
 
 ## Return Value(s)
 
-This hook does not return anything.
+This hook returns an object containing the setter function for observing the target element with `ref` attribute
+
+| Property      | Type                      | Description                                                                                          |
+| ------------- | ------------------------- | ---------------------------------------------------------------------------------------------------- |
+| setElementRef | [Function](#return-types) | A ref callback to observe the target element for event listening. Does not change across re-renders. |
+
+### Return Types
+
+::: details
+
+```ts
+export type UseEventListenerReturnValues = {
+   setElementRef: (elementNode: HTMLElement | null) => void
+}
+```
+
+:::
 
 ## Common Use Cases
 
@@ -207,6 +230,34 @@ export default function ConditionalExample() {
       <div>
          <button onClick={() => setIsListening(!isListening)}>{isListening ? 'Stop' : 'Start'} Listening</button>
          <p>Press any key (when listening is enabled)</p>
+      </div>
+   )
+}
+```
+
+:::
+
+### `setElementRef` for Observing target
+
+::: details Example
+
+```ts {6,18}
+import { useState } from 'react'
+import { useEventListener } from 'classic-react-hooks'
+
+export default function ConditionalExample() {
+   const [counter, setCounter] = useState(0)
+   const { setElementRef } = useEventListener({
+      event: 'click',
+      handler: () => {
+         console.log(counter)
+      },
+   })
+
+   return (
+      <div>
+         <button onClick={() => setCounter((c) => c + 1)}>update counter {counter}</button>
+         <div ref={setElementRef}>log value</div>
       </div>
    )
 }
