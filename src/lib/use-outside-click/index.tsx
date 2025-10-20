@@ -14,10 +14,8 @@ import { useEventListener } from '../use-event-listener'
 
    function Modal() {
       const [isOpen, setIsOpen] = useState(false)
-      const modalRef = useRef<HTMLDivElement>(null)
 
-      useOutsideClick({
-         target: () => modalRef.current,
+      const {setElementRef} = useOutsideClick({
          handler: () => setIsOpen(false),
       })
 
@@ -27,7 +25,7 @@ import { useEventListener } from '../use-event-listener'
 
       return (
          <div className='modal-overlay'>
-            <div ref={modalRef} class='modal-content bg-white p-8 rounded-lg shadow-md'>
+            <div ref={setElementRef} class='modal-content bg-white p-8 rounded-lg shadow-md'>
                <h2>Modal Title</h2>
                <p>Click outside this modal to close it.</p>
                <button onClick={() => setIsOpen(false)}>Close</button>
@@ -60,7 +58,7 @@ export default function useOutsideClick({
       handler?.(event)
    }
 
-   useEventListener({
+   const { setElementRef } = useEventListener({
       target: () => document,
       event: 'click',
       handler: eventCb,
@@ -69,4 +67,6 @@ export default function useOutsideClick({
          ...options,
       },
    })
+
+   return { setElementRef }
 }
