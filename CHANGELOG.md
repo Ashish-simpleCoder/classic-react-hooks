@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.20
+
+### Patch Changes
+
+-  f8af3e3: - Update dependencies, pnpm and node version for better security and performance
+
 ## 2.0.0-canary.19
 
 ### Minor Changes
