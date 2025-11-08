@@ -1,4 +1,3 @@
-'use client'
 import type { EffectCallback } from 'react'
 import React, { useEffect } from 'react'
 

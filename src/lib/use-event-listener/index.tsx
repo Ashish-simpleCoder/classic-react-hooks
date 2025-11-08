@@ -1,4 +1,3 @@
-'use client'
 import type { EvHandler, EvOptions, EvTarget } from '../../types'
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -15,7 +14,6 @@ export type UseEventListenerReturnValues = {
  *  A React hook that provides a declarative way to add DOM event listeners with automatic cleanup.
  *
  * @example
-   import { useRef } from 'react'
    import { useEventListener } from 'classic-react-hooks'
 
    export default function ClickExample() {

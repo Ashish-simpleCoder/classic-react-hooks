@@ -1,4 +1,3 @@
-'use client'
 import React, { useRef } from 'react'
 
 const DEFAULT_DELAY = 300
@@ -7,7 +6,7 @@ const DEFAULT_DELAY = 300
  * @description
  *  A React hook that returns a throttled version of a callback function.
  *
- * @example 
+ * @example
    import { useState } from 'react'
    import { useThrottledFn } from 'classic-react-hooks'
 
@@ -42,7 +41,7 @@ const DEFAULT_DELAY = 300
             {saving && <p>Saving...</p>}
          </div>
       )
-   } 
+   }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-throttled-fn.html
  *

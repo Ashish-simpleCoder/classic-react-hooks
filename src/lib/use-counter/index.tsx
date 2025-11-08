@@ -1,4 +1,3 @@
-'use client'
 import type { Prettify } from '../../types'
 import React, { useRef, useState } from 'react'
 import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter'
@@ -29,7 +28,7 @@ const LOWERCASED_COUNTER_TEXT = COUNTER_TEXT.toLowerCase() as Lowercase<typeof C
          </div>
       )
    }
- * 
+ *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-counter.html
  *
  */

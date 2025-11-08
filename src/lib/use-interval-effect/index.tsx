@@ -1,11 +1,10 @@
-'use client'
 import React, { useEffect, useRef } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
 /**
  * @description
  *  A React hook that executes a callback function at regular intervals, similar to `setInterval` but with additional control methods for clearing and restarting the timer.
- * 
+ *
  * @example
    import { useState } from 'react'
    import { useIntervalEffect } from 'classic-react-hooks'
@@ -28,7 +27,7 @@ import useSyncedRef from '../use-synced-ref'
          </div>
       )
    }
- * 
+ *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-interval-effect.html
  */
 export default function useIntervalEffect({ handler, interval = 100 }: { handler: () => void; interval?: number }) {
