@@ -1,4 +1,3 @@
-'use client'
 import React, { useEffect, useRef } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
@@ -22,7 +21,7 @@ import useSyncedRef from '../use-synced-ref'
 
       return <div>{message}</div>
    }
- * 
+ *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-timeout-effect.html
  */
 export default function useTimeoutEffect({ handler, timeout = 100 }: { handler: () => void; timeout?: number }) {

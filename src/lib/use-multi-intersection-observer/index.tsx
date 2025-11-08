@@ -2,7 +2,7 @@ import type { IntersectionObserverOptions } from '../use-intersection-observer'
 
 import useIntersectionObserver from '../use-intersection-observer'
 
-export default function useMultipleIntersectionObserver<Key extends string>(
+export default function useMultiIntersectionObserver<Key extends string>(
    keys: readonly Key[],
    options?: Omit<IntersectionObserverOptions, 'key'>
 ) {

@@ -1,4 +1,3 @@
-'use client'
 import React, { useRef } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
@@ -48,14 +47,14 @@ export default function useCopyToClipboard(props?: { onSuccess?: OnSuccess; onEr
 }
 
 /**
- * 
+ *
  * @example
    copyToClipboardFn(
       'Text to copy',
       () => console.log('Copied successfully!'),
       (error) => console.error('Copy failed:', error)
    )
- *    
+ *
  */
 export async function copyToClipboardFn(data: string, onSuccess?: OnSuccess, onError?: OnError) {
    try {

@@ -1,4 +1,3 @@
-'use client'
 import type { EvOptions, EvTarget } from '../../types'
 
 import React from 'react'
@@ -9,7 +8,7 @@ import { useEventListener } from '../use-event-listener'
  * A React hook that detects outside click for specified element and triggers the given callback.
  *
  * @example
-   import { useRef, useState } from 'react'
+   import { useState } from 'react'
    import { useOutsideClick } from 'classic-react-hooks'
 
    function Modal() {

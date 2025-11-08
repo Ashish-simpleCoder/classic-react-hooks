@@ -1,4 +1,3 @@
-'use client'
 import { useState } from 'react'
 import { useEventListener } from '../use-event-listener'
 
@@ -27,7 +26,7 @@ import { useEventListener } from '../use-event-listener'
          </div>
       )
    }
- * 
+ *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-window-resize.html
  */
 export default function useWindowResize<T>({

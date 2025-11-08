@@ -1,4 +1,3 @@
-'use client'
 import type { Dispatch, SetStateAction } from 'react'
 import React, { useRef, useCallback, useSyncExternalStore } from 'react'
 

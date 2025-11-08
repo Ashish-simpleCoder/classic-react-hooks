@@ -1,4 +1,3 @@
-'use client'
 import React, { useEffect, useRef } from 'react'
 
 const DEFAULT_DELAY = 300
@@ -8,7 +7,7 @@ const DEFAULT_DELAY = 300
  *  A hook which returns a debounced function.
  *
  * @example
- * 
+ *
    import { useState, useEffect } from 'react'
    import { useDebouncedFn } from 'classic-react-hooks'
 
@@ -52,7 +51,7 @@ const DEFAULT_DELAY = 300
          </div>
       )
    }
- *     
+ *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-debounced-fn.html
  *
  */
@@ -87,7 +86,7 @@ export default function useDebouncedFn<T extends (...args: any[]) => any>({
 /**
  * @description
  * A React hook that returns a debounced version of any function, delaying its execution until after a specified delay has passed since the last time it was invoked.
- * 
+ *
  * @example
    import { useState, useEffect } from 'react'
    import { useDebouncedFn } from 'classic-react-hooks'
@@ -132,7 +131,7 @@ export default function useDebouncedFn<T extends (...args: any[]) => any>({
          </div>
       )
    }
- * 
+ *
  *  @see Docs https://classic-react-hooks.vercel.app/hooks/use-debounced-fn.html
  */
 export function debouncedFnWrapper<T extends (...args: any[]) => any>(props: { callbackToBounce: T; delay?: number }) {

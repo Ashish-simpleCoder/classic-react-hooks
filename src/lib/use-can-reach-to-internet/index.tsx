@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import useSyncedRef from '../use-synced-ref'
 
@@ -21,23 +19,23 @@ const DEFAULT_OPTIONS: Required<CanReachToInternetOptions> = {
 
 /**
  * Custom React hook for monitoring comprehensive internet connectivity status
- * 
+ *
  * @description
  * This hook provides a robust solution for detecting internet connectivity by combining:
  * - Browser's native online/offline detection (navigator.onLine)
  * - Actual network reachability testing via HTTP requests
  * - Automatic polling with configurable intervals
  * - Manual connectivity checking capabilities
- * 
- * The hook differentiates between being "online" (browser thinks it's connected) 
+ *
+ * The hook differentiates between being "online" (browser thinks it's connected)
  * and actually being able to reach the internet (verified through network requests).
  * @example
  * import { useCanReachToInternet } from 'classic-react-hooks'
- * 
+ *
  * function ConnectivityStatus() {
-      const { 
-         isOnline, 
-         canReachToInternet, 
+      const {
+         isOnline,
+         canReachToInternet,
          isFullyConnected,
          isCheckingConnection,
          isNetworkPollingEnabled,
@@ -45,49 +43,49 @@ const DEFAULT_OPTIONS: Required<CanReachToInternetOptions> = {
          stopNetworkPolling,
          forceCheckNetwork
       } = useCanReachToInternet()
-      
+
       return (
          <div className="p-4 border rounded-lg">
          <h3 className="font-semibold mb-2">Connectivity Status</h3>
-         
+
          <div className="space-y-2">
             <div className="flex items-center gap-2">
                <span className={`w-3 h-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500'}`} />
                <span>Browser Online: {isOnline ? 'Yes' : 'No'}</span>
             </div>
-            
+
             <div className="flex items-center gap-2">
                <span className={`w-3 h-3 rounded-full ${canReachToInternet ? 'bg-green-500' : 'bg-red-500'}`} />
                <span>Internet Reachable: {canReachToInternet ? 'Yes' : 'No'}</span>
             </div>
-            
+
             <div className="flex items-center gap-2">
                <span className={`w-3 h-3 rounded-full ${isFullyConnected ? 'bg-green-500' : 'bg-red-500'}`} />
                <span>Fully Connected: {isFullyConnected ? 'Yes' : 'No'}</span>
             </div>
-            
+
             {isCheckingConnection && (
                <div className="text-sm text-gray-600">Checking connectivity...</div>
             )}
          </div>
-         
+
          <div className="mt-4 space-x-2">
-            <button 
+            <button
                onClick={forceCheckNetwork}
                className="px-3 py-1 bg-blue-500 text-white rounded text-sm"
             >
                Check Now
             </button>
-            
+
             {isNetworkPollingEnabled ? (
-               <button 
+               <button
                onClick={stopNetworkPolling}
                className="px-3 py-1 bg-red-500 text-white rounded text-sm"
                >
                Stop Polling
                </button>
             ) : (
-               <button 
+               <button
                onClick={startNetworkPolling}
                className="px-3 py-1 bg-green-500 text-white rounded text-sm"
                >
@@ -98,7 +96,7 @@ const DEFAULT_OPTIONS: Required<CanReachToInternetOptions> = {
          </div>
       )
    }
- * 
+ *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-can-reach-to-internet.html
  */
 export default function useCanReachToInternet(options: CanReachToInternetOptions = {}) {
