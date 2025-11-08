@@ -63,7 +63,11 @@ interface EvOptions extends AddEventListenerOptions {
 
 ## Return Value(s)
 
-This hook does not return anything.
+This hook returns an object that includes a setter function, allowing you to observe and manage the target element through its ref attribute.
+
+| Property      | Type                      | Description                                                         |
+| ------------- | ------------------------- | ------------------------------------------------------------------- |
+| setElementRef | [Function](#return-types) | A ref callback that observes the target element for event listening |
 
 ## Common Use Cases
 
@@ -73,18 +77,20 @@ This hook does not return anything.
 
 ## Usage Examples
 
+::: info Note
+Refer to [use-event-listener](/hooks/use-event-listener.html#basic-click-handler) hook for more examples.
+:::
+
 ### Modal Component
 
 ```ts
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useOutsideClick } from 'classic-react-hooks'
 
 function Modal() {
    const [isOpen, setIsOpen] = useState(false)
-   const modalRef = useRef<HTMLDivElement>(null)
 
-   useOutsideClick({
-      target: () => modalRef.current,
+   const { setElementRef } = useOutsideClick({
       handler: () => setIsOpen(false),
    })
 
@@ -94,7 +100,7 @@ function Modal() {
 
    return (
       <div className='modal-overlay'>
-         <div ref={modalRef} class='modal-content bg-white p-8 rounded-lg shadow-md'>
+         <div ref={setElementRef} class='modal-content bg-white p-8 rounded-lg shadow-md'>
             <h2>Modal Title</h2>
             <p>Click outside this modal to close it.</p>
             <button onClick={() => setIsOpen(false)}>Close</button>
@@ -103,70 +109,3 @@ function Modal() {
    )
 }
 ```
-
-### Conditional Outside Click
-
-::: details Example
-
-```ts {10-12}
-function ConditionalOutsideClick() {
-   const [isModalOpen, setIsModalOpen] = useState(false)
-   const [isPinned, setIsPinned] = useState(false)
-   const modalRef = useRef<HTMLDivElement>(null)
-
-   useOutsideClick({
-      target: () => modalRef.current,
-      handler: () => {
-         // Only close if not pinned
-         if (!isPinned) {
-            setIsModalOpen(false)
-         }
-      },
-   })
-
-   return (
-      <div>
-         {isModalOpen && (
-            <div ref={modalRef}>
-               <button onClick={() => setIsPinned(!isPinned)}>{isPinned ? 'Unpin' : 'Pin'} Modal</button>
-               <p>Modal content</p>
-            </div>
-         )}
-      </div>
-   )
-}
-```
-
-:::
-
-### Dynamic Target
-
-::: details Example
-
-```ts {5,12-14,18}
-function DynamicTarget() {
-   const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
-
-   useOutsideClick({
-      target: () => activeElement,
-      handler: () => {
-         console.log('Clicked outside active element')
-         setActiveElement(null)
-      },
-   })
-
-   const makeActive = (element: HTMLElement) => {
-      setActiveElement(element)
-   }
-
-   return (
-      <div>
-         <div onClick={(e) => makeActive(e.currentTarget)} className='p-5 bg-gray-100 m-2.5'>
-            Click to make active
-         </div>
-      </div>
-   )
-}
-```
-
-:::

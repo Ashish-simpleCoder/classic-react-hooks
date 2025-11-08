@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# use-multiple-intersection-observer
+# use-multi-intersection-observer
 
 A React hook that provides a convenient way to observe multiple elements simultaneously using the [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) API.
 
@@ -12,9 +12,9 @@ Built on top of [useIntersectionObserver](use-intersection-observer.html) hook f
 
 ## Features
 
--  **Multiple observers:** Create multiple intersection observers with a single hook call
--  **Consistent API:** Each observer follows the same pattern as `useIntersectionObserver`
--  **Shared configuration:** Apply the same options to all observers while maintaining individual keys
+-  **Multiple Observers:** Create multiple intersection observers with a single hook call
+-  **Unified API:** Each observer follows the same pattern as `useIntersectionObserver`
+-  **Shared configuration:** Apply same options to all of the observers while maintaining individual keys
 
 ## Problem It Solves
 
@@ -33,7 +33,7 @@ const contact = useIntersectionObserver({ key: 'contact', threshold: 0.5 })
 
 ```ts
 // ✅ With multi-observer hook
-const sections = useMultipleIntersectionObserver(['hero', 'about', 'services', 'contact'], { threshold: 0.5 })
+const sections = useMultiIntersectionObserver(['hero', 'about', 'services', 'contact'], { threshold: 0.5 })
 ```
 
 :::
@@ -41,15 +41,15 @@ const sections = useMultipleIntersectionObserver(['hero', 'about', 'services', '
 ::: details Type Safety at Scale
 **Problem:** Maintaining type safety with multiple dynamically named properties
 
--  Loses type inference when managing multiple observers manually
+-  Loses type inference while managing multiple observers manually
 -  No IntelliSense for dynamically generated property names
--  Runtime errors from typos in property access
+-  Runtime errors due to typos in property access
 
-**Solution:** Full type safety across all observers
+**Solution:** This hook provides full type safety and comprehensive IntelliSense for all generated observer properties
 
 ```ts
 // ✅ Full type safety and IntelliSense
-const observers = useMultipleIntersectionObserver(['hero', 'footer'] as const)
+const observers = useMultiIntersectionObserver(['hero', 'footer'] as const)
 // TypeScript knows: observers.hero.setHeroElementRef, observers.hero.isHeroElementIntersecting
 // TypeScript knows: observers.footer.setFooterElementRef, observers.footer.isFooterElementIntersecting
 ```
@@ -119,10 +119,10 @@ The hook returns a record object where each key from the input array maps to its
 ### Basic Multiple Observers
 
 ```tsx {4-9}
-import { useMultipleIntersectionObserver } from 'classic-react-hooks'
+import { useMultiIntersectionObserver } from 'classic-react-hooks'
 
 export default function MultipleObserversExample() {
-   const observers = useMultipleIntersectionObserver(['header', 'main', 'footer'] as const, {
+   const observers = useMultiIntersectionObserver(['header', 'main', 'footer'] as const, {
       threshold: 0.3,
       onIntersection: (entry) => {
          console.log('Element intersection changed:', entry.target.id)
@@ -178,12 +178,12 @@ Each key in the array creates a separate `useIntersectionObserver` instance. Whi
 
 ```tsx {7-16}
 import { useState } from 'react'
-import { useMultipleIntersectionObserver } from 'classic-react-hooks'
+import { useMultiIntersectionObserver } from 'classic-react-hooks'
 
 export default function OneTimeExample() {
    const [hasBeenSeen, setHasBeenSeen] = useState(false)
 
-   const { setElementRef, isElementIntersecting } = useMultipleIntersectionObserver({
+   const { setElementRef, isElementIntersecting } = useMultiIntersectionObserver({
       onlyTriggerOnce: true, // [!code ++]
       threshold: 0.8,
       onIntersection: (entry) => {

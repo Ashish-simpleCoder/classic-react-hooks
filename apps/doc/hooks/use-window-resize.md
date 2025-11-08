@@ -6,10 +6,6 @@ outline: deep
 
 A React hook that evaluates provided callback function on window resize event and returns the result of it.
 
-::: tip
-Perfect for responsive behavior based on window dimensions.
-:::
-
 ::: info
 At it's core, [useEventListener](use-event-listener.html) hook is used internally for listening to resize event.
 :::

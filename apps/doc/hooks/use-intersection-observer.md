@@ -14,37 +14,35 @@ This hook automatically checks for `IntersectionObserver` support and logs a war
 ## Features
 
 -  **Auto cleanup:** Automatic cleanup of observers on unmount and dependency change
--  **Reactive:** Potentially re-attaches observers on dependency change(element, onlyTriggerOnce)
+-  **Reactive:** Listeners intelligently reattach when _`element`_ or _`onlyTriggerOnce`_ changes
 -  **Flexible keys:** Support for custom property naming through the `key` parameter with full-type safety
--  **One-time observation:** Built-in support for observing elements only once
--  **Standard options:** Full support for all `IntersectionObserverInit` options ([root](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/root), [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds))
+-  **One-time Observation:** Built-in support for observing elements only once
+-  **Full options support:** Full support for all `IntersectionObserverInit` options ([root](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/root), [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds))
 
 ::: tip
-The hook uses `useSyncedRef` to avoid unnecessary re-renders when callback functions change
+This hook internally uses [useSyncedRef](/hooks/use-synced-ref) to avoid unnecessary re-renders when callback functions change
 :::
 
 ## Problem It Solves
 
-::: details **Multiple Instance Management with Type-Safety**
+::: details Type-Safe Instance Management
 
--  **Type-Safe & Dynamic Key Property Generation:** Each instance gets uniquely named properties with full TypeScript support and IntelliSense
--  **Scalable Architecture:** Can observe unlimited elements without property collisions
+-  **Dynamic & Type-Safe Properties:** Generates uniquely named properties for each observer with full TypeScript and IntelliSense support.
+-  **Scalable:** Efficiently observe any number of elements without property naming conflicts.
 
-```tsx
-// Without key
-const { element, setElementRef, isElementIntersecting } = useIntersectionObserver()
-
-// With key 'sidebar'
+````tsx
+// Example: Dynamically named properties based on the 'key'
+const { element, setElementRef, isElementIntersecting } = useIntersectionObserver() // Without key
 const { sidebarElement, setSidebarElementRef, isSidebarElementIntersecting } = useIntersectionObserver({
-   key: 'sidebar',
+   key: 'sidebar', // With key 'sidebar'
 })
-```
+
 
 :::
 
-::: details **One-Time Observation Complexity**
+::: details One-Time Observation Complexity
 
--  `onlyTriggerOnce` option for automatically cleaning up observer after first intersection
+-  _`onlyTriggerOnce`_ option for automatically cleaning up observer after first intersection
    :::
 
 ## Parameters
@@ -57,7 +55,7 @@ const { sidebarElement, setSidebarElementRef, isSidebarElementIntersecting } = u
 
 The `options` parameter accepts an object that extends the standard `IntersectionObserverInit` with an additional custom property for conditional event handling and post callback.
 
-#### Standard IntersectionObserverInit Options
+#### Standard _`IntersectionObserverInit`_ Options
 
 | Property   |            Type             | Default | Description                     |
 | ---------- | :-------------------------: | :-----: | ------------------------------- |
@@ -66,7 +64,7 @@ The `options` parameter accepts an object that extends the standard `Intersectio
 | rootMargin |           string            |   0px   | Margin around root element      |
 | threshold  |     number \| number[]      |    0    | Intersection ratio threshold(s) |
 
-#### Custom Options
+#### Custom _`Options`_
 
 | Property        |                    Type                    |  Default  | Description                                               |
 | --------------- | :----------------------------------------: | :-------: | --------------------------------------------------------- |
@@ -99,7 +97,7 @@ export type IntersectionObserverResult<Key extends string> = {
 } & {
    [K in Key as Key extends '' ? 'isElementIntersecting' : `is${Capitalize<Key>}ElementIntersecting`]: boolean
 }
-```
+````
 
 :::
 
@@ -128,7 +126,7 @@ The hook returns an object with dynamically named properties based on the `key` 
 
 ### Basic Intersection Observer
 
-```tsx {4-9,18,21}
+```tsx {4-9,14}
 import { useIntersectionObserver } from 'classic-react-hooks'
 
 export default function BasicExample() {

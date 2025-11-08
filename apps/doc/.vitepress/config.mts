@@ -1,5 +1,6 @@
 import { defineConfig, type DefaultTheme } from 'vitepress'
 import { version } from '../../../package.json'
+import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -12,6 +13,13 @@ export default defineConfig({
 
    markdown: {
       lineNumbers: true,
+      config(md) {
+         md.use(groupIconMdPlugin)
+      },
+   },
+
+   vite: {
+      plugins: [groupIconVitePlugin()],
    },
 
    sitemap: {
@@ -132,7 +140,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
          collapsed: false,
          base: "/components/",
          items: [
-            { text: 'CanReachToInternetCtxProvider', link: 'CanReachToInternetCtxProvider' },
+            { text: 'Internet Connectivity Context', link: 'CanReachToInternetCtxProvider' },
          ]
       },
    ]

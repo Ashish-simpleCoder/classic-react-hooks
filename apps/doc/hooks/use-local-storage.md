@@ -4,13 +4,13 @@ outline: deep
 
 # use-local-storage
 
-A React hook that provides a seamless way to persist and synchronize state with `localStorage`, offering a `useState`-like API with automatic cross-tab synchronization.
+A React hook that provides a seamless way to persist and synchronize state with `localStorage`, offering a `useState`-like API with cross-tab synchronization.
 
 ## Features
 
--  **Automatic Synchronization:** Seamless bidirectional sync between React state,localStorage and across different browser tabs
--  **useState API Compatibility:** Drop-in replacement with identical API including functional updates
+-  **`useState` Compatible API:** Drop-in replacement with identical API including functional updates
 -  **SSR Compatible:** Default values prevent hydration mismatches
+-  **Auto Synchronization:** Seamless bidirectional sync between React state, `localStorage` and across different browser tabs
 -  **Error handling:** Graceful fallbacks when localStorage operations fail
 
 ::: danger Important Notes
@@ -24,7 +24,9 @@ A React hook that provides a seamless way to persist and synchronize state with 
 
 ::: details Manual LocalStorage Synchronization
 
--  **Problem:** Manually keeping React state synchronized with localStorage requires complex boilerplate code and is prone to sync issues.
+---
+
+**Problem:-** Manually keeping React state synchronized with `localStorage` requires complex boilerplate code and is prone to sync issues.
 
 ```tsx
 // ❌ Manual synchronization nightmare
@@ -65,7 +67,11 @@ function UserSettings() {
 }
 ```
 
--  **Solution:** The hook provides automatic bidirectional synchronization between React state and localStorage with a single line of code.
+---
+
+**Solution:-** This hook provides automatic bidirectional synchronization between React state and localStorage with a single line of code.
+
+It's designed to be a drop-in replacement for `useState`, maintaining the familiar API.
 
 ```tsx
 // ✅ Automatic synchronization
@@ -84,7 +90,9 @@ function UserSettings() {
 :::
 ::: details Inconsistent useState API Compatibility
 
--  **Problem:** Custom localStorage solutions often don't maintain the familiar `useState` API, breaking developer expectations and existing code patterns.
+---
+
+**Problem:-** Custom localStorage solutions often don't maintain the familiar `useState` API, breaking developer expectations and existing code patterns.
 
 ```tsx
 // ❌ Non-standard API breaks familiar patterns
@@ -99,7 +107,9 @@ function BrokenComponent() {
 }
 ```
 
--  **Solution:** The hook maintains 100% API compatibility with useState, including support for functional updates and previous value callbacks.
+---
+
+**Solution:-** This hook maintains 100% API compatibility with useState, including support for functional updates and previous value callbacks.
 
 ```tsx
 // ✅ Perfect useState compatibility
@@ -117,7 +127,9 @@ function Component() {
 
 ::: details Server-Side Rendering Compatibility Issues
 
--  **Problem:** Direct localStorage access during SSR causes hydration mismatches and crashes because localStorage isn't available on the server.
+---
+
+**Problem:-** Direct localStorage access during SSR causes `hydration mismatches` and crashes because localStorage isn't available on the server.
 
 ```tsx
 // ❌ SSR/hydration nightmare
@@ -130,7 +142,9 @@ function ProblematicComponent() {
 }
 ```
 
--  **Solution:** The hook's defaultValue system ensures consistent initial renders and smooth hydration by providing predictable fallback values.
+---
+
+**Solution:-** The hook's `defaultValue` prop ensures consistent initial renders and smooth hydration by providing predictable fallback values.
 
 ```tsx
 // ✅ SSR-compatible with smooth hydration
@@ -149,7 +163,9 @@ function SSRFriendlyComponent() {
 
 ::: details Lack of Type Safety
 
--  **Problem:** localStorage operations are inherently untyped, leading to runtime errors and unpredictable behavior when data types don't match expectations.
+---
+
+**Problem:-** localStorage operations are inherently `untyped`, leading to runtime errors and `unpredictable` behavior when data types don't match expectations.
 
 ```tsx
 // ❌ No type safety leads to runtime errors
@@ -166,7 +182,9 @@ function UnsafeComponent() {
 }
 ```
 
--  **Solution:** The hook provides full TypeScript support with generic type parameters that ensure type safety throughout the application.
+---
+
+**Solution:-** The hook provides full TypeScript support with generic type parameters that ensure type safety throughout the application.
 
 ```tsx
 // ✅ Full type safety with TypeScript generics

@@ -4,19 +4,19 @@ outline: deep
 
 # use-event-listener
 
-A React hook which provides a simple and declarative way to add DOM event listeners with automatic cleanup.
+A React hook that makes it easy to attach DOM event listeners declaratively with automatic cleanup.
 
 ## Features
 
--  **Flexible target observing:** Observe element with `target` prop or use setter function `setElementRef`
--  **Auto cleanup:** Automatic cleanup of events on unmount and dependency change
--  **Reactive:** Potentially re-attaches listeners on dependency change(target, event, options)
--  **Conditional event:** Conditional event support with feature flag. And listeners only get attached when:- target exists, handler is provided, and `shouldInjectEvent` is true
--  **Standard options:** Full support for all `AddEventListenerOptions` (capture, once, passive, signal)
+-  **Flexible Targeting:** Observe elements via the _`target`_ prop or _`setElementRef`_ function.
+-  **Auto Cleanup:** Listeners are automatically managed on unmount or dependency changes.
+-  **Reactive:** Listeners intelligently reattach when _`target`_, _`event`_, or _`options`_ change.
+-  **Conditional Binding:** Attach listeners only when _`target`_, a _`handler`_, and _`shouldInjectEvent`_ are valid.
+-  **Full options support:** Fully compatible with all _`AddEventListenerOptions`_ including _capture_, _once_, _passive_, and _signal_.
 
 ::: warning Usage Note
 
--  Do not pass `target` prop if using `setElementRef` and vise-versa.
+-  Do not pass _`target`_ prop if using _`setElementRef`_ and vise-versa.
 
 :::
 
@@ -24,7 +24,8 @@ A React hook which provides a simple and declarative way to add DOM event listen
 
 ::: details **Boilerplate Reduction**
 
--  **Problem:** Manually managing event listeners in React components leads to verbose, repetitive and error-prone code with potential memory leaks.
+Manually managing event listeners in React components leads to verbose, repetitive and error-prone code with potential memory leaks.
+See the below implementation:
 
 ```tsx
 // ❌ Problematic approach which is redundant and verbose
@@ -44,19 +45,17 @@ function Component() {
 }
 ```
 
-**Solution:**
+---
+
+How _`use-event-listener`_ solves it:
 
 -  Eliminates repetitive `addEventListener/removeEventListener` code
 -  Reduces component complexity by abstracting event handling logic
 -  Automatic cleanup ensures listeners are removed when:-
-
-   -> Component unmounts
-
-   -> `Target` element changes
-
-   -> `Event` type changes
-
-   -> Any of `Options` params:- `shouldInjectEvent`, `capture`, `once`, `passive`, `signal` gets changed
+   -  Component unmounts
+   -  `target` element changes
+   -  `event` type changes
+   -  Any of `options` params:- (_shouldInjectEvent_, _capture_, _once_, _passive_, _signal_) gets changed
 
 ```tsx
 // ✅ Clean, declarative approach
@@ -91,14 +90,14 @@ function Component() {
 | target    | [EvTarget](#type-definitions)  |    ✅    |       -       | Target element on which the event is listened to. |
 | event     |             string             |    ✅    |       -       | Event name (e.g. 'click', 'keydown')              |
 | handler   | [EvHandler](#type-definitions) |    ❌    |   undefined   | Event listener callback function                  |
-| options   | [EvOptions](#type-definitions) |    ❌    |   undefined   | Event listener options and feature flags          |
+| options   | [EvOptions](#type-definitions) |    ❌    |   undefined   | Standard Options and Feature flags                |
 |           |
 
 ### Options Parameter
 
-The `options` parameter accepts an object that extends the standard `AddEventListenerOptions` with an additional custom property for conditional event handling.
+The _`options`_ parameter supports all standard _`AddEventListenerOptions`_ and introduces extra custom properties to control conditional event binding.
 
-#### Standard AddEventListenerOptions
+#### Standard _`AddEventListenerOptions`_
 
 | Property | Type        | Default   | Description                                                                      |
 | -------- | ----------- | --------- | -------------------------------------------------------------------------------- |
@@ -107,7 +106,7 @@ The `options` parameter accepts an object that extends the standard `AddEventLis
 | passive  | boolean     | false     | If `true`, indicates that the function will never call `preventDefault()`        |
 | signal   | AbortSignal | undefined | An AbortSignal that can be used to remove the event listener                     |
 
-#### Custom Options
+#### Custom _`Options`_
 
 | Property          | Type           | Default | Description                                                                                         |
 | ----------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------- |
@@ -137,11 +136,11 @@ export interface EvOptions extends AddEventListenerOptions {
 
 ## Return Value(s)
 
-This hook returns an object containing the setter function for observing the target element with `ref` attribute
+This hook returns an object that includes a setter function, allowing you to observe and manage the target element through its ref attribute.
 
-| Property      | Type                      | Description                                                                                          |
-| ------------- | ------------------------- | ---------------------------------------------------------------------------------------------------- |
-| setElementRef | [Function](#return-types) | A ref callback to observe the target element for event listening. Does not change across re-renders. |
+| Property      | Type                      | Description                                                         |
+| ------------- | ------------------------- | ------------------------------------------------------------------- |
+| setElementRef | [Function](#return-types) | A ref callback that observes the target element for event listening |
 
 ### Return Types
 
@@ -237,11 +236,11 @@ export default function ConditionalExample() {
 
 :::
 
-### `setElementRef` for Observing target
+### Usage with `setElementRef`
 
 ::: details Example
 
-```ts {6,18}
+```ts {6,16}
 import { useState } from 'react'
 import { useEventListener } from 'classic-react-hooks'
 

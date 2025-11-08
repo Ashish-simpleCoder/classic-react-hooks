@@ -4,7 +4,7 @@ outline: deep
 
 # use-copy-to-clipboard
 
-A React hook that provides a simple and reliable way to copy text to the clipboard with success and error handling callbacks.
+A React hook that provides simple and reliable way to copy text to the clipboard with success and error handling callbacks.
 
 ## Features
 

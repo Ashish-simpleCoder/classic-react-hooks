@@ -18,7 +18,9 @@ A comprehensive React hook for monitoring internet connectivity status that goes
 
 ::: details The Problem with `navigator.onLine`
 
-**Problem:** `navigator.onLine` only tells you if the browser thinks it's connected to a network, not if it can actually reach the internet.
+---
+
+**Problem:-** `navigator.onLine` only tells you if the browser thinks it's connected to a network, not if it can actually reach the internet.
 
 Common Scenarios Where `navigator.onLine` Fails
 
@@ -28,7 +30,7 @@ Common Scenarios Where `navigator.onLine` Fails
 
 ---
 
-**Solution:** How `useCanReachToInternet` solve these problems
+**Solution:-** How `useCanReachToInternet` solve these problems
 
 It provides two layers of connectivity detection
 
