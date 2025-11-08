@@ -10,14 +10,20 @@ A React hook that returns a debounced version of any function, delaying its exec
 
 -  **Auto cleanup:** Timeouts are automatically cleared on unmount or dependency changes
 -  **Flexible delay:** Configurable delay with sensible defaults
--  **Performance optimized:** Prevents excessive function calls during rapid user interactions
+-  **Performance Optimized:** Prevents excessive function calls during rapid user interactions
 -  **Error handling:** Preserves original function's error behavior
+
+::: tip
+The `debounced function` is purely ref based and does not change across re-renders.
+:::
 
 ## Problem It Solves
 
 ::: details **Boilerplate Reduction**
 
-**Problem:** Manually implementing debouncing in React components leads to lengthy, error-prone code with potential memory leaks and stale closures.
+---
+
+**Problem:-** Manually implementing debouncing in React components leads to lengthy, error-prone code with potential memory leaks and stale closures.
 
 ```tsx
 // ❌ Problematic approach which is redundant and lengthy
@@ -62,16 +68,15 @@ function SearchInput() {
 }
 ```
 
-**Solution:**
+---
+
+**Solution:-**
 
 -  Eliminates repetitive debounce timing logic
 -  Automatic cleanup ensures timeouts are cleared when:
-
-   → Component unmounts
-
-   → Delay value changes
-
-   → Function reference changes
+   -  Component unmounts
+   -  Delay value changes
+   -  Function reference changes
 
 ```tsx
 // ✅ Clean, declarative approach
@@ -144,7 +149,7 @@ The hook returns a debounced version of the provided callback.
 
 ### Basic Search Debouncing
 
-```tsx {10-17}
+```tsx {8-19}
 import { useState } from 'react'
 import { useDebouncedFn } from 'classic-react-hooks'
 

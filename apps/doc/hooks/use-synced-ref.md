@@ -17,7 +17,9 @@ A React hook that creates a ref that automatically stays in sync with the provid
 
 ::: details **Stale Closure Problem**
 
-**Problem:** In React, when you capture state values in closures (like in `setTimeout`, event handlers, or async operations), you might get stale values due to how JavaScript closures work.
+---
+
+**Problem:-** In React, when you capture state values in closures (like in `setTimeout`, event handlers, or async operations), you might get stale values due to how JavaScript closures work.
 
 ```tsx
 // ❌ Problematic approach - stale closure issue
@@ -42,7 +44,9 @@ function Component() {
 }
 ```
 
-**Solution:**
+---
+
+**Solution:-**
 
 -  Provides a ref that always contains the current value
 -  Eliminates stale closure issues in async operations

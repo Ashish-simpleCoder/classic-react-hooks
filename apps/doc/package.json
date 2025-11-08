@@ -1,6 +1,6 @@
 {
    "name": "docs",
-   "version": "0.0.0",
+   "version": "2.0.0",
    "description": "Documentation for classic-react-hooks package",
    "main": "index.js",
    "scripts": {
@@ -10,13 +10,16 @@
    },
    "keywords": [
       "classic-react-hooks",
-      "hooks",
-      "react hooks"
+      "React hooks",
+      "Custom react hooks",
+      "Essential react hooks",
+      "Functional hook",
+      "hooks"
    ],
    "author": "Ashish-simpleCoder",
    "license": "MIT",
-   "dependencies": {},
    "devDependencies": {
-      "vitepress": "^1.0.1"
+      "vitepress": "^1.0.1",
+      "vitepress-plugin-group-icons": "^1.6.5"
    }
 }

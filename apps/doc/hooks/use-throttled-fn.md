@@ -9,16 +9,22 @@ A React hook that returns a throttled version of provided function, ensuring it 
 ## Features
 
 -  **Rate limiting:** Ensures function executes at most once per specified interval
--  **Immediate execution:** First call executes immediately, subsequent calls are throttled
--  **Performance optimized:** Prevents excessive function calls during rapid user interactions
+-  **Immediate Execution:** First call executes immediately, subsequent calls are throttled
+-  **Performance Optimized:** Prevents excessive function calls during rapid user interactions
 -  **Context preservation:** Maintains original function's `this` context and error behavior
 -  **Error handling:** Preserves original function's error behavior
+
+::: tip
+The `throttled function` is purely ref based and does not change across re-renders.
+:::
 
 ## Problem It Solves
 
 ::: details **Boilerplate Reduction**
 
-**Problem:** Manually implementing throttling in React components becomes lengthy, little bit complex code with potential performance issues and inconsistent behavior.
+---
+
+**Problem:-** Manually implementing throttling in React components becomes lengthy, little bit complex code with potential performance issues and inconsistent behavior.
 
 ```tsx
 // ❌ Problematic approach which is redundant and verbose
@@ -55,16 +61,15 @@ function ScrollTracker() {
 }
 ```
 
-**Solution:**
+---
+
+**Solution:-**
 
 -  Eliminates repetitive throttling logic
 -  Automatic handling of:
-
-   → First call immediate execution
-
-   → Context preservation
-
-   → Error handling
+   -  First call immediate execution
+   -  Context preservation
+   -  Error handling
 
 ```tsx
 // ✅ Clean, declarative approach

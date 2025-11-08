@@ -3,41 +3,51 @@
 Hi! We are really excited that you are interested in contributing to classic-react-hooks. Before submitting your contribution, please make sure to take a moment and read through the following guide:
 
 
-
 ## 🔧 System Requirements
-- Node.js v16 or higher
-- Pnpm v8 or higher
+- [Node.js](https://nodejs.org/en) v16 or higher
+- [Pnpm](https://pnpm.io/) v8 or higher
 
 
+----
 ## 🏗️ Repo Setup
 
-- Clone the repository:
 ```bash
 git clone https://github.com/Ashish-simpleCoder/classic-react-hooks.git
 
 cd classic-react-hooks
 ```
 
-The package manager used to install and link dependencies should be [pnpm](https://pnpm.io/) v8.12.0 or higher. NodeJS version should be v18.14.2 or higher
 
-1. Run `pnpm install` in root folder
+### Install dependencies
+```sh
+pnpm install
+```
 
-2. Run `pnpm run build` to build the package
+### Build project
+```sh
+pnpm build
+```
+### Run tests
+```sh
+pnpm test
+```
+### Format code
+```sh
+pnpm format
+```
 
-3. Run `pnpm run test` to run the test cases
 
-4. Run `pnpm run format` to format all of the coding with prettier
-
+----
 ## 🔃 Pull Request Guidelines
 
 -  Checkout a topic branch from a base branch, e.g. `main`, and merge back against that branch.
 
 -  If adding a new feature:
 
-   -  Add accompanying test case.
    -  Provide a convincing reason to add this feature. Ideally, you should open a suggestion issue first and have it approved before working on it.
+   -  Add accompanying test case.
 
--  If fixing bug:
+-  If fixing a bug:
 
    -  If you are resolving a special issue, add `(fix #xxxx[,#xxxx])` (#xxxx is the issue id) in your PR title for a better release log, e.g. `fix: update fetch logic (fix #3899)`.
    -  Provide a detailed description of the bug in the PR. Live demo preferred.
@@ -49,9 +59,13 @@ The package manager used to install and link dependencies should be [pnpm](https
 
 -  Use `pnpm format` to format files according to the project guidelines.
 
+
+---
 ## 📄 Documenation Guidelines
 
--  To contribute in the documentation, go to apps/doc directory
+To contribute in the documentation, go to `apps/doc` directory
+
+### Steps to contribute
 
 1. Run `pnpm install` to install all of the dependencies
 
