@@ -7,7 +7,7 @@ type CopyToClipboardFn = (data: string, onSuccess?: OnSuccess, onError?: OnError
 
 /**
  * @description
- *  A hook for copying the data in the clipboard with success and error callbacks.
+ * A React hook that provides simple and reliable way to copy text to the clipboard with success and error handling callbacks.
  *
  * @example
    import { useState } from 'react'

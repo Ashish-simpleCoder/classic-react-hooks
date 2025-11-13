@@ -7,3 +7,7 @@ export interface EvOptions extends AddEventListenerOptions {
    shouldInjectEvent?: boolean | any
 }
 export type EvHandler = (event: Event) => void
+
+export type UseEventListenerReturnValues = {
+   setElementRef: (elementNode: HTMLElement | null) => void
+}

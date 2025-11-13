@@ -18,17 +18,9 @@ const DEFAULT_OPTIONS: Required<CanReachToInternetOptions> = {
 }
 
 /**
- * Custom React hook for monitoring comprehensive internet connectivity status
- *
  * @description
- * This hook provides a robust solution for detecting internet connectivity by combining:
- * - Browser's native online/offline detection (navigator.onLine)
- * - Actual network reachability testing via HTTP requests
- * - Automatic polling with configurable intervals
- * - Manual connectivity checking capabilities
- *
- * The hook differentiates between being "online" (browser thinks it's connected)
- * and actually being able to reach the internet (verified through network requests).
+ * A comprehensive React hook for monitoring internet connectivity status that goes beyond basic online/offline detection by actually testing network reachability.
+
  * @example
  * import { useCanReachToInternet } from 'classic-react-hooks'
  *
