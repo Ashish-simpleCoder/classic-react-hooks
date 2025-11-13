@@ -1,17 +1,13 @@
-import type { EvHandler, EvOptions, EvTarget } from '../../types'
+import type { EvHandler, EvOptions, EvTarget, UseEventListenerReturnValues } from '../../types'
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import useSyncedRef from '../use-synced-ref'
-
-export type UseEventListenerReturnValues = {
-   setElementRef: (elementNode: HTMLElement | null) => void
-}
 
 /* Have taken reference from ChakraUI's use-event-listener for typing out the props in type-safe manner. */
 
 /**
  * @description
- *  A React hook that provides a declarative way to add DOM event listeners with automatic cleanup.
+ *  A React hook that makes it easy to attach DOM event listeners declaratively with automatic cleanup.
  *
  * @example
    import { useEventListener } from 'classic-react-hooks'

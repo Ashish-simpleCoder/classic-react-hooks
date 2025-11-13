@@ -26,6 +26,34 @@ export type IntersectionObserverResult<Key extends string> = Prettify<
    }
 >
 
+/**
+ * @description
+ *  A React hook that provides a declarative way to observe element visibility using the [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) API.
+ *
+ * @example
+  import { useIntersectionObserver } from 'classic-react-hooks'
+
+  export default function BasicExample() {
+        const { element, setElementRef, isElementIntersecting } = useIntersectionObserver({
+          threshold: 0.5,
+          onIntersection: (entry) => {
+              console.log('Intersection changed:', entry.isIntersecting)
+          },
+        })
+
+        return (
+          <div className='h-[200vh]'>
+              <div className='mt-[100vh]'>
+                <div ref={setElementRef} className={`p-5 ${isElementIntersecting ? 'bg-green-200' : 'bg-red-200'}`}>
+                    {isElementIntersecting ? 'Visible!' : 'Not visible'}
+                </div>
+              </div>
+          </div>
+        )
+    }
+ *
+ * @see Docs https://classic-react-hooks.vercel.app/hooks/use-intersection-observer.html
+ */
 export default function useIntersectionObserver<Key extends string = ''>(
    options?: IntersectionObserverOptions<Key>
 ): IntersectionObserverResult<Key> {

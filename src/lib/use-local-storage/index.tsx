@@ -3,7 +3,7 @@ import React, { useRef, useCallback, useSyncExternalStore } from 'react'
 
 /**
  * @description
- * A React hook that provides a seamless way to persist and synchronize state with `localStorage`, offering a `useState`-like API with automatic cross-tab synchronization.
+ * A React hook that provides a seamless way to persist and synchronize state with `localStorage`, offering a `useState`-like API with cross-tab synchronization.
  *
  * @example
    import { useLocalStorage } from 'classic-react-hooks'

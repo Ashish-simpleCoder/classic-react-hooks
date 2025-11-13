@@ -4,7 +4,7 @@ const DEFAULT_DELAY = 300
 
 /**
  * @description
- *  A React hook that returns a throttled version of a callback function.
+ * A React hook that returns a throttled version of provided function, ensuring it executes at most once per specified time interval, regardless of how frequently it's called.
  *
  * @example
    import { useState } from 'react'

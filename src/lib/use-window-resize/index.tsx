@@ -3,8 +3,8 @@ import { useEventListener } from '../use-event-listener'
 
 /**
  * @description
- * -  A React hook that evaluates a callback function on window resize events and returns the result.
-  *  - Perfect for responsive behavior based on window dimensions.
+ * A React hook that evaluates provided callback function on window resize event and returns the result of it.
+ *
  * @example
    import { useWindowResize } from 'classic-react-hooks'
 

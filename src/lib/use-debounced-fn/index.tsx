@@ -4,11 +4,11 @@ const DEFAULT_DELAY = 300
 
 /**
  * @description
- *  A hook which returns a debounced function.
+ *  A React hook that returns a debounced version of any function, delaying its execution until after a specified delay has passed since the last time it was invoked.
  *
  * @example
  *
-   import { useState, useEffect } from 'react'
+   import React, { useState, useEffect } from 'react'
    import { useDebouncedFn } from 'classic-react-hooks'
 
    export default function SearchInput() {

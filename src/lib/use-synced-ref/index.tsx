@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 
 /**
  * @description
- *  A React hook that creates a ref that automatically stays in sync with the provided value.
+ * A React hook that creates a ref that automatically stays in sync with the provided value, ensuring you always have access to the latest state in asynchronous operations.
  *
  * @example
    import { useState } from 'react'
