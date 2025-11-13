@@ -132,7 +132,9 @@ export default function useCanReachToInternet(options: CanReachToInternetOptions
     * thinks it's online.
     *
     */
-   const checkIfCanReachToInternet = async () => {
+   const checkIfCanReachToInternet = async (
+      { pollingEnabled }: { pollingEnabled?: boolean } = { pollingEnabled: true }
+   ) => {
       // If offline then early return with flag update
       if (!isOnline) {
          setCanReachToInternet(false)
@@ -167,7 +169,9 @@ export default function useCanReachToInternet(options: CanReachToInternetOptions
          }
       } finally {
          if (isNetworkPollingEnabled && !abortController.signal.aborted) {
-            timeoutRef.current = setTimeout(() => checkIfCanReachToInternet(), config.networkPollingInterval)
+            if (pollingEnabled) {
+               timeoutRef.current = setTimeout(() => checkIfCanReachToInternet(), config.networkPollingInterval)
+            }
          }
          setIsCheckingConnection(false)
       }
@@ -177,6 +181,13 @@ export default function useCanReachToInternet(options: CanReachToInternetOptions
       // If network polling is stopped, then do not run again.
       // Initially trigger checker function
       if (isInitialCallDone.current && !isNetworkPollingEnabled) {
+         // Even if polling is stopped, check if the device is online.
+         // And update the <canReachToInternet> state
+         if (!isOnline) {
+            setCanReachToInternet(false)
+         } else {
+            checkIfCanReachToInternet({ pollingEnabled: false })
+         }
          return
       }
       isInitialCallDone.current = true

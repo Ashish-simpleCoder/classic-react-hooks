@@ -169,10 +169,10 @@ describe('useCanReachToInternet', () => {
             result.current.stopNetworkPolling()
          })
          expect(result.current.isNetworkPollingEnabled).toBe(false)
-         expect(mockFetch).toHaveBeenCalledTimes(1)
+         expect(mockFetch).toHaveBeenCalledTimes(2)
 
          vi.advanceTimersByTimeAsync(1000)
-         expect(mockFetch).toHaveBeenCalledTimes(1)
+         expect(mockFetch).toHaveBeenCalledTimes(2)
       })
 
       it('should start polling when startNetworkPolling is called', async () => {
@@ -262,6 +262,28 @@ describe('useCanReachToInternet', () => {
 
          expect(mockAddEventListener).toHaveBeenCalledWith('online', expect.any(Function))
          expect(mockAddEventListener).toHaveBeenCalledWith('offline', expect.any(Function))
+      })
+
+      it('should update the <canReachToInternet> state when online/offline events are triggered without polling enabled', async () => {
+         const { result, rerender } = renderHook(() => useCanReachToInternet({ enableNetworkPolling: false }))
+
+         await waitFor(() => {
+            expect(result.current.canReachToInternet).toBe(true)
+         })
+
+         // Should update the state when offline
+         await waitFor(() => {
+            mockNavigator.onLine = false
+            rerender()
+            expect(result.current.canReachToInternet).toBe(false)
+         })
+
+         // Should update the state when online
+         await waitFor(() => {
+            mockNavigator.onLine = true
+            rerender()
+            expect(result.current.canReachToInternet).toBe(true)
+         })
       })
    })
 
