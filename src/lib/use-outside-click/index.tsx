@@ -1,6 +1,6 @@
 import type { EvOptions, EvTarget } from '../../types'
 
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { useEventListener } from '../use-event-listener'
 
 /**
@@ -40,12 +40,19 @@ export default function useOutsideClick({
    handler,
    options,
 }: {
-   target: EvTarget
+   target?: EvTarget
    handler?: (event: DocumentEventMap['click']) => void
    options?: EvOptions
 }) {
+   const [elementNode, setElementNode] = useState<EventTarget | null>(() =>
+      typeof target === 'function' ? target() : null
+   )
+   const setElementRef = useRef((elementNode: HTMLElement | null) => {
+      setElementNode(elementNode)
+   })
+
    const eventCb = (event: DocumentEventMap['click']) => {
-      const node = typeof target == 'function' ? target() : null // node which need to be tracked if click has occured within it or not
+      const node = elementNode // node which need to be tracked if click has occured within it or not
 
       if (!node) return
 
@@ -57,7 +64,7 @@ export default function useOutsideClick({
       handler?.(event)
    }
 
-   const { setElementRef } = useEventListener({
+   useEventListener({
       target: () => document,
       event: 'click',
       handler: eventCb,
@@ -67,5 +74,5 @@ export default function useOutsideClick({
       },
    })
 
-   return { setElementRef }
+   return { setElementRef: setElementRef.current }
 }
