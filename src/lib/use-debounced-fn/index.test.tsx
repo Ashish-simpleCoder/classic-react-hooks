@@ -2,7 +2,7 @@ import { vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import useDebouncedFn from '.'
 
-describe('useDebouncedFn', () => {
+describe('use-debounced-fn', () => {
    beforeEach(() => {
       vi.useFakeTimers()
    })
@@ -12,7 +12,7 @@ describe('useDebouncedFn', () => {
       vi.clearAllMocks()
    })
 
-   describe('Basic functionality', () => {
+   describe('mounting', () => {
       it('should return a function', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
@@ -33,6 +33,68 @@ describe('useDebouncedFn', () => {
 
          act(() => {
             result.current()
+         })
+
+         expect(callback).not.toHaveBeenCalled()
+      })
+   })
+
+   describe('unmounting', () => {
+      it('should cleanup timer on unmount', () => {
+         const callback = vi.fn()
+
+         const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 500 }))
+
+         act(() => {
+            result.current()
+         })
+
+         unmount()
+
+         act(() => {
+            vi.advanceTimersByTime(600)
+         })
+
+         expect(callback).not.toHaveBeenCalled()
+      })
+
+      it('should cleanup multiple pending timers on unmount', () => {
+         const callback = vi.fn()
+
+         const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
+
+         act(() => {
+            result.current() // First call
+            vi.advanceTimersByTime(100)
+            result.current() // Second call (cancels first)
+            vi.advanceTimersByTime(100)
+            result.current() // Third call (cancels second)
+         })
+
+         unmount()
+
+         act(() => {
+            vi.advanceTimersByTime(500)
+         })
+
+         expect(callback).not.toHaveBeenCalled()
+      })
+
+      it('should not cause memory leaks with repeated mount/unmount', () => {
+         const callback = vi.fn()
+
+         for (let i = 0; i < 10; i++) {
+            const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 100 }))
+
+            act(() => {
+               result.current()
+            })
+
+            unmount()
+         }
+
+         act(() => {
+            vi.advanceTimersByTime(200)
          })
 
          expect(callback).not.toHaveBeenCalled()
@@ -131,7 +193,7 @@ describe('useDebouncedFn', () => {
       })
    })
 
-   describe('Arguments handling', () => {
+   describe('Arugment passing to callback', () => {
       it('should pass arguments correctly to the callback', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
@@ -294,68 +356,6 @@ describe('useDebouncedFn', () => {
          expect(callback).toHaveBeenCalledTimes(1)
          expect(logFn).toHaveBeenCalledTimes(1)
          expect(logFn).toHaveBeenNthCalledWith(1, 'updated')
-      })
-   })
-
-   describe('Cleanup and unmounting', () => {
-      it('should cleanup timer on unmount', () => {
-         const callback = vi.fn()
-
-         const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 500 }))
-
-         act(() => {
-            result.current()
-         })
-
-         unmount()
-
-         act(() => {
-            vi.advanceTimersByTime(600)
-         })
-
-         expect(callback).not.toHaveBeenCalled()
-      })
-
-      it('should cleanup multiple pending timers on unmount', () => {
-         const callback = vi.fn()
-
-         const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
-
-         act(() => {
-            result.current() // First call
-            vi.advanceTimersByTime(100)
-            result.current() // Second call (cancels first)
-            vi.advanceTimersByTime(100)
-            result.current() // Third call (cancels second)
-         })
-
-         unmount()
-
-         act(() => {
-            vi.advanceTimersByTime(500)
-         })
-
-         expect(callback).not.toHaveBeenCalled()
-      })
-
-      it('should not cause memory leaks with repeated mount/unmount', () => {
-         const callback = vi.fn()
-
-         for (let i = 0; i < 10; i++) {
-            const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 100 }))
-
-            act(() => {
-               result.current()
-            })
-
-            unmount()
-         }
-
-         act(() => {
-            vi.advanceTimersByTime(200)
-         })
-
-         expect(callback).not.toHaveBeenCalled()
       })
    })
 

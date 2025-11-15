@@ -84,7 +84,7 @@ afterEach(() => {
    vi.clearAllMocks()
 })
 
-describe('useLocalStorage', () => {
+describe('use-local-storage', () => {
    describe('Initialization Tests', () => {
       it('should initialize with primitive value when localStorage is empty', () => {
          const { result } = renderHook(() => useLocalStorage({ key: 'test-primitive', initialValue: 'hello' }))
@@ -517,7 +517,7 @@ describe('useLocalStorage', () => {
       })
    })
 
-   describe('🌐SSR Support Tests', () => {
+   describe('SSR Support Tests', () => {
       it('should work with server-side rendering (no localStorage)', () => {
          // Mock server environment
          const originalLocalStorage = window.localStorage

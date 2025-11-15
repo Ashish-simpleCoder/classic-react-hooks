@@ -2,7 +2,7 @@ import { vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import useThrottledFn from '.'
 
-describe('useThrottledFn', () => {
+describe('use-throttled-fn', () => {
    beforeEach(() => {
       vi.useFakeTimers()
    })
@@ -12,7 +12,7 @@ describe('useThrottledFn', () => {
       vi.clearAllMocks()
    })
 
-   describe('Basic functionality', () => {
+   describe('mounting', () => {
       it('should return a function', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useThrottledFn({ callbackToThrottle: callback }))
