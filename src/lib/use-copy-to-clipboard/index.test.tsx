@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor, renderHook } from '@testing-library
 import React, { useState } from 'react'
 import useCopyToClipboard, { copyToClipboardFn } from '.'
 
-describe('useCopyToClipboard', () => {
+describe('use-copy-to-clipboard', () => {
    // Mock clipboard API
    const mockWriteText = vi.fn()
    const originalClipboard = navigator.clipboard

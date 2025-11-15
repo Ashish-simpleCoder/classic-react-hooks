@@ -1,8 +1,8 @@
 import { vi } from 'vitest'
 import { renderHook } from '@testing-library/react'
-import useTimeoutEffect from '.' // Fixed typo in import
+import useTimeoutEffect from '.'
 
-describe('useTimeoutEffect', () => {
+describe('use-timeout-effect', () => {
    beforeEach(() => {
       vi.useFakeTimers()
    })
@@ -12,7 +12,7 @@ describe('useTimeoutEffect', () => {
       vi.clearAllTimers()
    })
 
-   describe('basic functionality', () => {
+   describe('mounting', () => {
       it('should fire callback with default timeout of 100ms after mount', () => {
          const fn = vi.fn()
          renderHook(() => useTimeoutEffect({ handler: fn }))
@@ -43,6 +43,30 @@ describe('useTimeoutEffect', () => {
          expect(fn).toHaveBeenCalledTimes(1)
 
          // Advance more time to ensure it doesn't fire again
+         vi.advanceTimersByTime(1000)
+         expect(fn).toHaveBeenCalledTimes(1)
+      })
+   })
+
+   describe('unmounting', () => {
+      it('should clear timeout on unmount before timeout expires', () => {
+         const fn = vi.fn()
+         const { unmount } = renderHook(() => useTimeoutEffect({ handler: fn, timeout: 500 }))
+
+         vi.advanceTimersByTime(200)
+         unmount()
+         vi.advanceTimersByTime(500)
+         expect(fn).not.toHaveBeenCalled()
+      })
+
+      it('should not interfere with callback execution if unmounted after timeout', () => {
+         const fn = vi.fn()
+         const { unmount } = renderHook(() => useTimeoutEffect({ handler: fn, timeout: 100 }))
+
+         vi.advanceTimersByTime(100)
+         expect(fn).toHaveBeenCalledTimes(1)
+
+         unmount()
          vi.advanceTimersByTime(1000)
          expect(fn).toHaveBeenCalledTimes(1)
       })
@@ -179,30 +203,6 @@ describe('useTimeoutEffect', () => {
       })
    })
 
-   describe('component lifecycle', () => {
-      it('should clear timeout on unmount before timeout expires', () => {
-         const fn = vi.fn()
-         const { unmount } = renderHook(() => useTimeoutEffect({ handler: fn, timeout: 500 }))
-
-         vi.advanceTimersByTime(200)
-         unmount()
-         vi.advanceTimersByTime(500)
-         expect(fn).not.toHaveBeenCalled()
-      })
-
-      it('should not interfere with callback execution if unmounted after timeout', () => {
-         const fn = vi.fn()
-         const { unmount } = renderHook(() => useTimeoutEffect({ handler: fn, timeout: 100 }))
-
-         vi.advanceTimersByTime(100)
-         expect(fn).toHaveBeenCalledTimes(1)
-
-         unmount()
-         vi.advanceTimersByTime(1000)
-         expect(fn).toHaveBeenCalledTimes(1)
-      })
-   })
-
    describe('parameter updates', () => {
       it('should use latest handler when timeout fires', () => {
          const fn1 = vi.fn()
@@ -237,7 +237,7 @@ describe('useTimeoutEffect', () => {
       })
    })
 
-   describe('edge cases', () => {
+   describe('error handling', () => {
       it('should not throw when handler throws an error', () => {
          const errorHandler = vi.fn(() => {
             throw new Error('Test error')
