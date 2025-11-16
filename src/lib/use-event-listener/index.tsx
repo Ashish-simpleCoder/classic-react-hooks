@@ -80,9 +80,10 @@ export function useEventListener({
 }) {
    // Determining which hook to use -> layout or effect
    const useSelectedHook = layoutEffect ? useLayoutEffect : useEffect
+   const isSSR = typeof globalThis.window == 'undefined'
 
    const [elementNode, setElementNode] = useState<EventTarget | null>(() =>
-      typeof target === 'function' ? target() : null
+      typeof target === 'function' && !isSSR ? target() : null
    )
 
    const setElementRef = useRef((elementNode: HTMLElement | null) => {
