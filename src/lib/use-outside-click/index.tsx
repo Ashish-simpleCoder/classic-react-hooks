@@ -69,7 +69,7 @@ export default function useOutsideClick({
       event: 'click',
       handler: eventCb,
       options: {
-         capture: true,
+         capture: false, // Fixing the event delegation, to prevent async event trigger in react
          ...options,
       },
    })
