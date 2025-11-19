@@ -1,6 +1,6 @@
 import type { EvOptions, EvTarget } from '../../types'
 
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useEventListener } from '../use-event-listener'
 
 /**
@@ -19,7 +19,10 @@ import { useEventListener } from '../use-event-listener'
       })
 
       if (!isOpen) {
-         return <button onClick={() => setIsOpen(true)}>Open Modal</button>
+         return <button onClick={(e) => {
+            e.stopPropagation()
+            setIsOpen(true)
+         }}>Open Modal</button>
       }
 
       return (
@@ -44,18 +47,19 @@ export default function useOutsideClick({
    handler?: (event: DocumentEventMap['click']) => void
    options?: EvOptions
 }) {
-   const [elementNode, setElementNode] = useState<EventTarget | null>(() =>
-      typeof target === 'function' ? target() : null
-   )
-   const setElementRef = useRef((elementNode: HTMLElement | null) => {
-      setElementNode(elementNode)
+   const elementNode = useRef<HTMLElement | undefined | null>()
+   const setElementRef = useRef((node: HTMLElement | null) => {
+      elementNode.current = node
    })
+   const mergedOptions: EvOptions = { shouldInjectEvent: true, ...options }
 
    const eventCb = (event: DocumentEventMap['click']) => {
-      const node = elementNode // node which need to be tracked if click has occured within it or not
+      const node = elementNode.current // node which need to be tracked if click has occured within it or not
 
-      if (!node) return
-
+      if (!node) {
+         console.warn('Provided target element is null. Skipping the document click handler.')
+         return
+      }
       if (event.target == node) return
 
       if ('contains' in node && (node as Node).contains(event.target as Node)) {
@@ -64,12 +68,20 @@ export default function useOutsideClick({
       handler?.(event)
    }
 
+   useEffect(() => {
+      // Setting target inside effect, because effects run after the rendering of dom is done.
+      // Lazily setting target when <shouldInjectEvent> prop is true
+      if (typeof target == 'function' && mergedOptions.shouldInjectEvent) {
+         setElementRef.current(target() as HTMLElement)
+      }
+   }, [target, options?.shouldInjectEvent])
+
    useEventListener({
       target: () => document,
       event: 'click',
       handler: eventCb,
       options: {
-         capture: false, // Fixing the event delegation, to prevent async event trigger in react
+         capture: false, // Let the event bubble from top-to-bottom. Prevent it from user side using e.stopPropagation() on the button click
          ...options,
       },
    })
