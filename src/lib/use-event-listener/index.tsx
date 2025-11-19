@@ -80,11 +80,8 @@ export function useEventListener({
 }) {
    // Determining which hook to use -> layout or effect
    const useSelectedHook = layoutEffect ? useLayoutEffect : useEffect
-   const isSSR = typeof globalThis.window == 'undefined'
 
-   const [elementNode, setElementNode] = useState<EventTarget | null>(() =>
-      typeof target === 'function' && !isSSR ? target() : null
-   )
+   const [elementNode, setElementNode] = useState<EventTarget | null>(null)
 
    const setElementRef = useRef((elementNode: HTMLElement | null) => {
       setElementNode(elementNode)
@@ -120,11 +117,11 @@ export function useEventListener({
       signal = options.signal
    }
 
-   useSelectedHook(() => {
-      if (typeof target === 'function') {
+   useEffect(() => {
+      if (typeof target == 'function' && shouldInjectEvent) {
          setElementRef.current(target() as HTMLElement)
       }
-   }, [target])
+   }, [target, shouldInjectEvent])
 
    useSelectedHook(listener.current.effectCb, [elementNode, event, shouldInjectEvent, capture, once, passive, signal])
 
