@@ -10,7 +10,7 @@ export default defineConfig({
    minify: 'terser',
    shims: true,
    outDir: 'dist',
-   target: 'es2017',
+   target: 'esnext',
    treeshake: true,
    jsxFragment: 'React.Fragment',
    metafile: true,
