@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.22
+
+### Minor Changes
+
+-  5e43e42: Update target build to esnext in builder
+
 ## 2.0.0-canary.21
 
 ### Minor Changes
