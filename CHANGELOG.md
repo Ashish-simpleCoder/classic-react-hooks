@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.23
+
+### Minor Changes
+
+-  a0c4e96: ref: Initialize context lazily within ContextProvider component for can-reach-to-internet-context
+
 ## 2.0.0-canary.22
 
 ### Minor Changes
