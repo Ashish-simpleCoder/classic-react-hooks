@@ -1,7 +1,7 @@
 'use client'
-import type { ReactNode } from 'react'
+import type { ReactNode, Context } from 'react'
 
-import { createContext, useContext } from 'react'
+import React, { createContext, useContext, useRef } from 'react'
 import useCanReachToInternet, { CanReachToInternetOptions } from '.'
 
 /**
@@ -18,7 +18,7 @@ type CtxValues = ReturnType<typeof useCanReachToInternet>
  * without prop drilling.
  *
  */
-const CanReachToInternetCtx = createContext<CtxValues>({} as CtxValues)
+let CanReachToInternetCtx: Context<CtxValues>
 
 /**
  * Props interface for the CanReachToInternetCtxProvider component
@@ -44,7 +44,7 @@ interface CanReachToInternetCtxProviderProps extends CanReachToInternetOptions {
  * @example
  * // Basic usage - wrap your app with the provider
    import { CanReachToInternetCtxProvider } from 'classic-react-hooks'
-   
+
    function App() {
       return (
          <CanReachToInternetCtxProvider>
@@ -57,6 +57,7 @@ interface CanReachToInternetCtxProviderProps extends CanReachToInternetOptions {
  *
  * */
 export function CanReachToInternetCtxProvider({ children, ...options }: CanReachToInternetCtxProviderProps) {
+   CanReachToInternetCtx = useRef(createContext<CtxValues>({} as CtxValues)).current
    const values = useCanReachToInternet(options)
 
    return <CanReachToInternetCtx.Provider value={values}>{children}</CanReachToInternetCtx.Provider>
@@ -64,29 +65,29 @@ export function CanReachToInternetCtxProvider({ children, ...options }: CanReach
 
 /**
  * Custom hook to consume the internet connectivity context
- * 
+ *
  * @description
  * This hook provides access to all the internet connectivity status and control
  * methods from the nearest CanReachToInternetCtxProvider in the component tree.
  * It must be used within a component that is wrapped by CanReachToInternetCtxProvider,
  * otherwise it will throw an error.
- * 
+ *
  * The hook returns the same values as useCanReachToInternet, but accessed through
  * React Context instead of being created locally in each component.
- * 
+ *
  * @throws {Error} Throws an error if used outside of CanReachToInternetCtxProvider
- * 
+ *
  * @example
  * // Basic usage in a component
    import { useCanReachToInternetCtx } from 'classic-react-hooks'
-   
+
    function NetworkStatusBadge() {
       const { isFullyConnected, isCheckingConnection } = useCanReachToInternetCtx()
-      
+
       if (isCheckingConnection) {
          return <div className="badge checking">Checking...</div>
       }
-      
+
       return (
          <div className={`badge ${isFullyConnected ? 'online' : 'offline'}`}>
             {isFullyConnected ? '🟢 Online' : '🔴 Offline'}
