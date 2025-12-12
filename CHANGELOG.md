@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.24
+
+### Patch Changes
+
+-  ab12cc5: build: upgrade from tsup to tsdown bundler
+
 ## 2.0.0-canary.23
 
 ### Minor Changes
