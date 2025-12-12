@@ -89,7 +89,6 @@ export default defineConfig({
          { icon: 'bluesky', link: 'https://bsky.app/profile/ashish-simplecoder.bsky.social' },
          { icon: 'npm', link: 'https://www.npmjs.com/package/classic-react-hooks' },
          { icon: 'x', link: 'https://twitter.com/ashish_devloper' },
-
       ],
       editLink: {
          pattern: 'https://github.com/Ashish-simpleCoder/classic-react-hooks/edit/main/apps/doc/:path',

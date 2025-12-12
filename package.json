@@ -30,7 +30,7 @@
       "tsup.config.ts"
    ],
    "scripts": {
-      "build": "pnpm clean && tsup",
+      "build": "tsdown",
       "prepare": "pnpm build",
       "release": "changeset publish",
       "type-check": "tsc",
@@ -63,7 +63,7 @@
       "size-limit": "^8.2.4",
       "terser": "^5.17.1",
       "ts-node": "^10.9.1",
-      "tsup": "^6.7.0",
+      "tsdown": "^0.17.2",
       "typescript": "^5.0.4",
       "vite": "5.3.3",
       "vitest": "^2.0.3"

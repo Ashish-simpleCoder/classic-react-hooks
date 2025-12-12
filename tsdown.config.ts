@@ -1,18 +1,16 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsdown'
 
 export default defineConfig({
    entry: ['src/index.tsx'],
-   splitting: true,
+   platform:'neutral',
    sourcemap: true,
    clean: true,
    dts: true,
    format: ['cjs', 'esm'],
-   minify: 'terser',
+   minify: true,
    shims: true,
    outDir: 'dist',
    target: 'esnext',
    treeshake: true,
-   jsxFragment: 'React.Fragment',
-   metafile: true,
    tsconfig: './tsconfig.json',
 })
