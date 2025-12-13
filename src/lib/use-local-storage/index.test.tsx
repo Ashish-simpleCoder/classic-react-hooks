@@ -93,6 +93,24 @@ describe('use-local-storage', () => {
          expect(mockStorage.getItem).toHaveBeenCalledWith('test-primitive')
       })
 
+      it('should initialize with ssr', () => {
+         const { result } = renderHook(() => useLocalStorage({ key: 'test-primitive', initialValue: 'hello' }), {
+            hydrate: true,
+         })
+
+         expect(result.current[0]).toBe('hello')
+         expect(mockStorage.getItem).toHaveBeenCalledWith('test-primitive')
+      })
+
+      it('should initialize with function in ssr', () => {
+         const { result } = renderHook(() => useLocalStorage({ key: 'test-primitive', initialValue: () => 'hello' }), {
+            hydrate: true,
+         })
+
+         expect(result.current[0]).toBe('hello')
+         expect(mockStorage.getItem).toHaveBeenCalledWith('test-primitive')
+      })
+
       it('should initialize with object value when localStorage is empty', () => {
          const initialObj = { name: 'John', age: 30 }
          const { result } = renderHook(() => useLocalStorage({ key: 'test-object', initialValue: initialObj }))
