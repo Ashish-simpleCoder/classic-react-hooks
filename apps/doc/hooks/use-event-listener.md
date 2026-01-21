@@ -8,7 +8,7 @@ A React hook that makes it easy to attach DOM event listeners declaratively with
 
 ## Features
 
--  **Flexible Targeting:** Observe elements via the _`target`_ prop or _`setElementRef`_ function.
+-  **Flexible Targeting:** Observe elements via the _`target`_ prop or _`setElementRef`_(node ref) function.
 -  **Auto Cleanup:** Listeners are automatically managed on unmount or dependency changes.
 -  **Reactive:** Listeners intelligently reattach when _`target`_, _`event`_, or _`options`_ change.
 -  **Conditional Binding:** Attach listeners only when _`target`_, a _`handler`_, and _`shouldInjectEvent`_ are valid.
@@ -160,7 +160,33 @@ export type UseEventListenerReturnValues = {
 
 ## Usage Examples
 
+### Usage with `setElementRef`(no manual creation of ref)
+
+```ts {6,16}
+import { useState } from 'react'
+import { useEventListener } from 'classic-react-hooks'
+
+export default function ConditionalExample() {
+   const [counter, setCounter] = useState(0)
+   const { setElementRef } = useEventListener({
+      event: 'click',
+      handler: () => {
+         console.log(counter)
+      },
+   })
+
+   return (
+      <div>
+         <button onClick={() => setCounter((c) => c + 1)}>update counter {counter}</button>
+         <div ref={setElementRef}>log value</div>
+      </div>
+   )
+}
+```
+
 ### Basic Click Handler
+
+::: details Exampls
 
 ```ts {7-13}
 import { useRef } from 'react'
@@ -180,6 +206,8 @@ export default function ClickExample() {
    return <button ref={buttonRef}>Click me</button>
 }
 ```
+
+:::
 
 ### Listening Window Event
 
@@ -229,34 +257,6 @@ export default function ConditionalExample() {
       <div>
          <button onClick={() => setIsListening(!isListening)}>{isListening ? 'Stop' : 'Start'} Listening</button>
          <p>Press any key (when listening is enabled)</p>
-      </div>
-   )
-}
-```
-
-:::
-
-### Usage with `setElementRef`
-
-::: details Example
-
-```ts {6,16}
-import { useState } from 'react'
-import { useEventListener } from 'classic-react-hooks'
-
-export default function ConditionalExample() {
-   const [counter, setCounter] = useState(0)
-   const { setElementRef } = useEventListener({
-      event: 'click',
-      handler: () => {
-         console.log(counter)
-      },
-   })
-
-   return (
-      <div>
-         <button onClick={() => setCounter((c) => c + 1)}>update counter {counter}</button>
-         <div ref={setElementRef}>log value</div>
       </div>
    )
 }
