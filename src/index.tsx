@@ -7,7 +7,7 @@ export { default as useOutsideClick } from './lib/use-outside-click'
 export { default as useCopyToClipboard, copyToClipboardFn } from './lib/use-copy-to-clipboard'
 export { default as useLocalStorage } from './lib/use-local-storage'
 
-export { default as useDebouncedFn, debouncedFnWrapper } from './lib/use-debounced-fn'
+export { useDebouncedFn, debouncedFnWrapper } from './lib/use-debounced-fn'
 export { default as useThrottledFn, throttledFnWrapper } from './lib/use-throttled-fn'
 
 export { default as useCanReachToInternet } from './lib/use-can-reach-to-internet'
