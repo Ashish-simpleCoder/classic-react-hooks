@@ -1,5 +1,13 @@
 # classic-react-hooks
 
+## 2.0.0-canary.25
+
+### Minor Changes
+
+-  2358a55: New api and props for use-debounced-fn
+   -  Introduce cleanup and debouncedFn return value
+   -  Introduce immediateCallback, onSuccess, onError and onFinally callback as lifecycle functions
+
 ## 2.0.0-canary.24
 
 ### Patch Changes
