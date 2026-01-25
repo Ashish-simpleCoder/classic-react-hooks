@@ -713,4 +713,128 @@ describe('use-local-storage', () => {
          })
       })
    })
+
+   describe('Encoder/Decoder Tests', () => {
+      it('should encode value before storing', () => {
+         const encoder = vi.fn((val: string) => btoa(val))
+         const { result } = renderHook(() => useLocalStorage({ key: 'encode-test', initialValue: 'hello', encoder }))
+
+         act(() => {
+            result.current[1]('world')
+         })
+
+         expect(encoder).toHaveBeenCalledWith('"world"')
+         expect(mockStorage.setItem).toHaveBeenCalledWith('encode-test', btoa('"world"'))
+      })
+
+      it('should decode value when retrieving', () => {
+         const decoder = vi.fn((val: string) => atob(val))
+         const encoded = btoa('"stored"')
+         mockStorage._setStore({ 'decode-test': encoded })
+
+         const { result } = renderHook(() => useLocalStorage({ key: 'decode-test', initialValue: 'default', decoder }))
+
+         expect(decoder).toHaveBeenCalledWith(encoded)
+         expect(result.current[0]).toBe('stored')
+      })
+
+      it('should handle both encoder and decoder', () => {
+         const encoder = (val: string) => btoa(val)
+         const decoder = (val: string) => atob(val)
+
+         const { result } = renderHook(() =>
+            useLocalStorage({ key: 'both-test', initialValue: { data: 'test' }, encoder, decoder })
+         )
+
+         act(() => {
+            result.current[1]({ data: 'updated' })
+         })
+
+         const stored = mockStorage._getStore()['both-test']
+         expect(stored).toBe(btoa(JSON.stringify({ data: 'updated' })))
+
+         mockStorage._setStore({ 'both-test': stored })
+         act(() => {
+            mockEvents._triggerCustomEvent('both-test')
+         })
+
+         expect(result.current[0]).toEqual({ data: 'updated' })
+      })
+
+      it('should handle encoder errors gracefully', () => {
+         const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+         const encoder = () => {
+            throw new Error('Encode failed')
+         }
+
+         const { result } = renderHook(() => useLocalStorage({ key: 'encode-error', initialValue: 'init', encoder }))
+
+         act(() => {
+            result.current[1]('new')
+         })
+
+         expect(consoleSpy).toHaveBeenCalled()
+         consoleSpy.mockRestore()
+      })
+
+      it('should handle decoder errors gracefully', () => {
+         const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+         const decoder = () => {
+            throw new Error('Decode failed')
+         }
+         mockStorage._setStore({ 'decode-error': 'invalid' })
+
+         const { result } = renderHook(() =>
+            useLocalStorage({ key: 'decode-error', initialValue: 'fallback', decoder })
+         )
+
+         expect(result.current[0]).toBe('fallback')
+         expect(consoleSpy).toHaveBeenCalled()
+         consoleSpy.mockRestore()
+      })
+
+      it('should work without encoder/decoder (backward compatibility)', () => {
+         const { result } = renderHook(() => useLocalStorage({ key: 'no-codec', initialValue: 'test' }))
+
+         act(() => {
+            result.current[1]('updated')
+         })
+
+         expect(mockStorage.setItem).toHaveBeenCalledWith('no-codec', '"updated"')
+         expect(result.current[0]).toBe('updated')
+      })
+
+      it('should handle complex objects with encoder/decoder', () => {
+         const encoder = (val: string) => btoa(val)
+         const decoder = (val: string) => atob(val)
+         const obj = { nested: { data: [1, 2, 3] } }
+
+         const { result } = renderHook(() =>
+            useLocalStorage({ key: 'complex-codec', initialValue: obj, encoder, decoder })
+         )
+
+         act(() => {
+            result.current[1]({ nested: { data: [4, 5, 6] } })
+         })
+
+         expect(result.current[0]).toEqual({ nested: { data: [4, 5, 6] } })
+      })
+
+      it('should apply encoder on key change migration', () => {
+         const encoder = vi.fn((val: string) => btoa(val))
+         let key = 'key-1'
+
+         const { result, rerender } = renderHook(() => useLocalStorage({ key, initialValue: 'value', encoder }))
+
+         act(() => {
+            result.current[1]('migrated')
+         })
+
+         key = 'key-2'
+         rerender()
+
+         expect(encoder).toHaveBeenCalledWith('"migrated"')
+         expect(mockStorage.setItem).toHaveBeenCalledWith('key-2', btoa('"migrated"'))
+      })
+   })
 })

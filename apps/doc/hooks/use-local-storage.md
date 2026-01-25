@@ -8,16 +8,20 @@ A React hook that provides a seamless way to persist and synchronize state with 
 
 ## Features
 
--  **`useState` Compatible API:** Drop-in replacement with identical API including functional updates
+-  **_useState_ Compatible API:** Drop-in replacement with identical API including functional updates
 -  **SSR Compatible:** Default values prevent hydration mismatches
 -  **Auto Synchronization:** Seamless bidirectional sync between React state, `localStorage` and across different browser tabs
 -  **Error handling:** Graceful fallbacks when localStorage operations fail
+-  **Custom Encoding/Decoding:** Optional encoder and decoder for data transformation (encryption, compression, etc.)
+-  **Dynamic Key Migration:** Automatically migrates data when key changes without data loss
 
 ::: danger Important Notes
 
 -  **Automatic Serialization:** Data is automatically serialized to JSON when storing.
 -  **Synchronous Updates:** State updates are synchronous and immediately persisted.
 -  **Fallback value:** Always provide default values for SSR fallback.
+-  **Encoder/Decoder:** Applied after JSON serialization and before JSON parsing respectively.
+-  **Key Migration:** When key changes, old key is removed and data is migrated to new key automatically.
    :::
 
 ## Problem It Solves
@@ -76,7 +80,7 @@ It's designed to be a drop-in replacement for `useState`, maintaining the famili
 ```tsx
 // ✅ Automatic synchronization
 function UserSettings() {
-   const [theme, setTheme] = useLocalStorage({ key: 'theme', defaultValue: 'light' })
+   const [theme, setTheme] = useLocalStorage({ key: 'theme', initialValue: 'light' })
 
    return (
       <select value={theme} onChange={(e) => setTheme(e.target.value)}>
@@ -114,7 +118,7 @@ function BrokenComponent() {
 ```tsx
 // ✅ Perfect useState compatibility
 function Component() {
-   const [count, setCount] = useLocalStorage({ key: 'count', defaultValue: 0 })
+   const [count, setCount] = useLocalStorage({ key: 'count', initialValue: 0 })
 
    // All familiar useState patterns work perfectly
    setCount(5) // Direct value
@@ -144,14 +148,14 @@ function ProblematicComponent() {
 
 ---
 
-**Solution:-** The hook's `defaultValue` prop ensures consistent initial renders and smooth hydration by providing predictable fallback values.
+**Solution:-** The hook's `initialValue` prop ensures consistent initial renders and smooth hydration by providing predictable fallback values.
 
 ```tsx
 // ✅ SSR-compatible with smooth hydration
 function SSRFriendlyComponent() {
    const [theme, setTheme] = useLocalStorage({
       key: 'theme',
-      defaultValue: 'light', // Used during SSR and as fallback
+      initialValue: 'light', // Used during SSR and as fallback
    })
 
    // Server and client both start with 'light'
@@ -197,7 +201,7 @@ interface UserSettings {
 function SafeComponent() {
    const [settings, setSettings] = useLocalStorage<UserSettings>({
       key: 'user-settings',
-      defaultValue: { theme: 'light', language: 'en', notifications: true },
+      initialValue: { theme: 'light', language: 'en', notifications: true },
    })
 
    // TypeScript ensures settings has the correct shape
@@ -210,12 +214,56 @@ function SafeComponent() {
 
 :::
 
+::: details Lack of Data Security and Transformation
+
+---
+
+**Problem:-** Sensitive data stored in localStorage is visible in plain text, and there's no built-in way to transform or compress data before storage.
+
+```tsx
+// ❌ Sensitive data exposed in plain text
+function InsecureComponent() {
+   const [apiKey, setApiKey] = useLocalStorage({ key: 'api-key', initialValue: '' })
+
+   // API key stored as plain text in localStorage - anyone can read it!
+   // No way to compress large data structures
+}
+```
+
+---
+
+**Solution:-** The hook supports optional `encoder` and `decoder` functions for custom data transformation like encryption, compression, or Base64 encoding.
+
+```tsx
+// ✅ Encrypted storage with custom encoder/decoder
+function SecureComponent() {
+   const [apiKey, setApiKey] = useLocalStorage({
+      key: 'api-key',
+      initialValue: '',
+      encoder: (value) => btoa(value), // Base64 encode
+      decoder: (value) => atob(value), // Base64 decode
+   })
+
+   // Or use real encryption
+   const [sensitiveData, setSensitiveData] = useLocalStorage({
+      key: 'sensitive',
+      initialValue: {},
+      encoder: (value) => encryptData(value), // Your encryption function
+      decoder: (value) => decryptData(value), // Your decryption function
+   })
+}
+```
+
+:::
+
 ## Parameters
 
-| Parameter    |  Type  | Required | Default Value | Description                               |
-| ------------ | :----: | :------: | :-----------: | ----------------------------------------- |
-| key          | string |    ✅    |       -       | Unique key for localStorage item          |
-| defaultValue |  any   |    ❌    |   undefined   | Initial value when no stored value exists |
+| Parameter    |           Type            | Required | Default Value | Description                                                  |
+| ------------ | :-----------------------: | :------: | :-----------: | ------------------------------------------------------------ |
+| key          |          string           |    ✅    |       -       | Unique key for localStorage item                             |
+| initialValue |  State \| (() => State)   |    ❌    |   undefined   | Initial value when no stored value exists                    |
+| encoder      | (value: string) => string |    ❌    |   undefined   | Optional function to encode stringified value before storing |
+| decoder      | (value: string) => string |    ❌    |   undefined   | Optional function to decode stored value before parsing      |
 
 ## Return Value(s)
 
@@ -233,6 +281,8 @@ Returns a tuple `[state, setState]` similar to `useState`:
 -  Shopping cart persistence
 -  User settings and preferences
 -  Feature flags for application
+-  Encrypted/encoded sensitive data storage
+-  Compressed data for large objects
 
 ## Usage Examples
 
@@ -242,8 +292,8 @@ Returns a tuple `[state, setState]` similar to `useState`:
 import { useLocalStorage } from 'classic-react-hooks'
 
 function UserPreferences() {
-   const [theme, setTheme] = useLocalStorage({ key: 'theme', defaultValue: 'light' })
-   const [language, setLanguage] = useLocalStorage({ key: 'language', defaultValue: 'en' })
+   const [theme, setTheme] = useLocalStorage({ key: 'theme', initialValue: 'light' })
+   const [language, setLanguage] = useLocalStorage({ key: 'language', initialValue: 'en' })
 
    return (
       <div>
@@ -279,7 +329,7 @@ interface UserProfile {
 function ProfileForm() {
    const [profile, setProfile] = useLocalStorage<UserProfile>({
       key: 'user-profile',
-      defaultValue: {
+      initialValue: {
          name: '',
          email: '',
          preferences: {
@@ -327,3 +377,93 @@ function ProfileForm() {
 ```
 
 :::
+
+### Encoded/Encrypted Storage
+
+::: details
+
+```ts
+// Base64 encoding example
+function Base64Example() {
+   const [token, setToken] = useLocalStorage({
+      key: 'auth-token',
+      initialValue: '',
+      encoder: (value) => btoa(value), // Encode to Base64
+      decoder: (value) => atob(value), // Decode from Base64
+   })
+
+   return <input type='text' value={token} onChange={(e) => setToken(e.target.value)} placeholder='Enter token' />
+}
+
+// Custom encryption example (pseudo-code)
+function EncryptedStorage() {
+   const encrypt = (value: string) => {
+      // Your encryption logic (e.g., AES)
+      return CryptoJS.AES.encrypt(value, 'secret-key').toString()
+   }
+
+   const decrypt = (value: string) => {
+      // Your decryption logic
+      const bytes = CryptoJS.AES.decrypt(value, 'secret-key')
+      return bytes.toString(CryptoJS.enc.Utf8)
+   }
+
+   const [sensitiveData, setSensitiveData] = useLocalStorage({
+      key: 'sensitive-info',
+      initialValue: { apiKey: '', secret: '' },
+      encoder: encrypt,
+      decoder: decrypt,
+   })
+
+   return (
+      <div>
+         <input
+            type='password'
+            value={sensitiveData.apiKey}
+            onChange={(e) => setSensitiveData((prev) => ({ ...prev, apiKey: e.target.value }))}
+            placeholder='API Key'
+         />
+      </div>
+   )
+}
+
+// Compression example using pako library
+function CompressedStorage() {
+   const compress = (value: string) => {
+      return pako.deflate(value, { to: 'string' })
+   }
+
+   const decompress = (value: string) => {
+      return pako.inflate(value, { to: 'string' })
+   }
+
+   const [largeData, setLargeData] = useLocalStorage({
+      key: 'large-dataset',
+      initialValue: [],
+      encoder: compress,
+      decoder: decompress,
+   })
+
+   // Useful for storing large arrays or objects
+}
+```
+
+:::
+
+## Data Flow
+
+The encoding and decoding process follows this flow:
+
+**Storing data:**
+
+```
+State → JSON.stringify() → encoder() → localStorage
+```
+
+**Retrieving data:**
+
+```
+localStorage → decoder() → JSON.parse() → State
+```
+
+Note: The encoder operates on the JSON-stringified value, and the decoder operates before JSON parsing.
