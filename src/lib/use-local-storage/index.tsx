@@ -33,9 +33,13 @@ import React, { useRef, useCallback, useSyncExternalStore } from 'react'
 export default function useLocalStorage<State>({
    key,
    initialValue,
+   encoder,
+   decoder,
 }: {
    key: string
    initialValue?: State | (() => State)
+   encoder?: (value: string) => string
+   decoder?: (value: string) => string
 }) {
    // Cache the last parse value to avoid unnecessary re-renders
    const lastValueRef = useRef<State | null>(null)
@@ -47,7 +51,8 @@ export default function useLocalStorage<State>({
          // Key has changed, reset cached values
          if (lastKeyRef.current !== key) {
             localStorage.removeItem(lastKeyRef.current)
-            localStorage.setItem(key, JSON.stringify(lastValueRef.current))
+            const serializedValue = JSON.stringify(lastValueRef.current)
+            localStorage.setItem(key, encoder ? encoder(serializedValue) : serializedValue)
             lastKeyRef.current = key
             lastValueRef.current = null
             lastStringRef.current = null
@@ -59,7 +64,7 @@ export default function useLocalStorage<State>({
             // Only parse if the string value has changed
             if (lastStringRef.current !== item) {
                lastStringRef.current = item
-               lastValueRef.current = JSON.parse(item)
+               lastValueRef.current = JSON.parse(decoder ? decoder(item) : item)
             }
             return lastValueRef.current!
          }
@@ -138,7 +143,7 @@ export default function useLocalStorage<State>({
             }
 
             const serializedValue = JSON.stringify(newValue === undefined ? null : newValue)
-            localStorage.setItem(key, serializedValue)
+            localStorage.setItem(key, encoder ? encoder(serializedValue) : serializedValue)
 
             // Update cache
             lastStringRef.current = serializedValue
