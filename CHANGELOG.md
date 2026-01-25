@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.26
+
+### Minor Changes
+
+-  4fc9b6c: feat: add `encoder` and `decoder` props in useLocalStorage for encoding/decoding value in localStorage
+
 ## 2.0.0-canary.25
 
 ### Minor Changes
