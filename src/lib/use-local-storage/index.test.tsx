@@ -750,7 +750,7 @@ describe('use-local-storage', () => {
             result.current[1]({ data: 'updated' })
          })
 
-         const stored = mockStorage._getStore()['both-test']
+         const stored = mockStorage._getStore()['both-test']!
          expect(stored).toBe(btoa(JSON.stringify({ data: 'updated' })))
 
          mockStorage._setStore({ 'both-test': stored })
