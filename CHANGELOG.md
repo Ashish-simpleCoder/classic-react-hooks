@@ -1,5 +1,11 @@
 # classic-react-hooks
 
+## 2.0.0-canary.27
+
+### Minor Changes
+
+-  8a2a4b7: Feature: Add AbortSignal api support for use-debounced-fn hook for cancelling the async work
+
 ## 2.0.0-canary.26
 
 ### Minor Changes
