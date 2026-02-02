@@ -1,6 +1,7 @@
 import { vi } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import { useDebouncedFn } from '.'
+import { act } from 'react'
 
 describe('use-debounced-fn', () => {
    beforeEach(() => {
@@ -32,34 +33,30 @@ describe('use-debounced-fn', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          expect(callback).not.toHaveBeenCalled()
       })
    })
 
    describe('unmounting', () => {
-      it('should cleanup timer on unmount', () => {
+      it('should cleanup timer on unmount', async () => {
          const callback = vi.fn()
 
          const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 500 }))
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          unmount()
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(600)
          })
 
          expect(callback).not.toHaveBeenCalled()
       })
 
-      it('should cleanup multiple pending timers on unmount', () => {
+      it('should cleanup multiple pending timers on unmount', async () => {
          const callback = vi.fn()
 
          const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
@@ -74,31 +71,61 @@ describe('use-debounced-fn', () => {
 
          unmount()
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(500)
          })
 
          expect(callback).not.toHaveBeenCalled()
       })
 
-      it('should not cause memory leaks with repeated mount/unmount', () => {
+      it('should not cause memory leaks with repeated mount/unmount', async () => {
          const callback = vi.fn()
 
          for (let i = 0; i < 10; i++) {
             const { result, unmount } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 100 }))
 
-            act(() => {
-               result.current.debouncedFn()
-            })
+            result.current.debouncedFn()
 
             unmount()
          }
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(200)
          })
 
          expect(callback).not.toHaveBeenCalled()
+      })
+
+      it('should abort pending async operations on unmount', () => {
+         const callback = vi.fn(async (signal: AbortSignal) => {
+            return new Promise((resolve, reject) => {
+               const timeout = setTimeout(() => resolve('completed'), 100)
+               signal.addEventListener('abort', () => {
+                  clearTimeout(timeout)
+                  reject(new DOMException('Aborted', 'AbortError'))
+               })
+            })
+         })
+         const onError = vi.fn()
+
+         const { result, unmount } = renderHook(() =>
+            useDebouncedFn({ callbackToBounce: callback, onError, delay: 300 })
+         )
+
+         result.current.debouncedFn()
+
+         act(() => {
+            vi.advanceTimersByTime(300)
+         })
+
+         unmount()
+
+         act(() => {
+            vi.advanceTimersByTime(100)
+         })
+
+         // AbortError should be caught but not passed to onError
+         expect(onError).not.toHaveBeenCalled()
       })
    })
 
@@ -107,9 +134,7 @@ describe('use-debounced-fn', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          act(() => {
             vi.advanceTimersByTime(299)
@@ -127,9 +152,7 @@ describe('use-debounced-fn', () => {
          const customDelay = 500
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: customDelay }))
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          act(() => {
             vi.advanceTimersByTime(499)
@@ -142,7 +165,7 @@ describe('use-debounced-fn', () => {
          expect(callback).toHaveBeenCalledTimes(1)
       })
 
-      it('should debounce multiple rapid calls', () => {
+      it('should debounce multiple rapid calls', async () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 200 }))
 
@@ -157,40 +180,186 @@ describe('use-debounced-fn', () => {
             result.current.debouncedFn() // Call 4 - should reset timer again
          })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(199)
          })
          expect(callback).not.toHaveBeenCalled()
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(1) // 200ms from last call
          })
          expect(callback).toHaveBeenCalledTimes(1)
       })
 
-      it('should allow multiple executions after delay periods', () => {
+      it('should allow multiple executions after delay periods', async () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 100 }))
 
          // First execution
-         act(() => {
-            result.current.debouncedFn('first')
-         })
-         act(() => {
+         result.current.debouncedFn('first')
+         await act(() => {
             vi.advanceTimersByTime(100)
          })
          expect(callback).toHaveBeenCalledTimes(1)
-         expect(callback).toHaveBeenNthCalledWith(1, 'first')
+         expect(callback).toHaveBeenNthCalledWith(1, expect.any(AbortSignal), 'first')
 
          // Second execution
-         act(() => {
-            result.current.debouncedFn('second')
-         })
-         act(() => {
+         result.current.debouncedFn('second')
+         await act(() => {
             vi.advanceTimersByTime(100)
          })
          expect(callback).toHaveBeenCalledTimes(2)
-         expect(callback).toHaveBeenNthCalledWith(2, 'second')
+         expect(callback).toHaveBeenNthCalledWith(2, expect.any(AbortSignal), 'second')
+      })
+   })
+
+   describe('AbortSignal behavior', () => {
+      it('should pass AbortSignal as first argument to callbackToBounce', () => {
+         const callback = vi.fn()
+         const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
+
+         result.current.debouncedFn('arg1', 'arg2', 123)
+         vi.advanceTimersByTime(300)
+
+         expect(callback).toHaveBeenCalledTimes(1)
+         const callArgs = callback.mock.calls[0]!
+         expect(callArgs[0]).toBeInstanceOf(AbortSignal)
+         expect(callArgs[1]).toBe('arg1')
+         expect(callArgs[2]).toBe('arg2')
+         expect(callArgs[3]).toBe(123)
+      })
+
+      it('should abort previous operation when new call is made', async () => {
+         let abortedCount = 0
+         const callback = vi.fn(async (signal: AbortSignal, value: string) => {
+            return new Promise((resolve, reject) => {
+               const timeout = setTimeout(() => resolve(value), 100)
+               signal.addEventListener('abort', () => {
+                  abortedCount++
+                  clearTimeout(timeout)
+                  reject(new DOMException('Aborted', 'AbortError'))
+               })
+            })
+         })
+
+         const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 200 }))
+
+         result.current.debouncedFn('first')
+
+         await act(() => {
+            vi.advanceTimersByTime(200)
+         })
+
+         result.current.debouncedFn('second') // Should abort first
+
+         expect(abortedCount).toBe(1)
+      })
+
+      it('should not call onError when AbortError is thrown', async () => {
+         const callback = vi.fn(async (signal: AbortSignal) => {
+            return new Promise((resolve, reject) => {
+               const timeout = setTimeout(() => resolve('completed'), 100)
+               signal.addEventListener('abort', () => {
+                  clearTimeout(timeout)
+                  reject(new DOMException('Aborted', 'AbortError'))
+               })
+            })
+         })
+         const onError = vi.fn()
+
+         const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError, delay: 300 }))
+
+         result.current.debouncedFn()
+
+         await act(() => {
+            vi.advanceTimersByTime(300)
+         })
+
+         // Trigger abort by calling again
+         result.current.debouncedFn()
+
+         // AbortError should be caught internally and not trigger onError
+         expect(onError).not.toHaveBeenCalled()
+      })
+
+      it('should call onError for non-abort errors', async () => {
+         const testError = new Error('Regular error')
+         const callback = vi.fn(async (signal: AbortSignal) => {
+            throw testError
+         })
+         const onError = vi.fn()
+
+         const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError, delay: 300 }))
+
+         result.current.debouncedFn('test')
+
+         await act(() => {
+            vi.advanceTimersByTime(300)
+         })
+
+         expect(onError).toHaveBeenCalledWith(testError, 'test')
+      })
+
+      it('should provide non-aborted signal on first execution', async () => {
+         const callback = vi.fn((signal: AbortSignal) => {
+            expect(signal.aborted).toBe(false)
+         })
+
+         const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
+
+         result.current.debouncedFn()
+
+         await act(() => {
+            vi.advanceTimersByTime(300)
+         })
+
+         expect(callback).toHaveBeenCalledTimes(1)
+      })
+
+      it('should handle fetch requests with abort signal', async () => {
+         const mockFetch = vi.fn((url: string, options: any) => {
+            return new Promise((resolve, reject) => {
+               const timeout = setTimeout(
+                  () => resolve({ ok: true, json: () => Promise.resolve({ data: 'test' }) }),
+                  100
+               )
+               options.signal.addEventListener('abort', () => {
+                  clearTimeout(timeout)
+                  reject(new DOMException('Aborted', 'AbortError'))
+               })
+            })
+         })
+
+         global.fetch = mockFetch as any
+
+         const callback = vi.fn(async (signal: AbortSignal, query: string) => {
+            const response = await fetch(`/api/search?q=${query}`, { signal })
+            return response
+         })
+
+         const onError = vi.fn()
+
+         const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError, delay: 300 }))
+
+         act(() => {
+            result.current.debouncedFn('first')
+         })
+
+         act(() => {
+            vi.advanceTimersByTime(300)
+         })
+
+         // Cancel with new call before fetch completes
+         act(() => {
+            result.current.debouncedFn('second')
+         })
+
+         await act(() => {
+            vi.advanceTimersByTime(200)
+         })
+
+         // First fetch should be aborted, onError should not be called for AbortError
+         expect(onError).not.toHaveBeenCalled()
       })
    })
 
@@ -199,18 +368,13 @@ describe('use-debounced-fn', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
-         act(() => {
-            result.current.debouncedFn('arg1', 'arg2', 123)
-         })
+         result.current.debouncedFn('arg1', 'arg2', 123)
+         vi.advanceTimersByTime(300)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
-
-         expect(callback).toHaveBeenCalledWith('arg1', 'arg2', 123)
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'arg1', 'arg2', 123)
       })
 
-      it('should use arguments from the latest call', () => {
+      it('should use arguments from the latest call', async () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 200 }))
 
@@ -220,12 +384,12 @@ describe('use-debounced-fn', () => {
             result.current.debouncedFn('third') // This should be the final call
          })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(200)
          })
 
          expect(callback).toHaveBeenCalledTimes(1)
-         expect(callback).toHaveBeenCalledWith('third')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'third')
       })
 
       it('should preserve argument references', () => {
@@ -245,8 +409,8 @@ describe('use-debounced-fn', () => {
             vi.advanceTimersByTime(300)
          })
 
-         expect(callback).toHaveBeenCalledWith(originalObj)
-         expect(callback.mock.calls?.[0]?.[0].value).toBe('modified')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), originalObj)
+         expect(callback.mock.calls?.[0]?.[1].value).toBe('modified')
       })
    })
 
@@ -291,7 +455,7 @@ describe('use-debounced-fn', () => {
          })
 
          expect(callback).toHaveBeenCalledTimes(1)
-         expect(callback).toHaveBeenCalledWith('third')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'third')
       })
 
       it('should pass all arguments to immediateCallback', () => {
@@ -301,9 +465,7 @@ describe('use-debounced-fn', () => {
             useDebouncedFn({ immediateCallback: immediate, callbackToBounce: callback })
          )
 
-         act(() => {
-            result.current.debouncedFn('arg1', 42, { key: 'value' })
-         })
+         result.current.debouncedFn('arg1', 42, { key: 'value' })
 
          expect(immediate).toHaveBeenCalledWith('arg1', 42, { key: 'value' })
       })
@@ -312,74 +474,60 @@ describe('use-debounced-fn', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
+         vi.advanceTimersByTime(300)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
-
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
       })
    })
 
    describe('onSuccess', () => {
-      it('should call onSuccess after sync callbackToBounce completes', () => {
+      it('should call onSuccess after sync callbackToBounce completes', async () => {
          const callback = vi.fn()
          const onSuccess = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onSuccess, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
 
-         act(() => {
+         // Wait for the scheduled callbacks to get resolved
+         // then check the status
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
          expect(onSuccess).toHaveBeenCalledWith('test')
          expect(callback).toHaveBeenCalledBefore(onSuccess)
       })
 
       it('should call onSuccess after async callbackToBounce completes', async () => {
-         const callback = vi.fn(async (val: string) => {
+         const callback = vi.fn(async (signal: AbortSignal, val: string) => {
             await new Promise((resolve) => setTimeout(resolve, 100))
             return val
          })
          const onSuccess = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onSuccess, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('async-test')
-         })
+         result.current.debouncedFn('async-test')
+         vi.advanceTimersByTime(300)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'async-test')
 
-         expect(callback).toHaveBeenCalledWith('async-test')
-
-         // Advance timers for the async operation
-         await act(async () => {
+         await act(() => {
             vi.advanceTimersByTime(100)
-            await Promise.resolve()
          })
 
          expect(onSuccess).toHaveBeenCalledWith('async-test')
       })
 
-      it('should pass same arguments to onSuccess', () => {
+      it('should pass same arguments to onSuccess', async () => {
          const callback = vi.fn()
          const onSuccess = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onSuccess }))
 
-         act(() => {
-            result.current.debouncedFn('arg1', 123, { nested: true })
-         })
+         result.current.debouncedFn('arg1', 123, { nested: true })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -398,29 +546,27 @@ describe('use-debounced-fn', () => {
             vi.advanceTimersByTime(300)
          })
 
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
       })
 
-      it('should not call onSuccess if execution is cancelled', () => {
+      it('should not call onSuccess if execution is cancelled', async () => {
          const callback = vi.fn()
          const onSuccess = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onSuccess, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('first')
-         })
+         result.current.debouncedFn('first')
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(100)
             result.current.debouncedFn('second') // Cancels first
          })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
          expect(callback).toHaveBeenCalledTimes(1)
-         expect(callback).toHaveBeenCalledWith('second')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'second')
          expect(onSuccess).toHaveBeenCalledTimes(1)
          expect(onSuccess).toHaveBeenCalledWith('second')
       })
@@ -435,15 +581,10 @@ describe('use-debounced-fn', () => {
          const onError = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
+         vi.advanceTimersByTime(300)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
-
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
          expect(onError).toHaveBeenCalledWith(error, 'test')
       })
 
@@ -455,13 +596,8 @@ describe('use-debounced-fn', () => {
          const onError = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError }))
 
-         act(() => {
-            result.current.debouncedFn('arg1', 42, { key: 'value' })
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         result.current.debouncedFn('arg1', 42, { key: 'value' })
+         vi.advanceTimersByTime(300)
 
          expect(onError).toHaveBeenCalledWith(error, 'arg1', 42, { key: 'value' })
       })
@@ -476,53 +612,43 @@ describe('use-debounced-fn', () => {
             useDebouncedFn({ callbackToBounce: callback, onSuccess, onError, delay: 300 })
          )
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         result.current.debouncedFn('test')
+         vi.advanceTimersByTime(300)
 
          expect(onError).toHaveBeenCalled()
          expect(onSuccess).not.toHaveBeenCalled()
       })
 
-      it('should work without onError (error is not caught)', () => {
+      it('should work without onError (error is not caught)', async () => {
          const callback = vi.fn(() => {
             throw new Error('Test error')
          })
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
-
+         result.current.debouncedFn('test')
          // Error is thrown but not caught
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
       })
 
-      it('should not call onError if execution is cancelled', () => {
+      it('should not call onError if execution is cancelled', async () => {
          const callback = vi.fn(() => {
             throw new Error('Test error')
          })
          const onError = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('first')
-         })
+         result.current.debouncedFn('first')
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(100)
             result.current.debouncedFn('second') // Cancels first
          })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -532,20 +658,18 @@ describe('use-debounced-fn', () => {
    })
 
    describe('onFinally', () => {
-      it('should call onFinally after successful execution', () => {
+      it('should call onFinally after successful execution', async () => {
          const callback = vi.fn()
          const onFinally = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onFinally, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
          expect(onFinally).toHaveBeenCalledWith('test')
       })
 
@@ -556,27 +680,20 @@ describe('use-debounced-fn', () => {
          const onFinally = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onFinally, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         result.current.debouncedFn('test')
+         vi.advanceTimersByTime(300)
 
          expect(onFinally).toHaveBeenCalledWith('test')
       })
 
-      it('should call onFinally with all arguments', () => {
+      it('should call onFinally with all arguments', async () => {
          const callback = vi.fn()
          const onFinally = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onFinally }))
 
-         act(() => {
-            result.current.debouncedFn('arg1', 42, { key: 'value' })
-         })
+         result.current.debouncedFn('arg1', 42, { key: 'value' })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -587,32 +704,25 @@ describe('use-debounced-fn', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
+         vi.advanceTimersByTime(300)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
-
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
       })
 
-      it('should not call onFinally if execution is cancelled', () => {
+      it('should not call onFinally if execution is cancelled', async () => {
          const callback = vi.fn()
          const onFinally = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onFinally, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('first')
-         })
+         result.current.debouncedFn('first')
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(100)
             result.current.debouncedFn('second') // Cancels first
          })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -622,7 +732,7 @@ describe('use-debounced-fn', () => {
    })
 
    describe('All callbacks together', () => {
-      it('should execute callbacks in correct order: immediate -> debounced -> success -> finally', () => {
+      it('should execute callbacks in correct order: immediate -> debounced -> success -> finally', async () => {
          const executionOrder: string[] = []
          const immediate = vi.fn(() => executionOrder.push('immediate'))
          const callback = vi.fn(() => executionOrder.push('debounced'))
@@ -639,13 +749,11 @@ describe('use-debounced-fn', () => {
             })
          )
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
 
          expect(executionOrder).toEqual(['immediate'])
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -672,20 +780,14 @@ describe('use-debounced-fn', () => {
             })
          )
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
-
+         result.current.debouncedFn('test')
          expect(executionOrder).toEqual(['immediate'])
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
          expect(executionOrder).toEqual(['immediate', 'debounced', 'error', 'finally'])
       })
 
-      it('should pass same arguments to all callbacks', () => {
+      it('should pass same arguments to all callbacks (except AbortSignal to debounced)', async () => {
          const immediate = vi.fn()
          const callback = vi.fn()
          const onSuccess = vi.fn()
@@ -702,22 +804,20 @@ describe('use-debounced-fn', () => {
 
          const testObj = { id: 1, name: 'test' }
 
-         act(() => {
-            result.current.debouncedFn(testObj, 'extra', 42)
-         })
+         result.current.debouncedFn(testObj, 'extra', 42)
 
          expect(immediate).toHaveBeenCalledWith(testObj, 'extra', 42)
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
-         expect(callback).toHaveBeenCalledWith(testObj, 'extra', 42)
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), testObj, 'extra', 42)
          expect(onSuccess).toHaveBeenCalledWith(testObj, 'extra', 42)
          expect(onFinally).toHaveBeenCalledWith(testObj, 'extra', 42)
       })
 
-      it('should pass same arguments to error and finally callbacks', () => {
+      it('should pass same arguments to error and finally callbacks', async () => {
          const immediate = vi.fn()
          const callback = vi.fn(() => {
             throw new Error('Test error')
@@ -742,9 +842,7 @@ describe('use-debounced-fn', () => {
 
          expect(immediate).toHaveBeenCalledWith(testObj, 'extra', 42)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         await vi.advanceTimersByTime(300)
 
          expect(onError).toHaveBeenCalledWith(expect.any(Error), testObj, 'extra', 42)
          expect(onFinally).toHaveBeenCalledWith(testObj, 'extra', 42)
@@ -752,63 +850,40 @@ describe('use-debounced-fn', () => {
    })
 
    describe('Manual cleanup', () => {
-      it('should cancel pending execution when cleanup is called', () => {
+      it('should cancel pending execution when cleanup is called', async () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
+         await vi.advanceTimersByTime(100)
+         result.current.cleanup()
 
-         act(() => {
-            vi.advanceTimersByTime(100)
-            result.current.cleanup()
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         await vi.advanceTimersByTime(300)
 
          expect(callback).not.toHaveBeenCalled()
       })
 
-      it('should not call onSuccess when cleanup cancels execution', () => {
+      it('should not call onSuccess when cleanup cancels execution', async () => {
          const callback = vi.fn()
          const onSuccess = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onSuccess, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
-
-         act(() => {
-            result.current.cleanup()
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         result.current.debouncedFn('test')
+         result.current.cleanup()
+         await vi.advanceTimersByTime(300)
 
          expect(callback).not.toHaveBeenCalled()
          expect(onSuccess).not.toHaveBeenCalled()
       })
 
-      it('should not call onFinally when cleanup cancels execution', () => {
+      it('should not call onFinally when cleanup cancels execution', async () => {
          const callback = vi.fn()
          const onFinally = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onFinally, delay: 300 }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
-
-         act(() => {
-            result.current.cleanup()
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         result.current.debouncedFn('test')
+         result.current.cleanup()
+         await vi.advanceTimersByTime(300)
 
          expect(callback).not.toHaveBeenCalled()
          expect(onFinally).not.toHaveBeenCalled()
@@ -818,26 +893,48 @@ describe('use-debounced-fn', () => {
          const callback = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, delay: 300 }))
 
+         result.current.debouncedFn('first')
+         result.current.cleanup()
+
+         result.current.debouncedFn('second')
+
+         vi.advanceTimersByTime(300)
+
+         expect(callback).toHaveBeenCalledTimes(1)
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'second')
+      })
+
+      it('should abort async operations when cleanup is called', async () => {
+         let wasAborted = false
+         const callback = vi.fn(async (signal: AbortSignal) => {
+            return new Promise((resolve, reject) => {
+               const timeout = setTimeout(() => resolve('completed'), 100)
+               signal.addEventListener('abort', () => {
+                  wasAborted = true
+                  clearTimeout(timeout)
+                  reject(new DOMException('Aborted', 'AbortError'))
+               })
+            })
+         })
+         const onError = vi.fn()
+
+         const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError, delay: 300 }))
+
+         result.current.debouncedFn()
+         vi.advanceTimersByTime(300)
+
          act(() => {
-            result.current.debouncedFn('first')
             result.current.cleanup()
          })
 
-         act(() => {
-            result.current.debouncedFn('second')
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
-
-         expect(callback).toHaveBeenCalledTimes(1)
-         expect(callback).toHaveBeenCalledWith('second')
+         expect(wasAborted).toBe(true)
+         // AbortError should not trigger onError
+         expect(onError).not.toHaveBeenCalled()
       })
    })
 
    describe('Context binding', () => {
-      it('should not preserve this context (calls with null)', () => {
+      it('should not preserve this context (calls with null)', async () => {
          let capturedThis: any = 'not-set'
          const testObj = {
             name: 'test',
@@ -848,11 +945,9 @@ describe('use-debounced-fn', () => {
 
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: testObj.callback }))
 
-         act(() => {
-            result.current.debouncedFn.call(testObj) // Try to set context
-         })
+         result.current.debouncedFn.call(testObj) // Try to set context
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -869,15 +964,11 @@ describe('use-debounced-fn', () => {
             initialProps: { callback: callback1 },
          })
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          rerender({ callback: callback2 })
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
          expect(callback1).not.toHaveBeenCalled()
          expect(callback2).toHaveBeenCalledTimes(1)
@@ -890,24 +981,16 @@ describe('use-debounced-fn', () => {
             initialProps: { delay: 200 },
          })
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          rerender({ delay: 500 })
 
-         act(() => {
-            vi.advanceTimersByTime(200)
-         })
+         vi.advanceTimersByTime(200)
          expect(callback).not.toHaveBeenCalled()
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
+         vi.advanceTimersByTime(500)
 
-         act(() => {
-            vi.advanceTimersByTime(500)
-         })
          expect(callback).toHaveBeenCalledTimes(1)
       })
 
@@ -921,9 +1004,7 @@ describe('use-debounced-fn', () => {
             { initialProps: { immediate: immediate1 } }
          )
 
-         act(() => {
-            result.current.debouncedFn('test1')
-         })
+         result.current.debouncedFn('test1')
 
          expect(immediate1).toHaveBeenCalledWith('test1')
 
@@ -937,7 +1018,7 @@ describe('use-debounced-fn', () => {
          expect(immediate1).toHaveBeenCalledTimes(1)
       })
 
-      it('should update onSuccess when it changes', () => {
+      it('should update onSuccess when it changes', async () => {
          const callback = vi.fn()
          const onSuccess1 = vi.fn()
          const onSuccess2 = vi.fn()
@@ -947,13 +1028,11 @@ describe('use-debounced-fn', () => {
             { initialProps: { onSuccess: onSuccess1 } }
          )
 
-         act(() => {
-            result.current.debouncedFn('test1')
-         })
+         result.current.debouncedFn('test1')
 
          rerender({ onSuccess: onSuccess2 })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -961,7 +1040,7 @@ describe('use-debounced-fn', () => {
          expect(onSuccess2).toHaveBeenCalledWith('test1')
       })
 
-      it('should update onError when it changes', () => {
+      it('should update onError when it changes', async () => {
          const callback = vi.fn(() => {
             throw new Error('Test error')
          })
@@ -973,13 +1052,11 @@ describe('use-debounced-fn', () => {
             { initialProps: { onError: onError1 } }
          )
 
-         act(() => {
-            result.current.debouncedFn('test1')
-         })
+         result.current.debouncedFn('test1')
 
          rerender({ onError: onError2 })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -987,7 +1064,7 @@ describe('use-debounced-fn', () => {
          expect(onError2).toHaveBeenCalledWith(expect.any(Error), 'test1')
       })
 
-      it('should update onFinally when it changes', () => {
+      it('should update onFinally when it changes', async () => {
          const callback = vi.fn()
          const onFinally1 = vi.fn()
          const onFinally2 = vi.fn()
@@ -997,13 +1074,11 @@ describe('use-debounced-fn', () => {
             { initialProps: { onFinally: onFinally1 } }
          )
 
-         act(() => {
-            result.current.debouncedFn('test1')
-         })
+         result.current.debouncedFn('test1')
 
          rerender({ onFinally: onFinally2 })
 
-         act(() => {
+         await act(() => {
             vi.advanceTimersByTime(300)
          })
 
@@ -1023,18 +1098,14 @@ describe('use-debounced-fn', () => {
          let callback = createCallback()
          const { result, rerender } = renderHook(() => useDebouncedFn({ callbackToBounce: callback }))
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          // Update both message and callback
          message = 'updated'
          callback = createCallback()
          rerender()
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
          expect(callback).toHaveBeenCalledTimes(1)
          expect(logFn).toHaveBeenCalledTimes(1)
@@ -1049,13 +1120,8 @@ describe('use-debounced-fn', () => {
          })
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: errorCallback }))
 
-         act(() => {
-            result.current.debouncedFn()
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         result.current.debouncedFn()
+         vi.advanceTimersByTime(300)
 
          expect(errorCallback).toHaveBeenCalledTimes(1)
       })
@@ -1073,25 +1139,17 @@ describe('use-debounced-fn', () => {
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: callback, onError }))
 
          // First call throws
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
          expect(onError).toHaveBeenCalled()
 
          // Second call succeeds
          shouldThrow = false
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
          expect(callback).toHaveBeenCalledTimes(2)
       })
@@ -1104,13 +1162,8 @@ describe('use-debounced-fn', () => {
          const onError = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: errorCallback, onSuccess, onError }))
 
-         act(() => {
-            result.current.debouncedFn()
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         result.current.debouncedFn()
+         vi.advanceTimersByTime(300)
 
          expect(onSuccess).not.toHaveBeenCalled()
          expect(onError).toHaveBeenCalled()
@@ -1124,13 +1177,9 @@ describe('use-debounced-fn', () => {
          const onFinally = vi.fn()
          const { result } = renderHook(() => useDebouncedFn({ callbackToBounce: errorCallback, onError, onFinally }))
 
-         act(() => {
-            result.current.debouncedFn('test')
-         })
+         result.current.debouncedFn('test')
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
          expect(onError).toHaveBeenCalledWith(expect.any(Error), 'test')
          expect(onFinally).toHaveBeenCalledWith('test')
@@ -1156,12 +1205,10 @@ describe('use-debounced-fn', () => {
             })
          })
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
          expect(callback).toHaveBeenCalledTimes(1)
-         expect(callback).toHaveBeenCalledWith('call-4')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'call-4')
       })
 
       it('should handle zero delay', () => {
@@ -1172,11 +1219,9 @@ describe('use-debounced-fn', () => {
             result.current.debouncedFn('test')
          })
 
-         act(() => {
-            vi.advanceTimersByTime(0)
-         })
+         vi.advanceTimersByTime(0)
 
-         expect(callback).toHaveBeenCalledWith('test')
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test')
       })
    })
 
@@ -1204,12 +1249,10 @@ describe('use-debounced-fn', () => {
             }
          })
 
-         act(() => {
-            vi.advanceTimersByTime(100)
-         })
+         vi.advanceTimersByTime(100)
 
          expect(callback).toHaveBeenCalledTimes(1)
-         expect(callback).toHaveBeenCalledWith(999)
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 999)
       })
 
       it('should not cause memory leaks with immediateCallback on many calls', () => {
@@ -1219,17 +1262,13 @@ describe('use-debounced-fn', () => {
             useDebouncedFn({ immediateCallback: immediate, callbackToBounce: callback, delay: 100 })
          )
 
-         act(() => {
-            for (let i = 0; i < 100; i++) {
-               result.current.debouncedFn(i)
-            }
-         })
+         for (let i = 0; i < 100; i++) {
+            result.current.debouncedFn(i)
+         }
 
          expect(immediate).toHaveBeenCalledTimes(100)
 
-         act(() => {
-            vi.advanceTimersByTime(100)
-         })
+         vi.advanceTimersByTime(100)
 
          expect(callback).toHaveBeenCalledTimes(1)
       })
@@ -1245,13 +1284,8 @@ describe('use-debounced-fn', () => {
          // Simulate StrictMode re-render
          rerender()
 
-         act(() => {
-            result.current.debouncedFn()
-         })
-
-         act(() => {
-            vi.advanceTimersByTime(200)
-         })
+         result.current.debouncedFn()
+         vi.advanceTimersByTime(200)
 
          expect(callback).toHaveBeenCalledTimes(1)
       })
@@ -1265,9 +1299,7 @@ describe('use-debounced-fn', () => {
             return useDebouncedFn({ callbackToBounce: callback, delay: 300 })
          })
 
-         act(() => {
-            result.current.debouncedFn()
-         })
+         result.current.debouncedFn()
 
          act(() => {
             vi.advanceTimersByTime(100)
@@ -1298,17 +1330,13 @@ describe('use-debounced-fn', () => {
             target: { value: 'test' },
          } as React.ChangeEvent<HTMLInputElement>
 
-         act(() => {
-            result.current.debouncedFn(mockEvent)
-         })
+         result.current.debouncedFn(mockEvent)
 
          expect(immediate).toHaveBeenCalledWith(mockEvent)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
+         vi.advanceTimersByTime(300)
 
-         expect(callback).toHaveBeenCalledWith(mockEvent)
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), mockEvent)
       })
 
       it('should handle multiple arguments with proper typing', () => {
@@ -1320,15 +1348,10 @@ describe('use-debounced-fn', () => {
             })
          )
 
-         act(() => {
-            result.current.debouncedFn('test', 42, true)
-         })
+         result.current.debouncedFn('test', 42, true)
+         vi.advanceTimersByTime(300)
 
-         act(() => {
-            vi.advanceTimersByTime(300)
-         })
-
-         expect(callback).toHaveBeenCalledWith('test', 42, true)
+         expect(callback).toHaveBeenCalledWith(expect.any(AbortSignal), 'test', 42, true)
       })
    })
 })
