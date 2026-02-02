@@ -1,35 +1,35 @@
 # Overview
 
-**_`classic-react-hooks`_** is a lightweight yet robust library of custom React hooks and components designed to simplify and streamline everyday development tasks.
+**_`classic-react-hooks`_** is a lightweight yet robust collection of custom React hooks and components designed to simplify common development tasks without sacrificing clarity or control.
 
-It promotes _`clean`_, _`declarative`_, _`modular`_, and _`predictable`_ code, making applications easier to maintain and scale as they grow.
+The library encourages _clean_, _declarative_, _modular_, and _predictable_ code, helping teams build applications that remain maintainable and scalable as complexity grows.
 
-Built with `TypeScript` and a strong emphasis on type safety, the library is _`minimal`_, _`tree-shakable`_, and optimized for modern React applications. All hooks are fully compatible with server-side rendering _`(SSR)`_, ensuring no hydration mismatches.
+Built entirely with **TypeScript**, **`classic-react-hooks`** prioritizes strong type safety while remaining _minimal_, _tree-shakable_, and optimized for modern React environments. All hooks are fully compatible with server-side rendering _(SSR)_, ensuring consistent behavior and preventing hydration mismatches.
 
-The library is thoroughly tested using _`Vitest`_ and _`React-Testing-Library`_, covering a wide range of use cases. Contributions of additional test cases are always welcome.
+The library is thoroughly tested using **Vitest** and **React Testing Library**, covering a broad range of real-world use cases. Contributions—especially additional test cases—are always welcome.
 
 ## Motivation
 
-**_`classic-react-hooks`_** is designed to provide a _`focused`_, _`predictable`_, and _`developer-friendly`_ set of React hooks that prioritize clarity, consistency, and long-term maintainability. The library emphasizes stable APIs, minimal abstractions, and practical flexibility, allowing developers to reason about behavior with confidence while building scalable applications.
+**_`classic-react-hooks`_** exists to provide a _focused_, _predictable_, and _developer-friendly_ set of React hooks that emphasize clarity, consistency, and long-term maintainability.
 
-In contrast, many existing hook libraries tend to focus on highly specialized use cases or offer broad collections of hooks that may not be universally applicable. Some primarily act as abstractions over smaller utility libraries, introducing additional layers of indirection without delivering proportional architectural value.
+Rather than offering a sprawling collection of narrowly scoped utilities, the library concentrates on stable, reusable primitives with minimal abstraction. APIs are designed to be easy to reason about, enabling developers to understand behavior intuitively and build scalable systems with confidence.
 
-These libraries often expose _`distinct APIs`_ for individual hooks, favoring _`syntactic brevity`_ over _`predictability`_ and _`consistency`_. While this can reduce boilerplate, it may also lead to APIs that are harder to internalize, less consistent in behavior, and more constrained in real-world usage.
+Many existing hook libraries prioritize syntactic brevity or highly specialized use cases. While this can reduce boilerplate, it often leads to fragmented APIs, inconsistent behavior, and abstractions that are difficult to internalize or adapt to real-world requirements. In some cases, these libraries merely wrap smaller utilities, adding layers of indirection without meaningful architectural benefit.
 
-Additionally, a common pattern among such libraries is a _`heavy reliance`_ on **useEffect**, **useCallback**, and **useMemo** for state tracking, function memoization, and lifecycle management. This frequently places the burden of dependency management and _`stale-closure`_ prevention on developers, potentially resulting in unnecessary _`re-renders`_, increased computational overhead, and more complex performance tuning.
+Another common pattern is a heavy reliance on **`useEffect`**, **`useCallback`**, and **`useMemo`** for state tracking and lifecycle control. This frequently shifts the burden of dependency management and stale-closure prevention onto developers, increasing cognitive load, introducing subtle bugs, and requiring unnecessary performance tuning.
 
-As a result, development effort often shifts away from building features toward managing library-specific APIs. **_`classic-react-hooks`_** aims to minimize this cognitive load, enabling developers to focus on delivering features rather than adapting to complex or inconsistent abstractions.
+**_`classic-react-hooks`_** aims to reverse this trend—reducing mental overhead and allowing developers to focus on building features instead of managing complex or inconsistent abstractions.
 
-## What `classic-react-hooks` offers
+## What `classic-react-hooks` Offers
 
--  A thoughtfully curated set of feature-rich hooks
+-  A carefully curated set of feature-rich, general-purpose hooks
 -  High performance with a minimal and lightweight footprint
--  Predictable and intuitive API behavior through natural usage
--  Built with TypeScript, prioritizing strong type safety
+-  Predictable, intuitive APIs designed for natural usage
+-  Strong TypeScript support with an emphasis on type safety
 -  Zero third-party dependencies
 -  Modular and declarative design principles
 -  Fully tree-shakable for optimal bundling
--  Comprehensive and well-structured documentation
+-  Comprehensive, well-structured documentation
 
 ## Installation
 

@@ -4,7 +4,9 @@ outline: deep
 
 # use-on-mount-effect
 
-A React hook that executes a callback function only once after the component mounts. This is a simplified wrapper around useEffect with an empty dependency array.
+_`use-on-mount-effect`_ is a small, intention-revealing React hook that runs a side effect exactly once after a component mounts. It provides a clear, declarative alternative to `useEffect` with an empty dependency array, eliminating ambiguity and dependency mistakes.
+
+The hook supports cleanup functions just like `useEffect`, making it safe for subscriptions and external integrations. By explicitly modeling mount-only behavior, it improves code readability and communicates intent more clearly. This makes it ideal for initialization logic and third-party setup code.
 
 ::: tip
 This hook is perfect for initialization logic that should run exactly once when a component first renders.

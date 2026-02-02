@@ -4,15 +4,22 @@ outline: deep
 
 # use-event-listener
 
-A React hook that makes it easy to attach DOM event listeners declaratively with automatic cleanup.
+_`use-event-listener`_ is a declarative React hook that simplifies DOM event handling with automatic lifecycle management.
+
+It eliminates repetitive add/removeEventListener boilerplate while preventing memory leaks through intelligent cleanup on unmount or dependency changes.
+
+This hook supports flexible targeting via either a target prop or setElementRef callback, and features built-in conditional binding. It fully supports all standard AddEventListenerOptions including capture, once, passive, and signal.
 
 ## Features
 
--  **Flexible Targeting:** Observe elements via the _`target`_ prop or _`setElementRef`_(node ref) function.
--  **Auto Cleanup:** Listeners are automatically managed on unmount or dependency changes.
--  **Reactive:** Listeners intelligently reattach when _`target`_, _`event`_, or _`options`_ change.
--  **Conditional Binding:** Attach listeners only when _`target`_, a _`handler`_, and _`shouldInjectEvent`_ are valid.
--  **Full options support:** Fully compatible with all _`AddEventListenerOptions`_ including _capture_, _once_, _passive_, and _signal_.
+-  **Declarative event handling:** Attach DOM events via a clean, hook-based API
+-  **Flexible targeting:** Bind listeners using a `target` function or `setElementRef` callback
+-  **Automatic cleanup:** Listeners are removed on unmount or dependency changes
+-  **Reactive rebinding:** Reattaches automatically when target, event, or options change
+-  **Conditional binding:** Toggle listener attachment with `shouldInjectEvent`
+-  **Full options support:** Supports all `AddEventListenerOptions` (`capture`, `once`, `passive`, `signal`)
+-  **Stable references:** Avoids unnecessary add/remove cycles across re-renders
+-  **Ref-free usage:** No manual refs needed when using `setElementRef`
 
 ::: warning Usage Note
 
@@ -51,7 +58,8 @@ How _`use-event-listener`_ solves it:
 
 -  Eliminates repetitive `addEventListener/removeEventListener` code
 -  Reduces component complexity by abstracting event handling logic
--  Automatic cleanup ensures listeners are removed when:-
+-  Makes conditional event attachment predictable and declarative
+-  Simplifies dynamic event binding when below things happens:-
    -  Component unmounts
    -  `target` element changes
    -  `event` type changes
@@ -78,10 +86,11 @@ function Component() {
 ::: details **Performance Benefits**
 
 -  Stable references accross re-renders which prevents listeners from being repeatedly added/removed
-
 -  Efficient dependency tracking
-
-:::
+-  Prevents memory leaks caused by missed or incorrect cleanup
+-  Eliminates manual lifecycle management for DOM event listeners
+-  Avoids unnecessary listener re-creation across component re-renders
+   :::
 
 ## Parameters
 

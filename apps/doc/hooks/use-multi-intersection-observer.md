@@ -4,21 +4,23 @@ outline: deep
 
 # use-multi-intersection-observer
 
-A React hook that provides a convenient way to observe multiple elements simultaneously using the [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) API.
+_`use-multi-intersection-observer`_ is a React hook that enables observing multiple elements simultaneously using a single, unified API.
 
-::: info
-Built on top of [useIntersectionObserver](use-intersection-observer.html) hook for type-safety and consistent behaviors.
-:::
+Built on top of [use-intersection-observer](use-intersection-observer.html), it preserves full type safety, predictable behavior, and consistent return shapes. The hook reduces boilerplate by allowing shared configuration while generating uniquely typed observers for each key. It scales intersection tracking cleanly across complex layouts and multi-section UIs.
 
 ## Features
 
--  **Multiple Observers:** Create multiple intersection observers with a single hook call
--  **Unified API:** Each observer follows the same pattern as `useIntersectionObserver`
--  **Shared configuration:** Apply same options to all of the observers while maintaining individual keys
+-  **Multiple observers, one hook:** Create many intersection observers with a single call
+-  **Unified API:** Each observer mirrors the [use-intersection-observer](use-intersection-observer.html) API
+-  **Full type safety:** Strong TypeScript inference with IntelliSense for all properties
+-  **Key-based access:** Access each observer via a unique key
+-  **Shared configuration:** Apply common `IntersectionObserver` options across observers
+-  **Independent state:** Each observer manages its own element ref and intersection state
+-  **Proven core:** Built on `use-intersection-observer` for consistency and reliability
 
 ## Problem It Solves
 
-::: details Multiple Hook Instance Boilerplate
+::: details Eliminates repetitive `use-intersection-observer` calls for multiple elements
 **Problem:** Managing many intersection observers requires repetitive hook calls
 
 ```ts

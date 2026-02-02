@@ -4,10 +4,12 @@ outline: deep
 
 # use-synced-effect
 
-A React hook that executes a callback when dependencies change, similar to `useEffect`, but skips execution on the initial mount.
+_`use-synced-effect`_ is a React hook that behaves like `useEffect` but intentionally skips execution on the initial render.
+
+It allows you to respond to dependency changes without triggering side effects during the first mount, which is a common requirement in real-world applications. The hook correctly handles React StrictMode’s double-invocation behavior while preserving standard cleanup semantics.
 
 ::: tip
-This is particularly useful when you want to respond to state changes without triggering side effects during the component's first render.
+This makes it ideal for side effects that should only run in response to state updates, not initial state setup. It provides a clean, predictable alternative to manual “isMounted” or ref-based guards.
 :::
 
 ## Features

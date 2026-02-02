@@ -4,7 +4,13 @@ outline: deep
 
 # use-interval-effect
 
-A React hook that executes a callback function at regular intervals, similar to `setInterval` but with additional control methods for clearing and restarting the timer.
+_`use-interval-effect`_ is a declarative React hook that provides a safe and flexible abstraction over `setInterval`.
+
+It repeatedly executes a callback at a specified interval while automatically handling setup and cleanup during the component lifecycle. The hook exposes simple control methods to pause or restart the interval, optionally with a new duration, without reimplementing timer logic. Its stable, cleanup-aware design prevents orphaned intervals and unexpected side effects.
+
+::: tip
+This hook is ideal for counters, polling, animations, and periodic background tasks.
+:::
 
 ## Features
 

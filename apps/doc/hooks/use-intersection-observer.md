@@ -4,7 +4,9 @@ outline: deep
 
 # use-intersection-observer
 
-A React hook that provides a declarative way to observe element visibility using the [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) API.
+_`use-intersection-observer`_ is a declarative React hook that simplifies observing element visibility using the native Intersection Observer API.
+
+It abstracts observer creation, lifecycle management, and cleanup while remaining fully type-safe. The hook supports dynamic property naming, one-time observation, and all standard observer options. It also gracefully handles unsupported environments by avoiding observer creation and warning in development.
 
 ::: danger Important
 
@@ -13,11 +15,15 @@ This hook automatically checks for `IntersectionObserver` support and logs a war
 
 ## Features
 
--  **Auto cleanup:** Automatic cleanup of observers on unmount and dependency change
--  **Reactive:** Listeners intelligently reattach when _`element`_ or _`onlyTriggerOnce`_ changes
--  **Flexible keys:** Support for custom property naming through the `key` parameter with full-type safety
--  **One-time Observation:** Built-in support for observing elements only once
--  **Full options support:** Full support for all `IntersectionObserverInit` options ([root](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/root), [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds))
+-  **Declarative API:** Observe element visibility without manual observer management
+-  **Automatic cleanup:** Observers disconnect on unmount or dependency changes
+-  **Reactive re-attachment:** Updates automatically when the element or options change
+-  **One-time observation:** `onlyTriggerOnce` support for single-intersection cases
+-  **Dynamic property keys:** Custom `key` for type-safe, IntelliSense-friendly state
+-  **Full options support:** Supports all `IntersectionObserverInit` options ([root](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/root), [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds))
+-  **Intersection callbacks:** Optional `onIntersection` for fine-grained control
+-  **Optimized reactivity:** Avoids unnecessary re-renders via [use-synced-ref](use-synced-ref.html)
+-  **Graceful degradation:** Safely handles environments without `IntersectionObserver`
 
 ::: tip
 This hook internally uses [useSyncedRef](/hooks/use-synced-ref) to avoid unnecessary re-renders when callback functions change
@@ -25,7 +31,16 @@ This hook internally uses [useSyncedRef](/hooks/use-synced-ref) to avoid unneces
 
 ## Problem It Solves
 
-::: details Type-Safe Instance Management
+::: details Eliminate manual setup
+
+-  Eliminates manual setup and cleanup of `IntersectionObserver` instances
+-  Prevents memory leaks caused by orphaned observers
+-  Removes complexity when observing elements only once
+-  Avoids brittle state handling for intersection status
+
+:::
+
+::: details Type-Safe and Collision free Instance Management
 
 -  **Dynamic & Type-Safe Properties:** Generates uniquely named properties for each observer with full TypeScript and IntelliSense support.
 -  **Scalable:** Efficiently observe any number of elements without property naming conflicts.
@@ -43,7 +58,8 @@ const { sidebarElement, setSidebarElementRef, isSidebarElementIntersecting } = u
 ::: details One-Time Observation Complexity
 
 -  _`onlyTriggerOnce`_ option for automatically cleaning up observer after first intersection
-   :::
+
+:::
 
 ## Parameters
 

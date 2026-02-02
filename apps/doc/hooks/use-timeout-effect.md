@@ -4,7 +4,13 @@ outline: deep
 
 # use-timeout-effect
 
-A React hook that fires a provided callback after a specified timeout, similar to `setTimeout`, but with additional control methods for clearing and restarting the timer.
+_`use-timeout-effect`_ is a small utility React hook that provides a declarative wrapper around `setTimeout` with built-in lifecycle safety.
+
+It schedules a callback to run after a specified delay while automatically cleaning up the timer when the component unmounts. The hook exposes simple control methods to clear or restart the timeout without reimplementing timer logic. This ensures predictable behavior across renders and avoids common pitfalls like orphaned timers.
+
+::: tip
+It is well suited for delayed UI updates, notifications, and one-off side effects.
+:::
 
 ## Features
 

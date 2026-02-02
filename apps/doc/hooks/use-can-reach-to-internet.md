@@ -4,15 +4,20 @@ outline: deep
 
 # use-can-reach-to-internet
 
-A comprehensive React hook for monitoring internet connectivity status that goes beyond basic online/offline detection by actually testing network reachability.
+_`use-can-reach-to-internet`_ is a comprehensive React hook for accurately detecting real internet connectivity, not just network presence.
+
+It combines the browser’s native navigator.onLine signal with active HTTP reachability checks to determine whether external internet access is actually available. The hook supports automatic polling as well as manual, on-demand connectivity checks, giving you full control over monitoring behavior.
+
+Its ref-safe, cleanup-aware design prevents memory leaks by properly managing timers and in-flight requests. This makes it well-suited for connectivity-aware UIs, retry logic, and robust offline/online handling.
 
 ## Features
 
--  **Real connectivity testing:** Performs actual HTTP requests to verify internet access
--  **Dual-layer detection:** Combines browser's `navigator.onLine` with network reachability tests
--  **Automatic monitoring:** Configurable polling intervals for continuous connectivity monitoring
--  **Manual control:** Start/stop polling and force connectivity checks on demand
--  **Cleanup handling:** Proper cleanup of network requests and timers to prevent memory leaks
+-  **Real connectivity testing:** Verifies internet access using actual HTTP requests
+-  **Dual-layer detection:** Combines `navigator.onLine` with reachability checks for accurate results
+-  **Comprehensive status flags:** Exposes `isOnline`, `canReachToInternet`, and `isFullyConnected`
+-  **Automatic monitoring:** Configurable polling interval for continuous connectivity tracking
+-  **Manual control:** Start, stop, or force connectivity checks programmatically
+-  **Cleanup-safe design:** Automatically cleans up timers and network requests to prevent leaks
 
 ## Problem It Solves
 

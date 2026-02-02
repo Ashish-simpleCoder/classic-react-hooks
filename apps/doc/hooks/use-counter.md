@@ -6,7 +6,11 @@ outline: deep
 
 A Hook for Fun
 
-A type-safe React hook for managing counter state with customizable step values and dynamic property naming.
+_`use-counter`_ is a playful yet type-safe React hook for managing counter state with minimal setup and maximum flexibility.
+
+It supports configurable initial values and step sizes while generating strongly typed, ergonomically named properties. By optionally accepting a key, the hook dynamically prefixes returned state and handlers, improving readability and avoiding naming collisions.
+
+Its simple API makes it ideal for demos, UI controls, scores, and quick stateful interactions. Despite its fun nature, it remains fully predictable and TypeScript-friendly.
 
 ## Features
 

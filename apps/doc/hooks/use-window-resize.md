@@ -4,18 +4,27 @@ outline: deep
 
 # use-window-resize
 
-A React hook that evaluates provided callback function on window resize event and returns the result of it.
+_`use-window-resize`_ is a React hook that runs a user-defined callback whenever the window is resized and returns its evaluated result.
 
-::: info
-At it's core, [useEventListener](use-event-listener.html) hook is used internally for listening to resize event.
-:::
+It enables responsive logic by recalculating values such as breakpoints, layout states, or visibility flags in real time.
+
+Built on top of an internal [use-event-listener](use-event-listener.html), it ensures clean event handling and reactive updates. The hook supports configurable defaults and conditional event injection, while leveraging `useLayoutEffect` to avoid layout reflow and ensure performant measurements.
 
 ## Features
 
--  **Custom handler:** Execute custom logic on window resize
--  **Reactive:** Automatic re-evaluation and state updates
--  **Configurable:** Configurable default values and event injection
--  **Performance:** It uses [useLayoutEffect](https://react.dev/reference/react/useLayoutEffect) hook for resize event listening
+-  **Custom resize handler:** Execute any calculation or logic on window resize
+-  **Reactive updates:** Automatically recalculates and updates state on resize
+-  **Configurable defaults:** Supports initial fallback values before first resize
+-  **Conditional event injection:** Optionally disable attaching the resize listener
+-  **Performance-optimized:** Uses `useLayoutEffect` for accurate, reflow-safe measurements
+
+## Problems It Solves
+
+-  Eliminates repetitive and error-prone window resize event handling
+-  Prevents unnecessary layout reflows during resize calculations
+-  Simplifies responsive logic without manual state management
+-  Avoids boilerplate for adding and cleaning up resize listeners
+-  Enables consistent, reusable resize-based behavior across components
 
 ## Parameters
 

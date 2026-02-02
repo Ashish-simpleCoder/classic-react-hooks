@@ -4,25 +4,28 @@ outline: deep
 
 # use-local-storage
 
-A React hook that provides a seamless way to persist and synchronize state with `localStorage`, offering a `useState`-like API with cross-tab synchronization.
+_`use-local-storage`_ is a React hook that provides a `useState`-compatible API for persisting state in `localStorage` with built-in synchronization and type safety.
+
+It automatically keeps React state, `localStorage`, and multiple browser tabs in sync while remaining SSR-friendly. The hook supports custom data encoding and decoding for advanced use cases like encryption or compression. It also handles key migration seamlessly without data loss.
 
 ## Features
 
--  **_useState_ Compatible API:** Drop-in replacement with identical API including functional updates
--  **SSR Compatible:** Default values prevent hydration mismatches
--  **Auto Synchronization:** Seamless bidirectional sync between React state, `localStorage` and across different browser tabs
--  **Error handling:** Graceful fallbacks when localStorage operations fail
--  **Custom Encoding/Decoding:** Optional encoder and decoder for data transformation (encryption, compression, etc.)
--  **Dynamic Key Migration:** Automatically migrates data when key changes without data loss
+-  **useState-compatible API:** Drop-in replacement with full support for functional updates
+-  **SSR safe:** Predictable initial values prevent hydration mismatches
+-  **Automatic synchronization:** Bidirectional sync between React state, `localStorage`, and browser tabs
+-  **Error resilience:** Graceful fallbacks when storage operations fail
+-  **Type-safe by design:** Strong TypeScript inference with generic support
+-  **Custom encoding/decoding:** Transform data via encryption, compression, or serialization strategies
+-  **Dynamic key migration:** Automatically migrates stored data when the key changes
+-  **Synchronous persistence:** State updates are synchronous and immediately written to `localStorage`
 
 ::: danger Important Notes
 
 -  **Automatic Serialization:** Data is automatically serialized to JSON when storing.
--  **Synchronous Updates:** State updates are synchronous and immediately persisted.
 -  **Fallback value:** Always provide default values for SSR fallback.
 -  **Encoder/Decoder:** Applied after JSON serialization and before JSON parsing respectively.
--  **Key Migration:** When key changes, old key is removed and data is migrated to new key automatically.
-   :::
+
+:::
 
 ## Problem It Solves
 

@@ -1,6 +1,7 @@
 # 🚀 classic-react-hooks
 
-Essential Custom Hooks for React Developers
+
+Performant · Minimal · Lightweight collection of everyday hooks
 
 <br />
 
@@ -25,42 +26,47 @@ https://classic-react-hooks.vercel.app/
 
 ## ✨ Features
 
--  Comes with treeshaking
--  Typescript support
--  Small bundle size
--  Minimal and Easy to use
+-  A carefully curated set of feature-rich, general-purpose hooks
+-  High performance with a minimal and lightweight footprint
+-  Predictable, intuitive APIs designed for natural usage
+-  Strong TypeScript support with an emphasis on type safety
+-  Zero third-party dependencies
+-  Modular and declarative design principles
+-  Fully tree-shakable for optimal bundling
+-  Comprehensive, well-structured documentation
 
 ## 🛠️ Tech Stack
 - React 18 with TypeScript
 - Vitepress for documentation
 - Changeset for sementic version releases
-- Vitest for testing the components
-- tsup for build tooling 
+- Vitest & React-Testing-Library for testing
+- tsdown for build tooling
 
 
 ## 🚀 Install in your project
 
 For npm users
-
-```bash
+```bash [npm]
 $ npm install classic-react-hooks
 ```
 
 For pnpm users
+```bash [pnpm]
+$ pnpm add classic-react-hooks
+```
 
-```bash
-$ pnpm install classic-react-hooks
+For deno users
+```bash [deno]
+$ deno install classic-react-hooks
 ```
 
 For yarn users
-
-```bash
+```bash [yarn]
 $ yarn add classic-react-hooks
 ```
 
 For bun users
-
-```bash
+```bash [bun]
 $ bun add classic-react-hooks
 ```
 
@@ -71,6 +77,5 @@ See [Contributing Guide](https://github.com/Ashish-simpleCoder/classic-react-hoo
 
 
 ## 📄 License
-- This project is licensed under the MIT License - see the LICENSE file for details. Say builds on top of earlier demos of how to use Whisper with Transformers.js.
-
-
+- This project is licensed under the MIT License - see the LICENSE file for details.
+Copyright (c) 2022-present, Ashish Prajapati

@@ -4,15 +4,27 @@ outline: deep
 
 # use-copy-to-clipboard
 
-A React hook that provides simple and reliable way to copy text to the clipboard with success and error handling callbacks.
+_`use-copy-to-clipboard`_ is a lightweight React hook that provides a simple and reliable way to copy text to the clipboard with built-in success and error handling.
+
+It leverages the modern Clipboard API while gracefully handling unsupported environments. The hook avoids unnecessary state updates by using a ref-based implementation, ensuring zero re-renders. It also allows flexible configuration through global and per-call callbacks.
 
 ## Features
 
--  **Clipboard API Support:** Uses the modern [navigator.clipboard](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API) API for secure clipboard access
--  **Fallback Handling:** Gracefully handles cases where clipboard API is not available
--  **Success/Error Callbacks:** Built-in success and error handling with customizable callbacks
--  **Flexible Configuration:** Configure global callbacks via props or override per-call
--  **Performance Optimized:** Zero re-renders - purely ref-based
+-  **Modern Clipboard API:** Uses [navigator.clipboard](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API) for secure, async clipboard access
+-  **Graceful fallback handling:** Safely handles environments without clipboard support
+-  **Success & error callbacks:** Built-in hooks for handling copy outcomes
+-  **Flexible callback configuration:** Define global callbacks or override them per copy call
+-  **Zero re-renders:** Ref-based implementation ensures optimal performance
+-  **Promise-based API:** Enables async handling and easy error chaining
+
+## Problems It Solves
+
+-  Removes repetitive clipboard access logic from components
+-  Handles browser support differences for clipboard operations
+-  Simplifies success and error handling for copy actions
+-  Prevents unnecessary re-renders when copying data
+-  Centralizes clipboard logic for reuse across the application
+-  Reduces error-prone imperative clipboard code
 
 ## Parameters
 
