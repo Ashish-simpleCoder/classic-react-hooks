@@ -4,7 +4,8 @@ const DEFAULT_DELAY = 300
 
 /**
  * @description
- *  A React hook that returns a debounced version of any function, delaying its execution until after a specified delay has passed since the last time it was invoked.
+ *
+ * use-debounced-fn is an async-aware React hook that provides a powerful, declarative way to implement debouncing with full lifecycle control.
  *
  * @example
  *
@@ -71,7 +72,7 @@ export function useDebouncedFn({
    delay,
 }: {
    immediateCallback?: (...args: any[]) => void
-   callbackToBounce: (...args: any[]) => void
+   callbackToBounce: (signal: AbortSignal, ...args: any[]) => void
    onSuccess?: (...args: any[]) => void
    onError?: (error: Error, ...args: any[]) => void
    onFinally?: (...args: any[]) => void
@@ -87,7 +88,7 @@ export function useDebouncedFn<Ev, Args extends any[] = any[]>({
    delay,
 }: {
    immediateCallback?: (ev: Ev, ...args: Args) => void
-   callbackToBounce: (ev: Ev, ...args: Args) => void
+   callbackToBounce: (signal: AbortSignal, ev: Ev, ...args: Args) => any
    onSuccess?: (ev: Ev, ...args: Args) => void
    onError?: (error: Error, ev: Ev, ...args: Args) => void
    onFinally?: (ev: Ev, ...args: Args) => void
@@ -105,7 +106,7 @@ export function useDebouncedFn({
    delay,
 }: {
    immediateCallback?: (...args: any[]) => void
-   callbackToBounce: (...args: any[]) => void
+   callbackToBounce: (signal: AbortSignal, ...args: any[]) => any
    onSuccess?: (...args: any[]) => void
    onError?: (error: Error, ...args: any[]) => void
    onFinally?: (...args: any[]) => void
@@ -192,36 +193,45 @@ export function useDebouncedFn({
  *  @see Docs https://classic-react-hooks.vercel.app/hooks/use-debounced-fn.html
  */
 export function debouncedFnWrapper<T extends (...args: any[]) => any>(props: {
-   immediateCallback?: T
-   callbackToBounce: T
-   onError?: (error: Error, ...args: Parameters<typeof props.callbackToBounce>) => void
-   onSuccess?: T
-   onFinally?: T
+   immediateCallback?: (...args: Parameters<T>) => void
+   callbackToBounce: (signal: AbortSignal, ...args: Parameters<T>) => any
+   onSuccess?: (...args: Parameters<T>) => void
+   onError?: (error: Error, ...args: Parameters<T>) => void
+   onFinally?: (...args: Parameters<T>) => void
    delay?: number
 }) {
-   let timerId: NodeJS.Timeout
+   let timerId: ReturnType<typeof setTimeout>
+   let controller: AbortController | null = null
 
    return {
-      debouncedFn: (...args: Parameters<typeof props.callbackToBounce>) => {
+      debouncedFn: (...args: Parameters<T>) => {
+         // Immediate phase
          props.immediateCallback?.(...args)
-         if (timerId) {
-            clearTimeout(timerId)
-         }
-         timerId = setTimeout(() => {
+
+         // Cancel previous async work
+         controller?.abort()
+
+         if (timerId) clearTimeout(timerId)
+
+         controller = new AbortController()
+
+         timerId = setTimeout(async () => {
             try {
-               const res = props.callbackToBounce.call(null, ...args)
-               if (res instanceof Promise) {
-                  res.then(() => props.onSuccess?.(...args))
-               } else {
-                  props.onSuccess?.(...args)
-               }
+               await props.callbackToBounce.call(null, controller!.signal, ...args)
+               props.onSuccess?.(...args)
             } catch (err) {
-               props.onError?.(err as Error, ...args)
+               if ((err as DOMException).name !== 'AbortError') {
+                  props.onError?.(err as Error, ...args)
+               }
             } finally {
                props.onFinally?.(...args)
             }
          }, props.delay ?? DEFAULT_DELAY)
       },
-      cleanup: () => clearTimeout(timerId),
+
+      cleanup: () => {
+         controller?.abort()
+         clearTimeout(timerId)
+      },
    }
 }
