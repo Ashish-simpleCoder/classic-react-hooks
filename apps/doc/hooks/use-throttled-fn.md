@@ -4,7 +4,11 @@ outline: deep
 
 # use-throttled-fn
 
-A React hook that returns a throttled version of provided function, ensuring it executes at most once per specified time interval, regardless of how frequently it's called.
+_`use-throttled-fn`_ is a lightweight React hook that provides a stable, throttled version of any callback function.
+
+It guarantees immediate execution on the first call and limits subsequent executions to at most once per configured time interval. The returned function is ref-based and remains unchanged across re-renders, avoiding unnecessary effect re-subscriptions.
+
+It preserves the original function’s context and error behavior, making it safe for both synchronous and asynchronous workflows. This hook is especially useful for handling high-frequency events without sacrificing performance or readability.
 
 ## Features
 

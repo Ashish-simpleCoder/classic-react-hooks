@@ -77,5 +77,7 @@ See [Contributing Guide](https://github.com/Ashish-simpleCoder/classic-react-hoo
 
 
 ## 📄 License
-- This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
 Copyright (c) 2022-present, Ashish Prajapati
