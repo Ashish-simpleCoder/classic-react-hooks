@@ -1,10 +1,10 @@
 # 🚀 classic-react-hooks
 
-#### An awesome collection of `feature packed custom hooks`.
+
+Performant · Minimal · Lightweight collection of everyday hooks
 
 <br />
 
-<br />
 <p align="left">
   <a href="https://badge.fury.io/Ashish-simpleCoder/classic-react-hooks">
     <img src="https://badge.fury.io/js/classic-react-hooks.svg" alt="npm version">
@@ -18,59 +18,66 @@
   </a>
 </p>
 
+<br />
+
 ## Read the Documentation
 
 https://classic-react-hooks.vercel.app/
 
-## Features
+## ✨ Features
 
--  Comes with treeshaking
--  Typescript support
--  Small bundle size
--  Minimal and Easy to use
+-  A carefully curated set of feature-rich, general-purpose hooks
+-  High performance with a minimal and lightweight footprint
+-  Predictable, intuitive APIs designed for natural usage
+-  Strong TypeScript support with an emphasis on type safety
+-  Zero third-party dependencies
+-  Modular and declarative design principles
+-  Fully tree-shakable for optimal bundling
+-  Comprehensive, well-structured documentation
 
-## Installation
+## 🛠️ Tech Stack
+- React 18 with TypeScript
+- Vitepress for documentation
+- Changeset for sementic version releases
+- Vitest & React-Testing-Library for testing
+- tsdown for build tooling
+
+
+## 🚀 Install in your project
 
 For npm users
-
-```bash
+```bash [npm]
 $ npm install classic-react-hooks
 ```
 
 For pnpm users
+```bash [pnpm]
+$ pnpm add classic-react-hooks
+```
 
-```bash
-$ pnpm install classic-react-hooks
+For deno users
+```bash [deno]
+$ deno install classic-react-hooks
 ```
 
 For yarn users
-
-```bash
+```bash [yarn]
 $ yarn add classic-react-hooks
 ```
 
 For bun users
-
-```bash
+```bash [bun]
 $ bun add classic-react-hooks
 ```
 
-## Hooks
 
--  use-event-listener
--  use-copy-to-clipboard
--  use-local-storage
--  use-outside-click
--  use-debounced-fn
--  use-throttled-hook
--  use-is-online
--  use-timeout-effect
--  use-interval-effect
--  use-synced-ref
--  use-synced-effect
--  use-on-mount-effect
--  use-counter
-
-## Contribution
+## 📝 Contribution
 
 See [Contributing Guide](https://github.com/Ashish-simpleCoder/classic-react-hooks/blob/main/CONTRIBUTING.md).
+
+
+## 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+Copyright (c) 2022-present, Ashish Prajapati

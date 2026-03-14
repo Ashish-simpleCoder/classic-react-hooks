@@ -1,5 +1,223 @@
 # classic-react-hooks
 
+## 2.0.0-canary.27
+
+### Minor Changes
+
+-  8a2a4b7: Feature: Add AbortSignal api support for use-debounced-fn hook for cancelling the async work
+
+## 2.0.0-canary.26
+
+### Minor Changes
+
+-  4fc9b6c: feat: add `encoder` and `decoder` props in useLocalStorage for encoding/decoding value in localStorage
+
+## 2.0.0-canary.25
+
+### Minor Changes
+
+-  2358a55: New api and props for use-debounced-fn
+   -  Introduce cleanup and debouncedFn return value
+   -  Introduce immediateCallback, onSuccess, onError and onFinally callback as lifecycle functions
+
+## 2.0.0-canary.24
+
+### Patch Changes
+
+-  ab12cc5: build: upgrade from tsup to tsdown bundler
+
+## 2.0.0-canary.23
+
+### Minor Changes
+
+-  a0c4e96: ref: Initialize context lazily within ContextProvider component for can-reach-to-internet-context
+
+## 2.0.0-canary.22
+
+### Minor Changes
+
+-  5e43e42: Update target build to esnext in builder
+
+## 2.0.0-canary.21
+
+### Minor Changes
+
+-  f5197b4: ## Doc Fixes
+
+   -  docs: fix imports in js-doc examples
+   -  types: Update type definitions to common types folder
+   -  docs: update docs for hooks
+
+   ## Test Updates
+
+   -  test: refactor and add new the test cases
+
+   ## Bug Fixes
+
+   -  fix: network state update on online/offline event when polling is off(7c765e984556b8496667dd057ca20bc6586e82b6)
+   -  fix: create seperate setElementRef for target setting in use-outside-click(ff812ca88e527c12b3604fb559c1b3d6b87ca7d9)
+   -  fix: making capture flag to false for use-outside-click(fd31ba46b569ed298de6c7a445204beea2c57284)
+   -  fix: lazily set target for outside and use-event-listener(1a387a1fe05dc8a736a629d8a66d067a3162340e)
+
+## 2.0.0-canary.20
+
+### Patch Changes
+
+-  f8af3e3: - Update dependencies, pnpm and node version for better security and performance
+
+## 2.0.0-canary.19
+
+### Minor Changes
+
+-  c534ff5: - Introduce second method `setElementRef` function for observing target with `ref` attribute (i.e. ref={setElementRef})
+
+## 2.0.0-canary.18
+
+### Minor Changes
+
+-  8305b6d: - Fix missing export for `useMultipleIntersectionObserver` hook
+
+## 2.0.0-canary.17
+
+### Minor Changes
+
+-  0d1ac96: - Fix timeout and interval effect cleanup when interval changes
+
+## 2.0.0-canary.16
+
+### Minor Changes
+
+-  87b8bbb: Feature:
+   -  Add cross-tab sync and ssr support and function based initial value support for `useLocalStorage` hook.
+
+## 2.0.0-canary.15
+
+### Minor Changes
+
+-  fb26e91: ## Fixes following issues
+
+   -  Fix: use-can-reach-to-internet `subscribe` handler for `useSyncExternalStore`. It was adding events instead of removing.
+   -  Fix: Prevent from re-triggering the call of `checkIfCanReachToInternet` function in useEffect when `isNetworkPollingEnabled` is disabled.
+
+   ## Test cases
+
+   -  Wrote test cases for use-can-reach-to-internet and use-copy-to-clipboard hook. Previously not written.
+
+## 2.0.0-canary.14
+
+### Minor Changes
+
+-  a2f9744: ## Major Rewrite for the Documentation
+   -  home page and overview
+   -  use-can-reach-to-internet
+   -  use-copy-to-clipboard
+   -  use-counter
+   -  use-debounced-fn
+   -  use-event-listener
+   -  use-intersection-observer
+   -  use-multi-intersection-observer
+   -  use-interval-effect
+   -  use-on-mount-effect
+   -  use-outside-effect
+   -  use-synced-effect
+   -  use-synced-ref
+   -  use-throttled-fn
+   -  use-timeout-effect
+   -  use-window-resize
+
+## 2.0.0-canary.13
+
+### Minor Changes
+
+-  ff4615c: docs: revamp to new doc version for `use-multi-intersection-observer`
+
+## 2.0.0-canary.12
+
+### Patch Changes
+
+-  5877980: Docs: Start overhauling to new documentation
+   -  Create new docs for `use-event-listener` and `use-intersection-observer` hooks
+
+## 2.0.0-canary.11
+
+### Minor Changes
+
+-  4f5bb6c: - breaking: use the implementation and working for `useIntersection` observer hook.
+   -  feat: introduce new hook `useMultiIntersectionObserver` hook.
+
+## 2.0.0-canary.10
+
+### Patch Changes
+
+-  5807a38: Add canary branch in CI release
+
+## 2.0.0-canary.9
+
+### Minor Changes
+
+-  e73af53: Feat: Introduce `layoutEffect` boolean prop in use-event-listener hook to pickup `useEffect` between `useLayoutEffect`. By default `useEffect` hook will be used.
+   Feat: Using layoutEffect for use-window-resize hook.
+
+## 2.0.0-canary.8
+
+### Patch Changes
+
+-  56478c2: Docs: Update features and overview section
+
+## 2.0.0-canary.7
+
+### Patch Changes
+
+-  cc71e9c: Update docs for copy-to-clipboard and deboucned-fn hook
+
+## 2.0.0-canary.6
+
+### Patch Changes
+
+-  c20ae22: Include src folder in npm publish
+
+## 2.0.0-canary.5
+
+### Minor Changes
+
+-  51e96f8: Doc update
+
+## 2.0.0-canary.4
+
+### Minor Changes
+
+-  c52bb9f: Add CanReachToInterernetCtxProvder and useCanReachToInternetCtx component's documentation
+
+## 2.0.0-canary.3
+
+### Minor Changes
+
+-  3e110b2: - Doc: Add `what problem it solves` doc for useCanReachToInternet
+   -  Doc: Refactor the docs for hooks
+
+## 2.0.0-canary.2
+
+### Minor Changes
+
+-  703c876: - breaking: remove useIsOnline hook
+   -  Feat: add useCanReachToInternet for getting network connection
+   -  Feat: add useCanReachToInternetCtx and CanReachToInternetCtxProvider for subscribing the application to get network reachability with context
+
+## 2.0.0-canary.1
+
+### Minor Changes
+
+-  44ce4b9: Docs - add usage example in js-doc for all of the hooks
+
+## 2.0.0-canary.0
+
+### Major Changes
+
+Breaking
+
+-  v2 release prepare
+-  Rewrite all of the hooks and their documenation
+
 ## 1.4.0
 
 ### Minor Changes

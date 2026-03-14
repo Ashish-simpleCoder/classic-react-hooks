@@ -1,5 +1,6 @@
 import { defineConfig, type DefaultTheme } from 'vitepress'
 import { version } from '../../../package.json'
+import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -9,6 +10,17 @@ export default defineConfig({
 
    lastUpdated: true,
    cleanUrls: false,
+
+   markdown: {
+      lineNumbers: true,
+      config(md) {
+         md.use(groupIconMdPlugin)
+      },
+   },
+
+   vite: {
+      plugins: [groupIconVitePlugin()],
+   },
 
    sitemap: {
       hostname: 'https://classic-react-hooks.vercel.app',
@@ -32,7 +44,28 @@ export default defineConfig({
          },
          {
             text: `v${version}`,
-            link: `https://github.com/Ashish-simpleCoder/classic-react-hooks/releases/tag/v${version}`,
+            items: [
+               {
+                  items: [
+                     {
+                        text: `v${version}`,
+                        link: `https://github.com/Ashish-simpleCoder/classic-react-hooks/releases/tag/v${version}`,
+                     },
+                  ],
+               },
+               {
+                  items: [
+                     {
+                        text: 'Unreleased',
+                        link: `https://canary-classic-react-hooks.vercel.app/`,
+                     },
+                     {
+                        text: 'v1.x',
+                        link: `https://v1-classic-react-hooks.vercel.app`,
+                     },
+                  ],
+               },
+            ],
          },
       ],
 
@@ -52,9 +85,10 @@ export default defineConfig({
             icon: 'github',
             link: 'https://github.com/Ashish-simpleCoder/classic-react-hooks',
          },
-         { icon: 'x', link: 'https://twitter.com/ashish_devloper' },
          { icon: 'linkedin', link: 'https://linkedin.com/in/ashish-prajapati-002154193' },
+         { icon: 'bluesky', link: 'https://bsky.app/profile/ashish-simplecoder.bsky.social' },
          { icon: 'npm', link: 'https://www.npmjs.com/package/classic-react-hooks' },
+         { icon: 'x', link: 'https://twitter.com/ashish_devloper' },
       ],
       editLink: {
          pattern: 'https://github.com/Ashish-simpleCoder/classic-react-hooks/edit/main/apps/doc/:path',
@@ -86,19 +120,28 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
          items: [
             { text: 'use-event-listener', link: 'use-event-listener' },
             { text: 'use-intersection-observer', link: 'use-intersection-observer' },
+            { text: 'use-multi-intersection-observer', link: 'use-multi-intersection-observer' },
             { text: 'use-window-resize', link: 'use-window-resize' },
             { text: 'use-copy-to-clipboard', link: 'use-copy-to-clipboard' },
             { text: 'use-local-storage', link: 'use-local-storage' },
             { text: 'use-outside-click', link: 'use-outside-click' },
             { text: 'use-debounced-fn', link: 'use-debounced-fn' },
             { text: 'use-throttled-fn', link: 'use-throttled-fn' },
-            { text: 'use-is-online', link: 'use-is-online' },
+            { text: 'use-can-reach-to-internet', link: 'use-can-reach-to-internet' ,collapsed: true},
             { text: 'use-timeout-effect', link: 'use-timeout-effect' },
             { text: 'use-interval-effect', link: 'use-interval-effect' },
             { text: 'use-synced-ref', link: 'use-synced-ref' },
             { text: 'use-synced-effect', link: 'use-synced-effect' },
             { text: 'use-on-mount-effect', link: 'use-on-mount-effect' },
             { text: 'use-counter', link: 'use-counter' },
+         ]
+      },
+      {
+         text: 'Components',
+         collapsed: false,
+         base: "/components/",
+         items: [
+            { text: 'Internet Connectivity Context', link: 'CanReachToInternetCtxProvider' },
          ]
       },
    ]

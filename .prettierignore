@@ -5,3 +5,5 @@ public
 apps/doc/.vitepress/cache
 apps/example
 .changeset
+
+pnpm-lock.yaml

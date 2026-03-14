@@ -12,4 +12,8 @@ apps/*
 apps/doc/.vitepress/cache
 
 
-src/**/*.dev.tsx
+/**/*.dev.tsx
+/**/*.dev.ts
+/**/*.dev.jsx
+/**/*.dev.js
+/**/*.dev.md

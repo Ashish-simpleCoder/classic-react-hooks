@@ -1,93 +1,139 @@
-import type { RefObject } from 'react'
 import type { Prettify } from '../../types'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter'
+import useSyncedRef from '../use-synced-ref'
 
-export type Target = HTMLElement | RefObject<HTMLElement> | (() => HTMLElement | null) | null
+export interface BaseIntersectionObserverOptions {
+   onIntersection?: (entry: IntersectionObserverEntry) => void
+   onlyTriggerOnce?: boolean
+}
 
-type Options = {
-   mode?: 'lazy' | 'virtualized'
-} & IntersectionObserverInit
+// prettier-ignore
+export interface IntersectionObserverOptions<Key extends string = ''> extends IntersectionObserverInit, BaseIntersectionObserverOptions {
+   key?: Key
+}
+
+export type IntersectionObserverResult<Key extends string> = Prettify<
+   {
+      [K in Key as Key extends '' ? 'element' : `${Key}Element`]: HTMLElement | null // element
+   } & {
+      [K in Key as Key extends '' ? 'setElementRef' : `set${Capitalize<Key>}ElementRef`]: (
+         elementNode: HTMLElement | null
+      ) => void // setElement
+   } & {
+      [K in Key as Key extends '' ? 'isElementIntersecting' : `is${Capitalize<Key>}ElementIntersecting`]: boolean // isElementIntersecting
+   }
+>
 
 /**
  * @description
- *  A hook which provides a way for listening to the Intersection Observer event for given target.
+ *  A React hook that provides a declarative way to observe element visibility using the [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) API.
  *
- *  It takes an array of targets and returns an array of boolean values which represents whether the targets are intersecting the screen or not.
+ * @example
+  import { useIntersectionObserver } from 'classic-react-hooks'
+
+  export default function BasicExample() {
+        const { element, setElementRef, isElementIntersecting } = useIntersectionObserver({
+          threshold: 0.5,
+          onIntersection: (entry) => {
+              console.log('Intersection changed:', entry.isIntersecting)
+          },
+        })
+
+        return (
+          <div className='h-[200vh]'>
+              <div className='mt-[100vh]'>
+                <div ref={setElementRef} className={`p-5 ${isElementIntersecting ? 'bg-green-200' : 'bg-red-200'}`}>
+                    {isElementIntersecting ? 'Visible!' : 'Not visible'}
+                </div>
+              </div>
+          </div>
+        )
+    }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-intersection-observer.html
  */
-export default function useInterSectionObserver(targets: Target[], options: Prettify<Options> = {}): Array<boolean> {
-   const [visibilityStates, setVisiblilityStates] = useState(() => {
-      return new Array(targets.length).fill(false) as Array<boolean>
+export default function useIntersectionObserver<Key extends string = ''>(
+   options?: IntersectionObserverOptions<Key>
+): IntersectionObserverResult<Key> {
+   const {
+      key = '' as Key,
+      onIntersection,
+      onlyTriggerOnce = false,
+      root,
+      rootMargin,
+      threshold,
+      ...restOptions
+   } = options ?? {}
+
+   const [element, setElement] = useState<HTMLElement | null>(null)
+   const [isIntersecting, setIsIntersecting] = useState(false)
+
+   const onIntersectionRef = useSyncedRef(onIntersection)
+   const observerOptions = useSyncedRef<IntersectionObserverInit>({
+      root,
+      rootMargin,
+      threshold,
+      ...restOptions,
    })
 
-   const intersection_options: IntersectionObserverInit = {
-      root: options.root,
-      rootMargin: options.rootMargin,
-      threshold: options.threshold,
-   }
-
-   if (!options.mode) {
-      options.mode = 'lazy'
-   }
+   const setElementRef = useRef((elementNode: HTMLElement | null) => {
+      setElement(elementNode)
+   })
 
    useEffect(() => {
       if (!window.IntersectionObserver) {
-         console.warn('IntersectionObserver is not available.')
+         if (process.env.NODE_ENV !== 'production') {
+            console.warn('IntersectionObserver is not available.')
+         }
          return
       }
-      const io = new IntersectionObserver((entries) => {
-         entries.forEach((entry) => {
-            const entry_idx = entry.target.getAttribute('idx')
-            if (entry.isIntersecting) {
-               setVisiblilityStates((_visibilityState) => {
-                  if (entry_idx == null) return _visibilityState
 
-                  _visibilityState[+entry_idx] = true
-                  return [..._visibilityState]
-               })
-               if (options.mode == 'lazy') {
-                  io.unobserve(entry.target)
-               }
-            } else {
-               setVisiblilityStates((_visibilityState) => {
-                  if (entry_idx == null) return _visibilityState
-
-                  _visibilityState[+entry_idx] = false
-                  return [..._visibilityState]
-               })
-            }
-         })
-      }, intersection_options)
-
-      targets.forEach((element, idx) => observer(element, idx))
-
-      function observer(element: Target, idx: number) {
-         let target: HTMLElement | null = null
-
-         try {
-            if (element && 'current' in element) {
-               target = element.current
-            } else if (typeof element == 'function') {
-               const ele = element()
-               target = ele
-            } else {
-               target = element
-            }
-            if (target) {
-               target.setAttribute('idx', idx.toString())
-               io.observe(target)
-            }
-         } catch (err) {
-            console.warn(err)
-         }
+      if (!element) {
+         return
       }
+
+      const observer = new IntersectionObserver((entries) => {
+         for (const entry of entries) {
+            const isCurrentlyIntersecting = entry.isIntersecting
+
+            setIsIntersecting(entry.isIntersecting)
+
+            // trigger onIntersection callback after intersection/non-intersection of the element
+            if (onIntersectionRef.current) {
+               onIntersectionRef.current?.(entry)
+            }
+
+            // handle onlyTriggerOnce
+            if (onlyTriggerOnce && isCurrentlyIntersecting) {
+               observer.unobserve(entry.target)
+               observer.disconnect()
+            }
+         }
+      }, observerOptions.current)
+
+      observer.observe(element)
 
       return () => {
-         io.disconnect()
+         if (element) {
+            observer.unobserve(element)
+            observer.disconnect()
+         }
+         setIsIntersecting(false)
       }
-   }, [])
+   }, [element, onlyTriggerOnce])
 
-   return visibilityStates
+   const capKey = key ? capitalizeFirstLetter(key) : ''
+   const propertyNames = {
+      elementKey: key ? `${key}Element` : 'element',
+      setRefKey: key ? `set${capKey}ElementRef` : 'setElementRef',
+      isIntersectingKey: key ? `is${capKey}ElementIntersecting` : 'isElementIntersecting',
+   }
+
+   return {
+      [propertyNames.setRefKey]: setElementRef.current,
+      [propertyNames.isIntersectingKey]: isIntersecting,
+      [propertyNames.elementKey]: element,
+   } as IntersectionObserverResult<Key>
 }

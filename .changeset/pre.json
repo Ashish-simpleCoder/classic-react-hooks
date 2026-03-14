@@ -1,0 +1,37 @@
+{
+  "mode": "pre",
+  "tag": "canary",
+  "initialVersions": {
+    "classic-react-hooks": "1.4.0"
+  },
+  "changesets": [
+    "brown-bears-cheat",
+    "brown-wolves-play",
+    "clean-coats-occur",
+    "cool-emus-lie",
+    "cool-spoons-fold",
+    "cuddly-melons-turn",
+    "early-apes-march",
+    "eight-webs-look",
+    "fresh-hounds-move",
+    "good-vans-impress",
+    "hungry-moons-serve",
+    "icy-boats-make",
+    "mighty-donkeys-roll",
+    "modern-ants-add",
+    "moody-pens-poke",
+    "pink-pugs-eat",
+    "popular-students-happen",
+    "silver-radios-tickle",
+    "slick-carrots-stick",
+    "spotty-jeans-carry",
+    "stale-radios-rule",
+    "tender-sites-occur",
+    "thirty-foxes-wink",
+    "twenty-pans-search",
+    "violet-cherries-applaud",
+    "warm-olives-punch",
+    "wet-states-wink",
+    "yellow-nails-worry"
+  ]
+}

@@ -1,50 +1,162 @@
-'use client'
-import type { Dispatch, MutableRefObject } from 'react'
-import React, { useRef, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
+import React, { useRef, useCallback, useSyncExternalStore } from 'react'
 
 /**
  * @description
- * A hook for managing the states with `local-storage`.
+ * A React hook that provides a seamless way to persist and synchronize state with `localStorage`, offering a `useState`-like API with cross-tab synchronization.
  *
- * It working is just like the `useState`.
- *
- * It automatically updates the state in `local-storage`.
- *
+ * @example
+   import { useLocalStorage } from 'classic-react-hooks'
+
+   function UserPreferences() {
+      const [theme, setTheme] = useLocalStorage({ key: 'theme', defaultValue: 'light' })
+      const [language, setLanguage] = useLocalStorage({ key: 'language', defaultValue: 'en' })
+
+      return (
+         <div>
+            <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+               <option value='light'>Light</option>
+               <option value='dark'>Dark</option>
+            </select>
+
+            <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+               <option value='en'>English</option>
+               <option value='es'>Spanish</option>
+               <option value='fr'>French</option>
+            </select>
+         </div>
+      )
+   }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-local-storage.html
  */
-export default function useLocalStorage<State>(key: string, defaultValue?: State) {
-   const [state, setState] = useState<State>(() => {
-      try {
-         const item = localStorage.getItem(key)
-         if (defaultValue && item == null) {
-            return defaultValue
-         }
-         const parsed_value = item == null ? '' : JSON.parse(item)
-         return parsed_value
-      } catch (err) {
-         if (defaultValue) {
-            return defaultValue
-         }
-         return undefined
-      }
-   })
+export default function useLocalStorage<State>({
+   key,
+   initialValue,
+   encoder,
+   decoder,
+}: {
+   key: string
+   initialValue?: State | (() => State)
+   encoder?: (value: string) => string
+   decoder?: (value: string) => string
+}) {
+   // Cache the last parse value to avoid unnecessary re-renders
+   const lastValueRef = useRef<State | null>(null)
+   const lastStringRef = useRef<string | null>(null)
+   const lastKeyRef = useRef<string>(key)
 
-   const updateState: MutableRefObject<Dispatch<React.SetStateAction<State>>> = useRef(
-      (value: State | ((state: State) => State)) => {
-         let new_value = value
-         if (typeof value == 'function') {
-            setState((state) => {
-               new_value = (value as (state: State) => State)(state)
-               localStorage.setItem(key, JSON.stringify(new_value))
-               return new_value
-            })
-         } else {
-            setState(new_value)
-            localStorage.setItem(key, JSON.stringify(new_value))
+   const getStoredState = useCallback(() => {
+      try {
+         // Key has changed, reset cached values
+         if (lastKeyRef.current !== key) {
+            localStorage.removeItem(lastKeyRef.current)
+            const serializedValue = JSON.stringify(lastValueRef.current)
+            localStorage.setItem(key, encoder ? encoder(serializedValue) : serializedValue)
+            lastKeyRef.current = key
+            lastValueRef.current = null
+            lastStringRef.current = null
          }
+
+         const item = localStorage.getItem(key)
+
+         if (item != null) {
+            // Only parse if the string value has changed
+            if (lastStringRef.current !== item) {
+               lastStringRef.current = item
+               lastValueRef.current = JSON.parse(decoder ? decoder(item) : item)
+            }
+            return lastValueRef.current!
+         }
+      } catch (err) {
+         console.log(err)
       }
+
+      // Return initial value
+      let returnVal: State
+      if (lastValueRef.current) {
+         returnVal = lastValueRef.current
+      } else if (typeof initialValue == 'function') {
+         returnVal = (initialValue as () => State)()
+      } else {
+         returnVal = initialValue as State
+      }
+
+      // Cache the initial value
+      lastValueRef.current = returnVal
+
+      return lastValueRef.current!
+   }, [key])
+
+   // Server-side snapshot - return initial value to avoid hydration mismatch
+   const getServerSnapshot = useCallback(() => {
+      if (lastValueRef.current) {
+         return lastValueRef.current
+      }
+      if (typeof initialValue == 'function') {
+         lastValueRef.current = (initialValue as () => State)()
+      } else {
+         lastValueRef.current = initialValue as State
+      }
+      return lastValueRef.current!
+   }, [])
+
+   const storedState = useSyncExternalStore(
+      useCallback(
+         (callback) => {
+            const handleStorageChange = (event: Event) => {
+               callback()
+            }
+
+            // Listen for our custom events
+            window.addEventListener(key, handleStorageChange)
+
+            // Also listen for storage event from other tabs
+            const handleStorageEvent = (event: StorageEvent) => {
+               if (event.key === key) {
+                  callback()
+               }
+            }
+
+            window.addEventListener('storage', handleStorageEvent)
+
+            return () => {
+               window.removeEventListener(key, handleStorageChange)
+               window.removeEventListener('storage', handleStorageEvent)
+            }
+         },
+         [key]
+      ),
+      getStoredState,
+      getServerSnapshot
    )
 
-   return [state, updateState.current] as const
+   const updateState: Dispatch<SetStateAction<State>> = useCallback(
+      (state: State | ((prevState: State) => State)) => {
+         try {
+            let newValue: State
+
+            if (typeof state === 'function') {
+               newValue = (state as (state: State) => State)(storedState)
+            } else {
+               newValue = state
+            }
+
+            const serializedValue = JSON.stringify(newValue === undefined ? null : newValue)
+            localStorage.setItem(key, encoder ? encoder(serializedValue) : serializedValue)
+
+            // Update cache
+            lastStringRef.current = serializedValue
+            lastValueRef.current = newValue
+
+            // Notify subscriber
+            window.dispatchEvent(new Event(key))
+         } catch (err) {
+            console.log(err)
+         }
+      },
+      [key, storedState]
+   )
+
+   return [storedState, updateState] as const
 }

@@ -3,111 +3,110 @@ import { vi } from 'vitest'
 import useOutsideClick from '.'
 
 describe('use-outside-click', () => {
-   it('should render', () => {
-      renderHook(() => useOutsideClick(null, () => {}))
+   describe('mounting', () => {
+      it('should render with null as target', () => {
+         // @ts-expect-error  handling the edge case if target is not type of function
+         renderHook(() => useOutsideClick({ target: null }))
+      })
    })
 
-   it('should work when Target is null', () => {
-      renderHook(() => useOutsideClick(null, () => {}, { shouldInjectEvent: true }))
+   describe('event trigger', () => {
+      it('should not fire listener if target is null ', () => {
+         // @ts-expect-error  handling the edge case if target is not type of function
+         renderHook(() => useOutsideClick({ target: null }))
 
-      const event = new Event('click')
-      document.dispatchEvent(event)
-   })
-
-   it('should add listener on-mount and remove it on un-mount', () => {
-      const div = document.createElement('div')
-      const addSpy = vi.spyOn(document, 'addEventListener')
-      const removeSpy = vi.spyOn(document, 'removeEventListener')
-
-      const { rerender, unmount } = renderHook(() => {
-         useOutsideClick(
-            () => div,
-            () => {}
-         )
+         const event = new Event('click', { bubbles: true })
+         document.dispatchEvent(event)
       })
 
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(0)
+      it('should fire listener when clicked outside of target', () => {
+         const div = document.createElement('div')
+         const ref = { current: div }
+         const fn = vi.fn()
 
-      rerender()
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(0)
+         renderHook(() => {
+            useOutsideClick({ target: () => ref.current, handler: fn })
+         })
 
-      unmount()
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(1)
-   })
-   it('should work with refs', () => {
-      const div = document.createElement('div')
-      const addSpy = vi.spyOn(document, 'addEventListener')
-      const removeSpy = vi.spyOn(document, 'removeEventListener')
+         const event = new Event('click', { bubbles: true })
+         document.dispatchEvent(event)
 
-      const ref = { current: div }
-
-      const { rerender, unmount } = renderHook(() => {
-         useOutsideClick(ref, () => {})
+         expect(fn).toHaveBeenCalledTimes(1)
+         expect(fn).toHaveBeenCalledWith(event)
       })
 
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(0)
+      it('should fire listener when clicked outside of target, when `setElementRef` is used', () => {
+         const div = document.createElement('div')
+         document.body.append(div) // Append to body to make it part of the DOM
 
-      rerender()
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(0)
+         const fn = vi.fn()
 
-      unmount()
-      expect(addSpy).toHaveBeenCalledTimes(1)
-      expect(removeSpy).toHaveBeenCalledTimes(1)
-   })
+         const { result, rerender } = renderHook(() => {
+            return useOutsideClick({ handler: fn })
+         })
 
-   it('should fire listener when clicked outside of target element when ref is provided', () => {
-      const div = document.createElement('div')
-      const ref = { current: div }
-      const listener = vi.fn()
+         result.current.setElementRef(div)
+         rerender()
 
-      renderHook(() => {
-         useOutsideClick(ref, listener)
+         const event = new Event('click', { bubbles: true })
+         // Simulate click outside of div
+         document.dispatchEvent(event)
+
+         expect(fn).toHaveBeenCalledTimes(1)
+         expect(fn).toHaveBeenCalledWith(event)
+
+         document.body.removeChild(div) // Clean up
       })
 
-      const event = new Event('click')
-      document.dispatchEvent(event)
+      it('should not fire when clicked on target', () => {
+         const div = document.createElement('div')
 
-      expect(listener).toHaveBeenCalledTimes(1)
-      expect(listener).toHaveBeenCalledWith(event)
-   })
+         document.body.append(div)
 
-   it('should fire listener when clicked outside of target element', () => {
-      const div = document.createElement('div')
+         const fn = vi.fn()
+         renderHook(() => {
+            useOutsideClick({ target: () => div, handler: fn })
+         })
 
-      const listener = vi.fn()
-      renderHook(() => {
-         useOutsideClick(() => div, listener)
+         const event = new Event('click', { bubbles: true })
+         div.dispatchEvent(event)
+
+         expect(fn).toHaveBeenCalledTimes(0)
       })
 
-      const event = new Event('click')
-      document.dispatchEvent(event)
+      it('should not fire when clicked inside target', () => {
+         const div = document.createElement('div')
+         const span = document.createElement('span')
 
-      expect(listener).toHaveBeenCalledTimes(1)
-      expect(listener).toHaveBeenCalledWith(event)
-   })
+         div.append(span)
+         document.body.append(div)
 
-   it('should not fire listener when clicked on target element or inside within it', () => {
-      const div = document.createElement('div')
-      const span = document.createElement('span')
+         const fn = vi.fn()
+         renderHook(() => {
+            useOutsideClick({ target: () => div, handler: fn })
+         })
 
-      div.append(span)
-      document.body.append(div)
+         const event = new Event('click', { bubbles: true })
+         span.dispatchEvent(event)
 
-      const listener = vi.fn()
-      renderHook(() => {
-         useOutsideClick(() => div, listener)
+         expect(fn).toHaveBeenCalledTimes(0)
       })
 
-      const event = new Event('click', { bubbles: true })
-      div.dispatchEvent(event)
-      expect(listener).toHaveBeenCalledTimes(0)
+      it('should not fire listener when clicked on target, when `setElementRef` is used', () => {
+         const div = document.createElement('div')
 
-      span.dispatchEvent(event)
-      expect(listener).toHaveBeenCalledTimes(0)
+         document.body.append(div)
+
+         const fn = vi.fn()
+         const { result, rerender } = renderHook(() => {
+            return useOutsideClick({ handler: fn })
+         })
+         result.current.setElementRef(div)
+         rerender()
+
+         const event = new Event('click', { bubbles: true })
+         div.dispatchEvent(event)
+         expect(fn).toHaveBeenCalledTimes(0)
+      })
    })
 })

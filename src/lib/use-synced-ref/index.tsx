@@ -1,11 +1,33 @@
-'use client'
 import React, { useRef } from 'react'
 
 /**
  * @description
- * A replacement for `useRef` hook, which automatically synces up with the given state.
+ * A React hook that creates a ref that automatically stays in sync with the provided value, ensuring you always have access to the latest state in asynchronous operations.
  *
- * No need to manually update the ref.
+ * @example
+   import { useState } from 'react'
+   import { useSyncedRef } from 'classic-react-hooks'
+
+   export default function Counter() {
+      const [count, setCount] = useState(0)
+      const countRef = useSyncedRef(count)
+
+      const handleAsyncOperation = () => {
+         setTimeout(() => {
+            // countRef.current always has the latest value
+            console.log('Current count:', countRef.current)
+            alert(`Count is now: ${countRef.current}`)
+         }, 2000)
+      }
+
+      return (
+         <div>
+            <p>Count: {count}</p>
+            <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+            <button onClick={handleAsyncOperation}>Show count after 2 seconds</button>
+         </div>
+      )
+   }
  *
  * @see Docs https://classic-react-hooks.vercel.app/hooks/use-synced-ref.html
  */
