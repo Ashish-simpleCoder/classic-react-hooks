@@ -1,3 +1,5 @@
+
+
 # 🚀 classic-react-hooks
 
 
@@ -38,7 +40,7 @@ https://classic-react-hooks.vercel.app/
 ## 🛠️ Tech Stack
 - React 18 with TypeScript
 - Vitepress for documentation
-- Changeset for sementic version releases
+- Changeset for semantic version releases
 - Vitest & React-Testing-Library for testing
 - tsdown for build tooling
 
